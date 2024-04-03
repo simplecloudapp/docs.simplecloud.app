@@ -1,0 +1,310 @@
+import {Button, CodeGroup, Note, Properties, Property} from "../../components/mdx";
+
+export const metadata = {
+  title: 'Minecraft Deployments',
+  description:
+    'In this guide, we’ll look at how MinecraftDeployments work. Strela offers a simple way to deploy Minecraft servers to Kubernetes.',
+}
+
+# Minecraft Deployments
+
+With Strela, you can deploy Minecraft servers to Kubernetes using the MinecraftDeployment resource. This resource is a custom resource definition (CRD) that allows you to define a Minecraft server and deploy it to your Kubernetes cluster.
+A MinecraftDeployment orchestrates the creation and management of Minecraft servers. It achieves this by generating MinecraftServerSets, which in turn, instantiate the actual MinecraftServer resources. {{ className: 'lead' }}
+
+## Get started with proxies
+
+We're getting started with proxies, as they are used in most Minecraft server setups. If you want to deploy a Minecraft server, you can use the same steps, but you will need to use a different image and port. You can find a better example in the [Get started with servers](#get-started-with-servers) section.
+
+The first thing you need to do is to create a MinecraftDeployment resource. In this case we're using a Docker image that is based on [itzg/bungeecord](https://hub.docker.com/r/itzg/bungeecord). You can read their documentation, if you want to use a different configuration.
+
+For this example we'll name the file `example-proxy-deployment.yaml` and we'll use the following content:
+
+```yaml {{ title: 'example-proxy-deployment.yaml' }}
+apiVersion: strela.dev/v1
+kind: MinecraftDeployment
+metadata:
+  name: example-proxy-deployment
+  labels:
+    # We define this label to be able to create a service, so the Minecraft server can be accessed from the server list.
+    app: example-proxy-deployment
+spec:
+  replicas: 1
+  type: PROXY
+  template:
+    spec:
+      template:
+        spec:
+          containers:
+            # We use our Docker image for a Minecraft proxy server.
+            # You can use any other image, but make sure it's starting a Minecraft server.
+            - image: ghcr.io/strela-dev/docker-minecraft-proxy:main
+              imagePullPolicy: Always
+              name: server
+              tty: true
+              stdin: true
+              ports:
+                # This might be different for your image, but it's usually 25577 for Minecraft proxies.
+                - containerPort: 25577
+                  name: main
+              env:
+                # Our image is based on itzg/bungeecord, so we use a variable to start a velocity server.
+                # If you use a different image, you might need to use a different variable.
+                - name: "TYPE"
+                  value: "VELOCITY"
+```
+
+After you've created the file, you can apply it to your Kubernetes cluster using the following command:
+
+```bash
+kubectl apply -f example-proxy-deployment.yaml
+```
+
+Please keep in mind that we don't register any servers on the proxy by default. If you want that every server you deploy is automatically registered on the proxy, you have to use our additional [Server Registration Plugin](/plugin/server-registration) for Velocity or BungeeCord.
+
+## Expose the proxy for players
+Exposing the proxy for players is a crucial step to allow them to connect to your Minecraft servers. You can use a Kubernetes service to expose the proxy. You can use the following example to create a service for the proxy:
+
+```yaml {{ title: 'example-proxy-service.yaml' }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-proxy-service
+spec:
+  selector:
+    app.kubernetes.io/component: proxy
+    # We use the label we've defined in the MinecraftDeployment to select the proxy.
+    # You can use a different label, if you've used a different label in the MinecraftDeployment.
+    # Multiple labels are also possible, and you can specify which proxies you want to select.
+    app: example-proxy-deployment
+  type: NodePort
+  ports:
+    # This might be different for your image, but in our case it's 25577 for Minecraft proxies.
+    - port: 25577
+      targetPort: minecraft
+      protocol: TCP
+      name: minecraft
+      nodePort: 32556
+```
+
+After you've created the file, you can apply it to your Kubernetes cluster using the following command:
+
+```bash
+kubectl apply -f example-proxy-service.yaml
+```
+
+Now you can connect to your proxy using the IP of your Kubernetes cluster and the port you've defined in the service. If you're using a cloud provider, you might need to use a LoadBalancer instead of a NodePort. You can find more information about the different service types in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/service/).
+
+## Get started with servers
+
+To create a Minecraft server, you can use the following example. If your server has state, that you want to keep between restarts, or your server needs to be identified by a number (e.g. for a lobby server), you should use a MinecraftStatefulSet instead of a MinecraftDeployment. You can find more information about the MinecraftStatefulSet in the [MinecraftStatefulSet documentation](/docs/minecraft-stateful-set).
+
+For this example, we're using a Docker image that is based on [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server). You can read their documentation, if you want to use a different configuration.
+
+In our case we'll name the file `example-server-deployment.yaml` and we'll use the following content:
+
+```yaml {{ title: 'example-server-deployment.yaml' }}
+apiVersion: strela.dev/v1
+kind: MinecraftDeployment
+metadata:
+  name: example-server-deployment
+spec:
+  replicas: 1
+  type: SERVER
+  template:
+    spec:
+      template:
+        spec:
+          containers:
+            # We use our Docker image for a Minecraft server.
+            # You can use any other image, but make sure it's starting a Minecraft server.
+            - image: ghcr.io/strela-dev/docker-minecraft-server:main
+              imagePullPolicy: Always
+              name: server
+              tty: true
+              stdin: true
+              ports:
+                # This might be different for your image, but it's usually 25565 for Minecraft servers.
+                - containerPort: 25565
+                  name: main
+              env:
+                # Our image is based on itzg/bungeecord, so we use a variable to start a velocity server.
+                # If you use a different image, you might need to use a different variable.
+                - name: "EULA"
+                  value: "TRUE"
+```
+
+After you've created the file, you can apply it to your Kubernetes cluster using the following command:
+
+```bash
+kubectl apply -f example-server-deployment.yaml
+```
+
+If you want to be redirected to any server, when you join a proxy, you can use our additional [Server Connection Plugin](/plugin/server-connection) for Velocity or BungeeCord. Just keep in mind that you have to put it in the proxy's plugins folder and not in the server's plugins folder.
+
+## Set up private Docker images
+
+You can use private Docker images for your Minecraft servers. To do so, you have to create a secret in your Kubernetes cluster and use it in your MinecraftDeployment.
+
+To create a secret, you can use the following command:
+
+
+<CodeGroup>
+    ```bash {{ title: 'Github Container Registry' }}
+    kubectl create secret docker-registry custom-registry-secret \
+      --docker-server=ghcr.io \
+      --docker-username=GITHUB_USER \
+      --docker-password=GITHUB_PASSWORD \
+      --docker-email=GITHUB_EMAIL
+    ```
+
+    ```bash {{ title: 'Docker Hub' }}
+    kubectl create secret docker-registry custom-registry-secret \
+      --docker-server=index.docker.io \
+      --docker-username=DOCKER_USER \
+      --docker-password=DOCKER_PASSWORD \
+      --docker-email=DOCKER_EMAIL
+    ```
+
+    ```bash {{ title: 'Other' }}
+    kubectl create secret docker-registry custom-registry-secret \
+      --docker-server=DOCKER_REGISTRY_SERVER \
+      --docker-username=DOCKER_USER \
+      --docker-password=DOCKER_PASSWORD \
+      --docker-email=DOCKER_EMAIL
+    ```
+</CodeGroup>
+
+After you've created the secret, you can use it in your MinecraftDeployment. You can use the following example to do so:
+
+<CodeGroup>
+
+    ```yaml {{ title: 'example-proxy-deployment.yaml' }}
+    apiVersion: strela.dev/v1
+    kind: MinecraftDeployment
+    metadata:
+      name: example-proxy-deployment
+      labels:
+        # We define this label to be able to create a service, so the Minecraft server can be accessed from the server list.
+        app: example-proxy-deployment
+    spec:
+      replicas: 1
+      type: PROXY
+      template:
+        spec:
+          template:
+            spec:
+              containers:
+                # We use our Docker image for a Minecraft proxy server.
+                # You can use any other image, but make sure it's starting a Minecraft server.
+                - image: ghcr.io/strela-dev/docker-minecraft-proxy:main
+                  imagePullPolicy: Always
+                  name: server
+                  tty: true
+                  stdin: true
+                  ports:
+                    # This might be different for your image, but it's usually 25577 for Minecraft proxies.
+                    - containerPort: 25577
+                      name: main
+                  env:
+                    # Our image is based on itzg/bungeecord, so we use a variable to start a velocity server.
+                    # If you use a different image, you might need to use a different variable.
+                    - name: "TYPE"
+                      value: "VELOCITY"
+                  imagePullSecrets:
+                    - name: custom-registry-secret
+    ```
+
+
+    ```yaml {{ title: 'example-server-deployment.yaml' }}
+    apiVersion: strela.dev/v1
+    kind: MinecraftDeployment
+    metadata:
+      name: example-server-deployment
+    spec:
+      replicas: 1
+      type: SERVER
+      template:
+        spec:
+          template:
+            spec:
+              containers:
+                # We use our Docker image for a Minecraft server.
+                # You can use any other image, but make sure it's starting a Minecraft server.
+                - image: ghcr.io/strela-dev/docker-minecraft-server:main
+                  imagePullPolicy: Always
+                  name: server
+                  tty: true
+                  stdin: true
+                  ports:
+                    # This might be different for your image, but it's usually 25565 for Minecraft servers.
+                    - containerPort: 25565
+                      name: main
+                  env:
+                    # Our image is based on itzg/bungeecord, so we use a variable to start a velocity server.
+                    # If you use a different image, you might need to use a different variable.
+                    - name: "EULA"
+                      value: "TRUE"
+                  imagePullSecrets:
+                    - name: custom-registry-secret
+    ```
+
+</CodeGroup>
+
+## Interact with a started MinecraftServer
+
+<Note>
+    We have a detailed guide on how to interact with a started MinecraftServer. You can find it in the [MinecraftServer documentation](/minecraft-server#interact-with-a-started-minecraft-server).
+</Note>
+
+## Spec Fields
+
+The `MinecraftDeploymentSpec` defines the desired state of your Minecraft server deployment. Below are the properties you can specify in the MinecraftDeployment spec:
+
+<Properties>
+    <Property name="replicas" type="integer">
+        Specifies the number of replicas for the Minecraft server deployment. Default is 1 if not specified.
+    </Property>
+
+    <Property name="type" type="MinecraftDeploymentType">
+        Defines the type of Minecraft server. Can be one of "PROXY" or "SERVER".
+    </Property>
+
+    <Property name="template" type="MinecraftServerTemplateSpec">
+        A template for creating the [MinecraftServerSet](/minecraft-server-set) instances. Includes also the configuration for the [MinecraftServer](/minecraft-server) resource.
+    </Property>
+</Properties>
+
+## Status Fields
+
+The `MinecraftDeploymentStatus` reflects the observed state of the MinecraftDeployment. It provides runtime information about the servers:
+
+<Properties>
+    <Property name="replicas" type="integer">
+        The current number of replicas of the server that are managed by this MinecraftDeployment.
+    </Property>
+
+    <Property name="ready" type="integer">
+        The number of replicas that are in a Ready state. Ready replicas are those that have successfully started and are available for players.
+    </Property>
+</Properties>
+
+## Types
+
+`MinecraftDeploymentType` is an enumeration that specifies the server type. It supports the following values:
+
+- `PROXY`: A proxy server like Velocity, BungeeCord, etc.
+- `SERVER`: A server like Spigot, Paper, etc.
+
+---
+
+Ensure you apply the correct YAML configuration based on this specification to manage your Minecraft servers effectively within your Kubernetes cluster.
+
+## Using an SDK
+
+If you want to use an API to deploy Minecraft server, you can use on of our official SDKs. They offer a simple way to interact with the Strela API and create and manage MinecraftDeployments.
+
+<div className="not-prose">
+    <Button href="/sdk" variant="text" arrow="right">
+        <>Check out our list of first-party SDKs</>
+    </Button>
+</div>

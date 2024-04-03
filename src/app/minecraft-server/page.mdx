@@ -1,0 +1,155 @@
+import {Button, CodeGroup, Note, Properties, Property} from "../../components/mdx";
+
+export const metadata = {
+  title: 'Minecraft Servers',
+  description:
+    'In this guide, we’ll look at how MinecraftServers work and how they are being controlled.',
+}
+
+# Minecraft Servers
+
+With Strela, you can create a single Minecraft server, including proxies like Velocity or BungeeCord, or normal servers like Spigot or Paper. You don't want to use a MinecraftServer in most cases, as you usually want to use a [MinecraftDeployment](/minecraft-deployment) or a [MinecraftStatefulSet](/minecraft-stateful-set) to create multiple servers. {{ className: 'lead' }}
+
+<Note>
+    A MincraftServer has no replicas, so if you want to create multiple servers, you have to use a [MinecraftDeployment](/minecraft-deployment) or a [MinecraftStatefulSet](/minecraft-stateful-set).
+</Note>
+
+## Get started with Minecraft servers
+
+We're getting started with a paper server, as they are most common used for single Minecraft server instances.
+
+The first thing you need to do is to create a MinecraftServer resource. In this case we're using a Docker image that is based on [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server). You can read their documentation, if you want to use a different configuration.
+
+For this example we'll name the file `example-minecraft-server.yaml` and we'll use the following content:
+
+```yaml {{ title: 'example-minecraft-server.yaml' }}
+apiVersion: strela.dev/v1
+kind: MinecraftServer
+metadata:
+  labels:
+    # We define this label to be able to create a service, so the Minecraft server can be accessed from the server list.
+    app: example-minecraft-server
+  name: example-minecraft-server
+spec:
+  # You can set the number of maximal players, but keep in mind that this doesn't change any configuration on the server itself.
+  # This is just for our Autoscaler, so it can allocate the right amount of resources.
+  maxPlayers: 20
+  template:
+    spec:
+      containers:
+        # We use our Docker image for a Minecraft proxy server.
+        # You can use any other image, but make sure it's starting a Minecraft server.
+        - image: ghcr.io/strela-dev/docker-minecraft-server:main
+          imagePullPolicy: Always
+          name: server
+          tty: true
+          stdin: true
+          ports:
+            # This might be different for your image, but it's usually 25565 for Minecraft servers.
+            - containerPort: 25565
+              name: main
+          env:
+            # Our image is based on itzg/minecraft-server, so we use a variable to start a velocity server.
+            # If you use a different image, you might need to use a different variable.
+            - name: "EULA"
+              value: "true"
+```
+
+After you've created the file, you can apply it to your Kubernetes cluster using the following command:
+
+```bash
+kubectl apply -f example-minecraft-server.yaml
+```
+
+## Interact with a started MinecraftServer
+
+If you want to interact with a started MinecraftServer, you have to find the pod name of the server. You can do so by using the following command:
+
+```bash
+kubectl get pods
+```
+
+After you've found the pod name, you can use the following command to attach with the server:
+
+```bash
+kubectl attach -it POD_NAME
+```
+
+Now you can run any command you want to run on the server. For example, you can kick a player by using the following command:
+
+```bash
+kick Fllip
+```
+
+## Spec Fields
+
+The `MinecraftServerSpec` defines the desired state of a MinecraftServer instance. Below are the properties you can configure:
+
+<Properties>
+    <Property name="container" type="string">
+        The name of the Docker container image to use for the Minecraft server. This allows for the specification of custom Minecraft server images.
+    </Property>
+
+    <Property name="configDir" type="string">
+        Specifies the directory where the Minecraft server's configuration files are stored. This path is relative to the container's filesystem.
+    </Property>
+
+    <Property name="template" type="corev1.PodTemplateSpec">
+        A template for creating the pod that will host the Minecraft server. This includes configurations for resources, volumes, and more.
+    </Property>
+
+    <Property name="configurationMode" type="ConfigurationMode">
+        Determines the server configuration mode. Options include "BUNGEECORD", "VELOCITY", "PAPER_VELOCITY", and "SPIGOT_BUNGEECORD".
+    </Property>
+
+    <Property name="maxPlayers" type="integer">
+        The maximum number of players that can join the Minecraft server. Helps in allocating resources and managing server load.
+
+        Keep in mind that this doesn't change any configuration on the server itself.
+    </Property>
+</Properties>
+
+## Status Fields
+
+The `MinecraftServerStatus` reflects the observed state of the MinecraftServer. It provides runtime information about the server's status:
+
+<Properties>
+    <Property name="ingame" type="boolean">
+        Indicates whether a game is currently in progress on the server.
+    </Property>
+
+    <Property name="ready" type="boolean">
+        Shows whether the Minecraft server is ready to accept players. A server is considered ready once it has successfully started and initialized.
+    </Property>
+
+    <Property name="playerCount" type="integer">
+        The current number of players connected to the server. This provides real-time insight into server utilization.
+    </Property>
+</Properties>
+
+## Configuration Modes
+
+`ConfigurationMode` is an enumeration that specifies the server's configuration mode, impacting how the server is set up and interacts with clients and other servers:
+
+- `BUNGEECORD`: For servers using the BungeeCord proxy system.
+- `VELOCITY`: For servers utilizing the modern Velocity proxy system.
+- `PAPER_VELOCITY`: A specialized setup for servers that combine PaperMC with Velocity.
+- `SPIGOT_BUNGEECORD`: For Spigot servers configured to work with BungeeCord.
+
+<Note>
+    A ConfigurationMode is only required if you are running a proxy server and want that the server is configured correctly, so the proxy can redirect players to the server, if the server is registered.
+</Note>
+
+---
+
+Ensure you apply the correct YAML configuration based on this specification to manage your Minecraft servers effectively within your Kubernetes cluster.
+
+## Using an SDK
+
+If you want to use an API to deploy Minecraft server, you can use on of our official SDKs. They offer a simple way to interact with the Strela API and create and manage MinecraftServers.
+
+<div className="not-prose">
+    <Button href="/sdk" variant="text" arrow="right">
+        <>Check out our list of first-party SDKs</>
+    </Button>
+</div>

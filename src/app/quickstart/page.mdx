@@ -1,0 +1,83 @@
+import { CodeGroup } from "../../components/Code";
+import { Button } from "../../components/Button";
+import { Note } from "../../components/mdx";
+
+export const metadata = {
+  title: 'Quickstart',
+  description:
+    'This guide will get you all set up and ready to use the Protocol API. We’ll cover how to get started an API client and how to make your first API request.',
+}
+
+# Quickstart
+
+This guide will get you all set up and ready to use Strela in your Kubernetes cluster. We'll cover how to get started using Helm. We'll also look at how you can install Kubernetes before you're getting started with Strela. {{ className: 'lead' }}
+
+<Note>
+  Before you install Strela, it would make sense to first understand how Kubernetes and Strela work in general. You can find this under [Crash Course](/crash-course).
+</Note>
+
+## Choose your Kubernetes distribution
+
+Before start with Strela you need to choose your Kubernetes distribution. In the following example, you can see how to install a few Kubernetes distributions on Linux.
+
+<CodeGroup>
+
+```bash {{ title: 'k3s' }}
+# k3s is a lightweight Kubernetes distribution
+curl -sfL https://get.k3s.io | sh -
+```
+
+```bash {{ title: 'microk8s'}}
+# microk8s is a lightweight Kubernetes distribution
+
+# 1. Install MicroK8s on Linux
+sudo snap install microk8s --classic
+
+# 2. Check the status while Kubernetes starts
+microk8s status --wait-ready
+
+# 3. Turn on the services you want
+microk8s enable dashboard
+microk8s enable dns
+microk8s enable registry
+microk8s enable istio
+microk8s enable helm
+```
+
+
+</CodeGroup>
+
+Please keep in mind that these are just examples, and you can find many more distributions on the internet.
+
+## Get started with Helm
+
+After picking your preferred distribution, you are ready to install our Helm chart. Below, you can see how to install the Strela Helm chart.
+
+<CodeGroup>
+
+```bash {{ title: 'Helm'}}
+# Add the Strela Helm repository
+helm repo add strela https://helm.strela.dev
+
+# Install the Strela Helm chart
+helm install strela strela/strela --namespace strela-system --create-namespace
+```
+
+</CodeGroup>
+
+<div className="not-prose">
+  <Button href="/custom-resources" variant="text" arrow="right">
+    <>Read the docs for all our custom Kubernetes resources</>
+  </Button>
+</div>
+
+## What's next?
+
+Great, you're now set up with Strela. Here are a few links that might be helpful as you continue to explore Strela:
+
+- [Create your first MinecraftDeployment](/minecraft-deployment)
+- [Create your first MinecraftStatefulSet](/minecraft-stateful-set)
+- [Create your first MinecraftAutoscaler](/minecraft-autoscaler)
+- [Learn more about the Strela Kubernetes controller](#)
+- [Learn more about the Strela Java-SDK](/sdk/java)
+- [Learn more about the Strela Go-SDK](/sdk/go)
