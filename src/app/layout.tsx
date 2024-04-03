@@ -9,8 +9,8 @@ import { type Section } from '@/components/SectionProvider'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - Strela',
-    default: 'Strela',
+    template: '%s - SimpleCloud',
+    default: 'SimpleCloud',
   },
 }
 

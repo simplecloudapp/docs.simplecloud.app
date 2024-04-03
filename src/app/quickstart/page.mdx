@@ -5,79 +5,67 @@ import { Note } from "../../components/mdx";
 export const metadata = {
   title: 'Quickstart',
   description:
-    'This guide will get you all set up and ready to use the Protocol API. We’ll cover how to get started an API client and how to make your first API request.',
+    'This guide will get you all set up for a SimpleCloud installation that is comparable to the SimpleCloud v2 experience.',
 }
 
 # Quickstart
 
-This guide will get you all set up and ready to use Strela in your Kubernetes cluster. We'll cover how to get started using Helm. We'll also look at how you can install Kubernetes before you're getting started with Strela. {{ className: 'lead' }}
+This guide will get you all set up for a SimpleCloud installation that is comparable to the [SimpleCloud v2](https://github.com/theSimpleCloud/SimpleCloud) experience. We'll cover the [CLI](/cli), standardized official [Droplets](/droplets) and the new [API](/api) design.  {{ className: 'lead' }}
+
+## Installing SimpleCloud
+
+The SimpleCloud Installer will install the SimpleCloud [CLI](/cli) as well as the core of the cloud.
 
 <Note>
-  Before you install Strela, it would make sense to first understand how Kubernetes and Strela work in general. You can find this under [Crash Course](/crash-course).
+    To get started with SimpleCloud, it is advised to use our [CLI](/cli), since you will only receive support for most topics if you do so (the only other way to run SimpleCloud is to [put it together yourself](/structure)).
 </Note>
 
-## Choose your Kubernetes distribution
-
-Before start with Strela you need to choose your Kubernetes distribution. In the following example, you can see how to install a few Kubernetes distributions on Linux.
-
 <CodeGroup>
 
-```bash {{ title: 'k3s' }}
-# k3s is a lightweight Kubernetes distribution
-curl -sfL https://get.k3s.io | sh -
+```bash {{ title: 'Unix' }}
+wget https://github.com/theSimpleCloud/installer/releases/latest && ./install.sh
 ```
 
-```bash {{ title: 'microk8s'}}
-# microk8s is a lightweight Kubernetes distribution
-
-# 1. Install MicroK8s on Linux
-sudo snap install microk8s --classic
-
-# 2. Check the status while Kubernetes starts
-microk8s status --wait-ready
-
-# 3. Turn on the services you want
-microk8s enable dashboard
-microk8s enable dns
-microk8s enable registry
-microk8s enable istio
-microk8s enable helm
+```bash {{ title: 'Windows'}}
+# You have to download the Installer files manually.
+./install.bat
 ```
-
-
 </CodeGroup>
 
-Please keep in mind that these are just examples, and you can find many more distributions on the internet.
+## Running SimpleCloud
 
-## Get started with Helm
+<Note>
+    Only do this if you installed via the installer.
+</Note>
 
-After picking your preferred distribution, you are ready to install our Helm chart. Below, you can see how to install the Strela Helm chart.
+For the CLI to be functional a running SimpleCloud instance is required. To start the cloud, execute the following command.
 
 <CodeGroup>
-
-```bash {{ title: 'Helm'}}
-# Add the Strela Helm repository
-helm repo add strela https://helm.strela.dev
-
-# Install the Strela Helm chart
-helm install strela strela/strela --namespace strela-system --create-namespace
+```bash {{ title: 'Unix' }}
+./run.sh
 ```
-
+```bash {{ title: 'Windows'}}
+./run.bat
+```
 </CodeGroup>
+
+## Setting up SimpleCloud
+
+If you chose to build a SimpleCloud environment by yourself, you have a lot more to go through before you can start.
 
 <div className="not-prose">
-  <Button href="/custom-resources" variant="text" arrow="right">
-    <>Read the docs for all our custom Kubernetes resources</>
+  <Button href="/structure" variant="text" arrow="right">
+    <>Read the docs about setting up a working SimpleCloud environment</>
   </Button>
 </div>
 
 ## What's next?
 
-Great, you're now set up with Strela. Here are a few links that might be helpful as you continue to explore Strela:
+Great, you're now set up with SimpleCloud. Here are a few links that might be helpful as you continue to explore SimpleCloud:
 
-- [Create your first MinecraftDeployment](/minecraft-deployment)
-- [Create your first MinecraftStatefulSet](/minecraft-stateful-set)
-- [Create your first MinecraftAutoscaler](/minecraft-autoscaler)
-- [Learn more about the Strela Kubernetes controller](#)
-- [Learn more about the Strela Java-SDK](/sdk/java)
-- [Learn more about the Strela Go-SDK](/sdk/go)
+- [Select wanted plugins](/cli/plugins)
+- [Select wanted droplets](/cli/droplets)
+- [Create your first group](/cli/group)
+- [Learn about the structure](/structure)
+- [Create a template](/serverhost/template)
+- [Learn about the SDKs](/sdk)
