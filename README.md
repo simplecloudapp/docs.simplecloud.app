@@ -1,0 +1,2 @@
+# docs
+Official SimpleCloud documentation
