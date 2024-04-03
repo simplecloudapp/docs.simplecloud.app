@@ -1,4 +1,4 @@
-# Strela Docs
+# SimpleCloud Docs
 
 ## Getting started
 
