@@ -1,0 +1,75 @@
+import { CodeGroup } from "../../components/Code";
+import { Button } from "../../components/Button";
+import { Note } from "../../components/mdx";
+
+export const metadata = {
+  title: 'Templates',
+  description:
+    'This guide will show you the endless templating possibilities with SimpleCloud',
+}
+
+# Templates
+
+Templates are not living in one directory for each group like in v2. They are multiple template destination processors, each with its
+own functionality. Also, you can have as many template actions for each processor as you want.
+
+## Defining a template action
+
+Template actions copy files from one directory to another by provided paths. They are defined under a destination processor in the templates YML file.
+Template YML files are saved under `/droplets/serverhost-droplet/templates` (see [structure](/structure))
+
+<Note>
+    If a template action path starts with `/`, it is marked as an absolute path.
+
+    You can also use following placeholders for paths:
+    - `%SERVER%`: gets replaced by a server name and numerical id (e.g. `lobby-1`)
+    - `%NUMERICAL_ID%`: gets replaced by the numerical id (e.g. `1`)
+    - `%GROUP%`: gets replaced by the group (e.g. `lobby`)
+</Note>
+
+## Destination processors
+
+In each template YML file, you can opt in to destination processors, by listing the processor as a key and a list of actions as its value.
+
+As of now, only 3 template processors exist:
+- `destinations`: Copies a file/directory to the servers directory on the server start
+- `random-destinations`: Copies a random file/directory inside a directory to the servers directory on the server start
+- `shutdown-destinations`: Copies a file/directory from the server to a template directory on the server stop
+
+### Example: Dynamic templates like in SimpleCloud v2
+This example shows a default template implementation that would operate like SimpleCloud v2 templates,
+using the `destinations` destination processor.
+<CodeGroup>
+```yml
+# destination processor
+destinations:
+   # template action
+   - copy-from: "%GROUP%"
+     copy-to: ""
+```
+</CodeGroup>
+
+## Template extending
+Templates can also extend other templates. you can list the extended templates by adding a `extends` list in the YML file.
+
+### Example: lobby template extending the generic server template
+
+#### generic_server.yml
+```yml
+destinations:
+    - copy-from: "generic/server/plugins"
+      copy-to: "plugins"
+```
+
+#### lobby.yml
+```yml
+extends:
+    - "generic_server"
+destinations:
+    - copy-from: "%GROUP%"
+      copy-to: ""
+```
+
+## Assigning templates to a group
+
+To assign a template to a group, set %template-id% to your wanted template id (e.g. if your wanted template is stored in `lobby.yml`, your template id is `lobby`) in the [properties](/server-group/properties) of the lobby group.
