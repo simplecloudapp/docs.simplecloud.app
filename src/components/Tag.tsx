@@ -11,10 +11,10 @@ const colorStyles = {
     medium:
       'ring-sky-300 dark:ring-emerald-400/30 bg-emerald-400/10 text-sky-500 dark:text-emerald-400',
   },
-  sky: {
-    small: 'text-sky-500',
+  amber: {
+    small: 'text-amber-500',
     medium:
-      'ring-sky-300 bg-sky-400/10 text-sky-500 dark:ring-sky-400/30 dark:bg-sky-400/10 dark:text-sky-400',
+      'ring-amber-300 bg-amber-400/10 text-amber-500 dark:ring-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400',
   },
   sky: {
     small: 'text-sky-500',
@@ -35,7 +35,7 @@ const colorStyles = {
 
 const valueColorMap = {
   GET: 'emerald',
-  POST: 'sky',
+  POST: 'amber',
   PUT: 'sky',
   DELETE: 'rose',
 } as Record<string, keyof typeof colorStyles>
