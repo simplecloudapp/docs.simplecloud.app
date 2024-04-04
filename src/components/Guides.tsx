@@ -3,29 +3,29 @@ import { Heading } from '@/components/Heading'
 
 const guides = [
   {
-    href: '/minecraft-deployment',
-    name: 'Minecraft Deployments',
-    description: 'Learn how to create a Minecraft server deployment.',
+    href: '/controller',
+    name: 'Controller',
+    description: 'Learn how the new controller works.',
   },
   {
-    href: '/minecraft-stateful-set',
-    name: 'Minecraft StatefulSets',
-    description: 'Understand how to manage Minecraft StatefulSets.',
+    href: '/server-group',
+    name: 'Server Groups',
+    description: 'Understand how to manage server groups.',
   },
   {
-    href: '/minecraft-server-set',
-    name: 'Minecraft ServerSets',
-    description: 'See how Minecraft server sets work, and how they start servers',
+    href: '/server',
+    name: 'Servers',
+    description: 'See how servers work, and how you can customize them.',
   },
   {
-    href: '/minecraft-server',
-    name: 'Minecraft Servers',
-    description: 'Learn how a Minecraft server is structured and how you can use it.',
+    href: '/template',
+    name: 'Templates',
+    description: 'Learn how a template is structured and how you can use it.',
   },
   {
-    href: '/minecraft-autoscaler',
-    name: 'Minecraft Autoscaler',
-    description: 'Read about our Autoscaler and create your own one.',
+    href: '/permissions',
+    name: 'Permissions',
+    description: 'See how you can integrate a permissions system with SimpleCloud.',
   }
 ]
 
