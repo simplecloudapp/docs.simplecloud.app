@@ -1,0 +1,79 @@
+import {Note} from "../../components/mdx";
+export const metadata = {
+    title: 'SimpleCloud Droplets',
+    description:
+        'Droplets are interpretation of a micro-services, that can extend the functionality of your SimpleCloud setup. They can be used to run custom code, interact with external services, or even to create a custom API.',
+}
+
+export const sections = [
+    { title: 'How to install a droplet?', id: 'how-to-install-a-droplet' },
+    { title: 'Why use droplets?', id: 'why-use-droplets' },
+    { title: 'Are droplets replacements for v2 modules?', id: 'are-droplets-replacements-for-v2-modules' },
+    { title: 'Can I create my own droplets?', id: 'can-i-create-my-own-droplets' },
+    { title: 'Official droplets', id: 'official-droplets' },
+]
+
+# SimpleCloud Droplets
+
+A droplet is our interpretation of a micro-service, that can extend the functionality of your SimpleCloud setup. They can be used to run custom code, interact with external services, or even to create a custom API. {{ className: 'lead' }}
+
+## How to install a droplet?
+
+If you have our [CLI](/cli) installed, you can install a droplet with the following command:
+
+```bash
+# Install a droplet
+simplecloud droplet install <droplet-name>
+```
+
+To see a list of all available droplets, you can use the following command, or view the list of [official droplets below](#official-droplets):
+
+```bash
+# List all available droplets
+simplecloud droplet list
+```
+
+## Why use droplets?
+
+Droplets are a powerful way to extend the functionality of your SimpleCloud setup, without having to write a full-blown application. A droplet (micro-service) is focused on doing one thing, and doing it well. This makes it easy to maintain for us, and easy to scale for you.
+
+This means that every important part of SimpleCloud v3 is now decoupled as good as possible and can theoretically be replaced by a custom droplet, or even not used at all.
+For example, if you don't need the [CloudPlayer](/droplet/player), because you have your own player or don't need a player at all, you can simply not include our [player-droplet](/droplet/player) and you're ready to go.
+
+## Are droplets replacements for v2 modules?
+
+The simple answer is no. Droplets are not replacements for v2 modules. Some droplets may have similarities with existing v2 modules, but that's not our intention.
+Most of the old modules can just be Velocity/BungeeCord/Spigot etc. plugins, that's why we decided to convert all old modules to new and simple [plugins](/plugin) from time to time.
+
+<Note>
+    If you have any ideas for new droplets, or plugins, feel free to join our [Discord](/https://discord.simplecloud.app) and share your ideas with us.
+</Note>
+
+## Can I create my own droplets?
+
+Yes, because a droplet is just simply a micro-service, you can create your own droplets. It's completely up to you how you create your droplets, but we have a small internal Tech-Stack that we use for our droplets.
+
+Here is a list of our Tech-Stack:
+- [Kotlin](https://kotlinlang.org/)
+- [ProtoBuf](https://developers.google.com/protocol-buffers)
+- [gRPC](https://grpc.io/)
+- [RabbitMQ](https://www.rabbitmq.com/)
+- [Redis](https://redis.io/)
+- [SQLite](https://www.sqlite.org/index.html) or [PostgreSQL](https://www.postgresql.org/)
+- [JOOQ](https://www.jooq.org/)
+
+Additionally, we use [Docker](https://www.docker.com/) to containerize our droplets.
+
+We don't use all of these technologies in every droplet, but we use them in most of our droplets. You can find the exact Tech-Stack of a droplet in the documentation of the specific droplet.
+
+<Note>
+    This is just our Tech-Stack, you can use any technology you want to create your own droplets. If you have any questions about creating your own droplets, feel free to join our [Discord](/https://discord.simplecloud.app) and ask us.
+</Note>
+
+## Official droplets
+
+We have created a few official droplets, that can be used to extend the functionality of your SimpleCloud setup. You can find a list of all official droplets below.
+- [Server Host Droplet](/droplet/serverhost)
+- [Server Host Docker Droplet](/droplet/serverhost-docker)
+- [Player Droplet](/droplet/player)
+- [Resource Pack Droplet](/droplet/resourcepack)
