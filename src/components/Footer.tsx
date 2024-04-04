@@ -121,10 +121,10 @@ function SmallPrint() {
         &copy; Copyright {new Date().getFullYear()}. All rights reserved.
       </p>
       <div className="flex gap-4">
-        <SocialLink href="https://github.com/strela-dev" icon={GitHubIcon}>
+        <SocialLink href="https://github.com/theSimpleCloud" icon={GitHubIcon}>
           Follow us on GitHub
         </SocialLink>
-        <SocialLink href="https://discord.strela.dev" icon={DiscordIcon}>
+        <SocialLink href="https://discord.simplecloud.app" icon={DiscordIcon}>
           Join our Discord server
         </SocialLink>
       </div>
