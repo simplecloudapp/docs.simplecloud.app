@@ -271,9 +271,9 @@ export const navigation: Array<NavGroup> = [
     title: 'API',
     links: [
       { title: 'Overview', href: '/api' },
-      { title: 'Kotlin', href: '/sdk/kotlin', tag: "Soon", tagColor: "rose" },
-      { title: 'Java', href: '/sdk/java', tag: "Soon", tagColor: "rose" },
-      { title: 'Go', href: '/sdk/go', tag: "Soon", tagColor: "rose" },
+      { title: 'Kotlin', href: '/api/kotlin', tag: "Soon", tagColor: "rose" },
+      { title: 'Java', href: '/api/java', tag: "Soon", tagColor: "rose" },
+      { title: 'Go', href: '/api/go', tag: "Soon", tagColor: "rose" },
     ],
   },
 ]

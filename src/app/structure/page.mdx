@@ -1,0 +1,104 @@
+import { CodeGroup } from "../../components/Code";
+import { Button } from "../../components/Button";
+import { Note } from "../../components/mdx";
+
+export const metadata = {
+  title: 'Structure',
+  description:
+    'This guide will show you how SimpleCloud is internally structured.',
+}
+
+# Structure
+
+<Note>
+    If you installed via the [CLI](/cli), you don't have to follow these steps. However, it is advised to still read through it, so you know how SimpleCloud operates.
+</Note>
+
+To make SimpleCloud work, we utilize a [Controller](/controller) (formerly known as Master), that manages server starts and handles API calls and Groups. This Controller itself is not able
+to start servers, so for it to do something you need a [Server Host Droplet](/server-host) (formerly known as Wrapper). This droplets main objective is to actually start Servers, therefore templates are also managed by this droplet.
+This means you can easily implement [Multi-Root](/multi-root) by just starting up a Server Host Droplet on each root server.
+
+<Note>
+    Before you read further, please first understand how [Controller](/controller) and [Server Host Droplet](/server-host) operate.
+</Note>
+
+## File structure
+
+We advise you to structure your files like this, as it works best in our experience
+
+```
+.
+├── controller-runtime.jar
+├── droplets/
+│   └── serverhost-droplet/
+│       ├── serverhost-droplet.jar
+│       ├── config.yml
+│       ├── cache
+│       ├── options/
+│       │   ├── configurators/
+│       │   │   ├── spigot.yml
+│       │   │   ├── ...
+│       │   │   └── velocity.yml
+│       │   ├── lobby.yml
+│       │   └── proxy.yml
+│       └── templates/
+│           ├── lobby.yml
+│           └── proxy.yml
+├── templates/
+│   ├── lobby/
+│   │   └── ...
+│   └── proxy/
+│       └── ...
+├── groups/
+│   ├── lobby.yml
+│   └── proxy.yml
+└── running/
+    ├── lobby/
+    │   └── lobby-1/
+    │       └── ...
+    └── proxy/
+        └── proxy-1/
+            └── ...
+```
+
+To achieve this file structure, start up the controller [jar](github.com/thesimplecloud/simplecloud-controller/releases/latest) in your installation dir.
+
+<CodeGroup>
+```bash {{title: 'Unix'}}
+screen -S controller java -jar controller-runtime
+```
+
+```bash {{title: 'Windows'}}
+java -jar controller-runtime
+```
+</CodeGroup>
+
+This will generate all needed files. Now stop the controller using `CTRL+C`, and drop the Server Host [jar](github.com/thesimplecloud/serverhost-droplet/releases/latest) into `droplets/serverhost-droplet`.
+You can now start Controller and Server Host Droplet, to get a running SimpleCloud instance!
+
+<CodeGroup>
+```bash {{title: 'Unix'}}
+# example command starting the controller in a screen
+screen -S controller java -jar controller-runtime
+
+# example starting the serverhost in a screen
+# to achieve our advised structure, you need to use
+# the TEMPLATE_PATH and RUNNING_PATH options
+screen -S serverhost java -jar droplets/serverhost-droplet/serverhost-droplet.jar --TEMPLATE_PATH "../../templates" --RUNNING_PATH "../../running"
+```
+
+```bash {{title: 'Windows'}}
+# example command starting the controller
+java -jar controller-runtime
+
+# example starting the serverhost
+# to achieve our advised structure, you need to use
+# the TEMPLATE_PATH and RUNNING_PATH options
+java -jar droplets/serverhost-droplet/serverhost-droplet.jar --TEMPLATE_PATH "../../templates" --RUNNING_PATH "../../running"
+```
+
+</CodeGroup>
+
+<Note>
+    If you dont want to execute these commands every time, you can use our [Runner](/runner)
+</Note>
