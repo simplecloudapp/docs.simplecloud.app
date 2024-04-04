@@ -16,7 +16,8 @@ interface NavGroup {
   links: Array<{
     title: string
     href: string
-    soon?: boolean
+    tag?: string,
+    tagColor?: TagColor
   }>
 }
 
@@ -192,7 +193,7 @@ function NavigationGroup({
         <ul role="list" className="border-l border-transparent">
           {group.links.map((link) => (
             <motion.li key={link.href} layout="position" className="relative">
-              <NavLink href={link.href} active={link.href === pathname} tag={link.soon ? "Soon" : undefined} tagColor="sky">
+              <NavLink href={link.href} active={link.href === pathname} tag={link.tag} tagColor={link.tagColor ?? "sky"}>
                   {link.title}
               </NavLink>
               <AnimatePresence mode="popLayout" initial={false}>
@@ -237,27 +238,42 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Introduction', href: '/' },
       { title: 'Quickstart', href: '/quickstart' },
-      { title: 'Minecraft Deployments', href: '/minecraft-deployment' },
-      { title: 'Minecraft Stateful Sets', href: '/minecraft-stateful-set', soon: true },
-      { title: 'Minecraft Server Sets', href: '/minecraft-server-set' },
-      { title: 'Minecraft Servers', href: '/minecraft-server' },
-      { title: 'Minecraft Autoscaler', href: '/minecraft-autoscaler' },
+      { title: 'Controller', href: "/controller" },
+      { title: 'Server Groups', href: "/server-group" },
+      { title: 'Servers', href: "/server" },
+      { title: 'Templates', href: "/template" },
+    ],
+  },
+  {
+    title: 'Droplets',
+    links: [
+      { title: 'Overview', href: '/droplet' },
+      { title: 'Server Host Droplet', href: '/droplet/serverhost' },
+      { title: 'Server Host Docker Droplet', href: '/droplet/serverhost-docker', tag: "Soon", tagColor: "rose" },
+      { title: 'Player Droplet', href: '/droplet/player' },
+      { title: 'Resource Pack Droplet', href: '/droplet/resourcepack', tag: "Soon", tagColor: "rose" },
     ],
   },
   {
     title: 'Plugins',
     links: [
-      { title: 'Server Registration Plugin', href: '/plugin/server-registration' },
-      { title: `Server Connection Plugin`, href: '/plugin/server-connection' }
+      { title: 'Overview', href: '/plugin' },
+      { title: 'Server Registration Plugin', href: '/plugin/server-registration', tag: "Proxy" },
+      { title: 'Server Connection Plugin', href: '/plugin/server-connection', tag: "Proxy" },
+      { title: 'Proxy Plugin', href: '/plugin/proxy', tag: "Proxy"  },
+      { title: 'Notify Plugin', href: '/plugin/notify', tag: "Proxy"  },
+      { title: 'Prefixes Plugin', href: '/plugin/prefixes', tag: "Server" },
+      { title: 'Signs Plugin', href: '/plugin/signs', tag: "Server"  },
+      { title: 'NPCs Plugin', href: '/plugin/npcs', tag: "Server"  },
     ],
   },
   {
-    title: 'SDKs',
+    title: 'API',
     links: [
-      { title: 'Overview', href: '/sdk' },
-      { title: 'Kotlin', href: '/sdk/kotlin', soon: true },
-      { title: 'Java', href: '/sdk/java', soon: true },
-      { title: 'Go', href: '/sdk/go', soon: true },
+      { title: 'Overview', href: '/api' },
+      { title: 'Kotlin', href: '/sdk/kotlin', tag: "Soon", tagColor: "rose" },
+      { title: 'Java', href: '/sdk/java', tag: "Soon", tagColor: "rose" },
+      { title: 'Go', href: '/sdk/go', tag: "Soon", tagColor: "rose" },
     ],
   },
 ]
