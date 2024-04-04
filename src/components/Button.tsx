@@ -16,14 +16,14 @@ function ArrowIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 
 const variantStyles = {
   primary:
-    'rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg400/10 dark:text-amber-400 dark:ring-1 dark:ring-inset dark:ring-amber-400/20 dark:hover:bg-amber-400/10 dark:hover:text-amber-300 dark:hover:ring-amber-300',
+    'rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg400/10 dark:text-sky-400 dark:ring-1 dark:ring-inset dark:ring-sky-400/20 dark:hover:bg-sky-400/10 dark:hover:text-sky-300 dark:hover:ring-sky-300',
   secondary:
     'rounded-full bg-zinc-100 py-1 px-3 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800/40 dark:text-zinc-400 dark:ring-1 dark:ring-inset dark:ring-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-300',
   filled:
-    'rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-amber-500 dark:text-white dark:hover:bg-amber-400',
+    'rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-sky-500 dark:text-white dark:hover:bg-sky-400',
   outline:
     'rounded-full py-1 px-3 text-zinc-700 ring-1 ring-inset ring-zinc-900/10 hover:bg-zinc-900/2.5 hover:text-zinc-900 dark:text-zinc-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-white',
-  text: 'text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-500',
+  text: 'text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-500',
 }
 
 type ButtonProps = {

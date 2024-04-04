@@ -2,7 +2,7 @@ export function Logo(props: React.ComponentPropsWithoutRef<'svg'>) {
     return (
         <svg viewBox="0 0 127 46" aria-hidden="true" {...props}>
             <path
-                className="fill-amber-400"
+                className="fill-sky-400"
                 d="M26.7342 19.2579H18.8719L21.1595 1.38739C21.3198 0.13479 19.679 -0.512388 18.9039 0.494913L0.255577 24.7745C-0.369777 25.5835 0.223508 26.7421 1.26576 26.7421H9.12812L6.8405 44.6126C6.68015 45.8652 8.32104 46.5124 9.09605 45.5051L27.7444 21.2255C28.3698 20.4165 27.7765 19.2579 26.7342 19.2579Z"
             />
             <path
