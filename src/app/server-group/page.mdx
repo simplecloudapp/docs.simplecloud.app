@@ -1,0 +1,35 @@
+export const metadata = {
+  title: 'Server groups',
+  description:
+    'Learn about the structure of Server Groups',
+}
+
+# Server groups
+SimpleCloud needs server groups to manage different server types and deployments dynamically. The controller starts [Servers](/server) of every group, each one inheriting the groups properties.
+Server groups are made up of [controller properties](#controller-properties), which are not dynamically changeable via the API, and [dynamic properties](#dynamic-properties).
+Group properties are modifiable using the [CLI](/cli#server-group) and by editing the [group config](/structure).
+
+## Controller properties
+Controller properties are group properties, which are needed by the [controller](/controller) to handle the server group.
+They generally should not be modified by third party programs in both group and [server](/server), while the cloud is running.
+
+| property | type | purpose |
+| -------- | ------ | ------- |
+| name | `string` | The name of this group |
+| type | `SERVER`, `PROXY` or `OTHER` | The [server type](/server#type) |
+| min-memory | `uint` in MB (e.g. `1024`) | The minimum RAM for a server of this group |
+| max-memory | `uint` in MB (e.g. `2048`) | The maximum RAM for a server of this group |
+| min-online-count | `uint` (e.g. 1) | The minimum amount of servers constantly online of this group |
+| max-online-count | `uint` (e.g. 2) | The maximum amount of servers constantly online of this group |
+| properties | `ConfigurationSection` | A key value set holding the [dynamic properties](#dynamic-properties) |
+
+## Dynamic properties
+Dynamic properties are group properties, which are needed by the [Server Host Droplet](/serverhost-droplet) or custom properties for your personal use. You can use
+custom properties in your groups configuration, and there are property Getters/Setters for [servers](/server) using the [API](/api).
+
+<Note>
+    If you use the official Server Host Droplet, you can learn which dynamic properties are mandatory for you by going [here](/serverhost-droplet#group-properties)
+</Note>
+
+## API reference
+You can create, delete, and edit dynamic properties for groups using the [API](/api#server-group).

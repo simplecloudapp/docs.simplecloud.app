@@ -70,10 +70,10 @@ const resources: Array<Resource> = [
     },
   },
   {
-    href: '/groups',
+    href: '/server-group',
     name: 'Groups',
     description:
-      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+      'Learn about the group model and how to create, retrieve, update, delete, and list server-group.',
     icon: UsersIcon,
     pattern: {
       y: 22,

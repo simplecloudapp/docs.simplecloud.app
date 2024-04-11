@@ -10,7 +10,7 @@ const guides = [
   {
     href: '/server-group',
     name: 'Server Groups',
-    description: 'Understand how to manage server groups.',
+    description: 'Understand how to manage server server-group.',
   },
   {
     href: '/server',
