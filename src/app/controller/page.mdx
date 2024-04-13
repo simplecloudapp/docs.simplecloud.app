@@ -20,9 +20,9 @@ The controller is pretty easy to understand. It's just a small program, that kno
 
 ## How does the controller work?
 
-The controller is pretty simple structured. It checks every few seconds if there are any updated on servers or server groups. If there are any updates, it will try to talk to a [server-host](/server-host) and apply those changes. The contacted [server-host](/server-host) will do the rest of the work, like starting, stopping, or updating a server.
+The structure of the controller is very simple. It checks every few seconds if there are any updated on servers or server groups. If there are any updates, it will try to talk to a [server-host](/server-host) and apply those changes. The contacted [server-host](/server-host) will do the rest of the work, like starting, stopping, or updating a server.
 
-For example, if you want to start a server, the controller will send a message to a [server-host](/server-host) and tell it to start a server. The [server-host](/server-host) will then start the server and tell the controller that the server is now running. The last of the controller is to update the status of the server in the database.
+For example, if you want to start a server, the controller will send a message to a [server-host](/server-host) and tell it to start a server. The [server-host](/server-host) will then start the server and tell the controller that the server is now running. At last, the controller updates the status of the server in the database.
 
 <Note>
     The controller is a very important part of SimpleCloud, but there can be only one controller running at a time. If you have multiple controllers running at the same time, you will run into problems.
@@ -41,13 +41,13 @@ simplecloud install controller
 
 Yes, you can run the controller in Docker. We provide a Docker image for the controller, that you can use. You can find a guide on how to run SimpleCloud in Docker [here](#).
 
-If you also want that every started server runs in Docker, you can use the [server-host-docker](/droplet/server-host-docker) droplet.
+If you want every server to run in Docker, you can use the [server-host-docker](/droplet/server-host-docker) droplet.
 
 ## What happens if the controller crashes?
 
 The quick answer is: Nothing. The controller is not responsible for running servers, it's just responsible for managing them. If the controller crashes, the servers will continue to run. The only thing that will not work is the management of the servers. You can't start, stop, or update a server until the controller is running again.
 
-That also means, that you can restart the controller at any time. The controller will automatically detect all running servers and server groups and update the database with the current status.
+That also means, you can restart the controller at any time. The controller will automatically detect all running servers and server groups and update the database accordingly.
 
 <Note>
     Please make sure to check the logs of the controller if it crashes. The logs will tell you why the controller crashed and how to fix it. If you can't fix the problem, please join our [Discord](https://discord.simplecloud.app) and report it there.
@@ -61,4 +61,4 @@ But like the old v2 Manager, the controller is the heart of SimpleCloud. Without
 
 ## Does the controller start droplets?
 
-No, the controller does not start droplets. That is the job of our [CLI](/cli) or of you. The controller is really just responsible for managing servers and server groups.
+No, the controller does not start droplets. That is the job of our [CLI](/cli) or yours. The controller is really just responsible for managing servers and server groups.
