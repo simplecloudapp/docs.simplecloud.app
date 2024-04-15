@@ -16,7 +16,7 @@ export const sections = [
 
 # SimpleCloud Controller
 
-The controller is pretty easy to understand. It's just a small program, that knows everything about server groups and those servers and is responsible for managing them. The controller is the heart of SimpleCloud v3. {{ className: 'lead' }}
+The controller is pretty easy to understand. It's just a small program, that keeps track of [server groups](/server-group) and their online [servers](/server) and manages them. It's the heart of SimpleCloud v3. {{ className: 'lead' }}
 
 ## How does the controller work?
 
@@ -30,7 +30,7 @@ For example, if you want to start a server, the controller will send a message t
 
 ## How to install the controller?
 
-When you install SimpleCloud, the controller is automatically installed. If you want you can install the controller manually, by running the [CLI](/cli) command below, but it's not recommended. Let SimpleCloud handle the installation of the controller.
+When you install SimpleCloud, the controller is automatically installed. If you want, you can install the controller manually by running the [CLI](/cli) command below, but it's not recommended. Let SimpleCloud handle the installation of the controller.
 
 ```bash
 # Install the controller
@@ -39,7 +39,7 @@ simplecloud install controller
 
 ## Can I run the controller in Docker?
 
-Yes, you can run the controller in Docker. We provide a Docker image for the controller, that you can use. You can find a guide on how to run SimpleCloud in Docker [here](#).
+Yes, you can run the controller in Docker. We provide a Docker image for the controller, you can use. You can find a guide on how to run SimpleCloud in Docker [here](#).
 
 If you want every server to run in Docker, you can use the [server-host-docker](/droplet/server-host-docker) droplet.
 
