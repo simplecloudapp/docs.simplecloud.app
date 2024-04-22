@@ -1,0 +1,78 @@
+import { CodeGroup } from "../../../components/Code";
+import { Button } from "../../../components/Button";
+import { Note } from "../../../components/mdx";
+
+export const metadata = {
+    title: 'Registration Plugin',
+    description:
+        'The registration plugin updates registered proxy child servers according to the clouds registered servers.',
+}
+
+<Button href="https://github.com/theSimpleCloud/server-registration-plugin/releases" arrow="right">
+        <>Download</>
+</Button>
+
+# Server Registration Plugin
+
+The registration plugin updates registered proxy child servers according to the clouds registered servers. If your SimpleCloud installation uses a proxy, you need this plugin to make that proxy work correctly. {{ className: 'lead' }}
+
+<Note>
+    This plugin internally uses the [server API](/api#server) to get the online cloud servers. It also provides a generic registration framework to make [own implementations](#own-implementation) for other proxy software easy.
+</Note>
+
+## Supported proxy versions
+
+| Proxy type | Server API availability | Plugin availability | Out of the box support                                                                               |
+|-----------------------|---------------------|-------------------|---------------------------------------------------------------------------------------------------------|
+| Velocity      | ✅                   | ✅                 | ✅                                                                                                       |
+| Bungeecord      | ✅                 | ✅                 | ✅                                                                                                       |
+| Gate            | ✅                 | ❌ (but its planned)                 | ❌ (but its planned) |
+| Other           | ❓ (see available [languages](/api)) | ❌ | ❌  (you can easily get it working by using your [own implementation](#creating-api-and-indexing-groups), but only if the [server API](/api#server) and registration [framework](#registration-framework) are available)
+
+
+## Configuring
+
+You will find the `config.yml` File in the data folder. These are the available options:
+
+````yml
+  # The pattern on how registered server should be named. Available placeholders are:
+  #     GROUP_NAME - The name of the servers group
+  #     ID - The unique id of the server
+  #     NUMERICAL_ID - The numerical id of the server
+  serverNamePattern: "%GROUP_NAME%-%NUMERICAL_ID%"
+
+  # A list of all server groups that should never be registered on this proxy
+  ignoreServerGroups:
+    - "bedwars"
+    - "skywars"
+
+  # A list of non cloud servers that should be registered on this proxy, the name field being the display name the server will be registered to.
+  additionalServers:
+    - name: "build"
+      address: "127.0.0.1"
+      port: 225555
+````
+
+## Registration framework
+The registration framework adds the interface `ServerRegisterer`, which makes it easy to create your own version of this plugin.
+
+```kotlin
+interface ServerRegisterer {
+    // Returns all currently registered servers
+    fun getRegistered(): List<Server>
+    // Is called whenever a new server successfully mounted on the its port, or when a server is reattached (after cloud restart)
+    fun register(server: Server)
+    // Is called whenever a server gets unmounted from its port
+    fun unregister(server: Server)
+}
+```
+
+### Available frameworks
+| Language | Availability |
+| --- | --- |
+| Java | ✅ |
+| Kotlin | ✅ |
+| Other | ❌ |
+
+## Own implementation
+You can use the [Velocity implementation](https://github.com/theSimpleCloud/server-registration-plugin/tree/main/registration-velocity/src/main/kotlin/app/simplecloud/plugin/registration/velocity) as reference for creating a custom registration plugin.
