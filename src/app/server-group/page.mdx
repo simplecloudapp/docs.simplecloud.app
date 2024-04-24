@@ -1,95 +1,97 @@
 export const metadata = {
-  title: 'Server groups',
-  description:
-    'Learn about the structure of Server Groups',
+    title: 'Server groups',
+    description:
+        'Learn about the structure of Server Groups',
 }
 
 # Server groups
-SimpleCloud needs server groups to manage different server types and deployments dynamically. The controller starts [Servers](/server) of every group, each one inheriting the groups properties.
+SimpleCloud needs server groups to manage different server types and deployments dynamically. The controller starts servers of every group, each one inheriting the groups properties.
 Server groups are made up of [controller properties](#controller-properties), which are not dynamically changeable via the API, and [dynamic properties](#dynamic-properties).
 Group properties are modifiable using the [CLI](/cli#server-group) and by editing the [group config](/structure). {{ className: 'lead' }}
 
 ## Controller properties
 Controller properties are group properties, which are needed by the [controller](/controller) to handle the server group.
-They generally should not be modified by third party programs in both group and [server](/server), while the cloud is running.
+They generally should not be modified by third party programs in both group and server, while the cloud is running.
 
-| property | type | purpose |
-| -------- | ------ | ------- |
-| name | `string` | The name of this group |
-| type | `SERVER`, `PROXY` or `OTHER` | The [server type](/server#type) |
-| min-memory | `uint` in MB (e.g. `1024`) | The minimum RAM for a server of this group |
-| max-memory | `uint` in MB (e.g. `2048`) | The maximum RAM for a server of this group |
-| min-online-count | `uint` (e.g. 1) | The minimum amount of servers constantly online of this group |
-| max-online-count | `uint` (e.g. 2) | The maximum amount of servers constantly online of this group |
-| max-players | `uint` (e. g. 20) | The maximum amount of players allowed in this group |
-| start-port | `uint` (e. g. 25565) | The lowest possible port for servers of this group |
-| properties | `ConfigurationSection` | A key value set holding the servers initial [dynamic properties](#dynamic-properties) |
+| property         | type                         | purpose                                                                               |
+|------------------|------------------------------|---------------------------------------------------------------------------------------|
+| name             | `string`                     | The name of this group                                                                |
+| type             | `SERVER`, `PROXY` or `OTHER` | The [server type](/server#type)                                                       |
+| min-memory       | `uint` in MB (e.g. `1024`)   | The minimum RAM for a server of this group                                            |
+| max-memory       | `uint` in MB (e.g. `2048`)   | The maximum RAM for a server of this group                                            |
+| min-online-count | `uint` (e.g. 1)              | The minimum amount of servers constantly online of this group                         |
+| max-online-count | `uint` (e.g. 2)              | The maximum amount of servers constantly online of this group                         |
+| max-players      | `uint` (e. g. 20)            | The maximum amount of players allowed in this group                                   |
+| start-port       | `uint` (e. g. 25565)         | The lowest possible port for servers of this group                                    |
+| properties       | `ConfigurationSection`       | A key value set holding the servers initial [dynamic properties](#dynamic-properties) |
 
 ## Dynamic properties
 Dynamic properties are group properties, which are needed by the [Server Host Droplet](/serverhost-droplet) or custom properties for your personal use. You can use
-custom properties in your groups configuration, and there are property Getters/Setters for [servers](/server) using the [API](/api).
+custom properties in your groups configuration, and there are property Getters/Setters for servers using the [API](/api).
 
 <Note>
-    If you use the official Server Host Droplet, you can learn which dynamic properties are mandatory for you by going [here](/serverhost-droplet#group-properties)
+    If you use the official Server Host Droplet, you can learn which dynamic properties are mandatory for you by going
+    [here](/serverhost-droplet#group-properties)
 </Note>
 
 ## Examples
 <CodeGroup>
-```yml {{title: "groups/survival_standalone.yml"}}
-# A simple Survival group running on its own (no proxy connection)
-name: survival
-type: SERVER
-min-memory: 1024
-max-memory: 1024
-start-port: 50000
-max-players: 100
-min-online-count: 1
-max-online-count: 1
-properties:
-  # These are used by the server-host droplet
-  configurator: "spigot_standalone" # See "configurators" page in server-host docs
-  template-id: "survival" # ID of the template used by the server-host
-  # Download link to ANY server runtime
-  server-url: https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/463/downloads/paper-1.20.4-463.jar
-  max-startup-seconds: "120" # Maximum time a server needs to start up
-```
-```yml {{title: "groups/proxy.yml"}}
-# A simple proxy group using velocity
-name: proxy
-type: PROXY
-min-memory: 1024
-max-memory: 1024
-start-port: 25565
-max-players: 100
-min-online-count: 1
-max-online-count: 1
-properties:
-  # These are used by the server-host droplet
-  configurator: "velocity" # See "configurators" page in server-host docs
-  template-id: "proxy" # ID of the template used by the server-host
-  # Download link to ANY server runtime
-  server-url: https://api.papermc.io/v2/projects/velocity/versions/3.3.0-SNAPSHOT/builds/378/downloads/velocity-3.3.0-SNAPSHOT-378.jar
-  max-startup-seconds: "120" # Maximum time a server needs to start up
- ```
- ```yml {{title: "groups/test.yml"}}
- # A simple server group registered to the proxy
- name: test
- type: SERVER
- min-memory: 1024
- max-memory: 1024
- start-port: 50000
- max-players: 10
- min-online-count: 2
- max-online-count: 2
- properties:
-   # These are used by the server-host droplet
-   configurator: "paper_velocity" # See "configurators" page in server-host docs
-   template-id: "test" # ID of the template used by the server-host
-   # Download link to ANY server runtime
-   server-url: https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/463/downloads/paper-1.20.4-463.jar
-   max-startup-seconds: "120" # Maximum time a server needs to start up
-  ```
+    ```yml {{title: "groups/survival_standalone.yml"}}
+    # A simple Survival group running on its own (no proxy connection)
+    name: survival
+    type: SERVER
+    min-memory: 1024
+    max-memory: 1024
+    start-port: 50000
+    max-players: 100
+    min-online-count: 1
+    max-online-count: 1
+    properties:
+    # These are used by the server-host droplet
+    configurator: "spigot_standalone" # See "configurators" page in server-host docs
+    template-id: "survival" # ID of the template used by the server-host
+    # Download link to ANY server runtime
+    server-url: https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/463/downloads/paper-1.20.4-463.jar
+    max-startup-seconds: "120" # Maximum time a server needs to start up
+    ```
+    ```yml {{title: "groups/proxy.yml"}}
+    # A simple proxy group using velocity
+    name: proxy
+    type: PROXY
+    min-memory: 1024
+    max-memory: 1024
+    start-port: 25565
+    max-players: 100
+    min-online-count: 1
+    max-online-count: 1
+    properties:
+    # These are used by the server-host droplet
+    configurator: "velocity" # See "configurators" page in server-host docs
+    template-id: "proxy" # ID of the template used by the server-host
+    # Download link to ANY server runtime
+    server-url:
+    https://api.papermc.io/v2/projects/velocity/versions/3.3.0-SNAPSHOT/builds/378/downloads/velocity-3.3.0-SNAPSHOT-378.jar
+    max-startup-seconds: "120" # Maximum time a server needs to start up
+    ```
+    ```yml {{title: "groups/test.yml"}}
+    # A simple server group registered to the proxy
+    name: test
+    type: SERVER
+    min-memory: 1024
+    max-memory: 1024
+    start-port: 50000
+    max-players: 10
+    min-online-count: 2
+    max-online-count: 2
+    properties:
+    # These are used by the server-host droplet
+    configurator: "paper_velocity" # See "configurators" page in server-host docs
+    template-id: "test" # ID of the template used by the server-host
+    # Download link to ANY server runtime
+    server-url: https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/463/downloads/paper-1.20.4-463.jar
+    max-startup-seconds: "120" # Maximum time a server needs to start up
+    ```
 </CodeGroup>
 
 ## API reference
-You can create, delete, and edit dynamic properties for groups using the [API](/api#server-group).
+You can create, delete, and edit dynamic properties for groups and servers using the [API](/api#server-group).

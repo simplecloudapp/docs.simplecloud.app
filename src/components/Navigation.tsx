@@ -240,8 +240,8 @@ export const navigation: Array<NavGroup> = [
       { title: 'Quickstart', href: '/quickstart' },
       { title: 'Controller', href: "/controller" },
       { title: 'Server Groups', href: "/server-group" },
-      { title: 'Servers', href: "/server" },
       { title: 'Templates', href: "/template" },
+      { title: 'Structure', href: "/structure" },
     ],
   },
   {
