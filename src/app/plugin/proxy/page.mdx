@@ -5,7 +5,7 @@ import {Note} from "../../../components/mdx";
 export const metadata = {
     title: 'Proxy Plugin',
     description:
-        'This proxy plugin provides a variety of features for MOTD and TabList in your server network.',
+        'This proxy plugin provides a variety of features for MOTD and Tablist in your server network.',
 }
 
 
@@ -15,7 +15,7 @@ export const metadata = {
 
 # Proxy Plugin
 
-The Proxy Plugin is a versatile tool designed to enhance your server network's Message of the Day (MOTD) and TabList features. It offers a range of customization options to tailor these aspects to your specific needs. {{ className: 'lead' }}
+The Proxy Plugin is a versatile tool designed to enhance your server network's Message of the Day (MOTD) and Tablist features. It offers a range of customization options to tailor these aspects to your specific needs. {{ className: 'lead' }}
 
 ## Supported proxy versions
 
@@ -39,13 +39,13 @@ The Proxy Plugin is a versatile tool designed to enhance your server network's M
 | Support for Adventure Minimessage format   | Configurations are formatted using Adventure [MiniMessage](https://docs.advntr.dev/minimessage)       |
 | Placeholders                               | see [here](#placeholders)                                                                             |
 
-### TabList
+### Tablist
 
 | Features                                 | Explanation                                                                                     |
 |------------------------------------------|-------------------------------------------------------------------------------------------------|
-| Customizable update interval             | Enables you to change the time between tablist updates                                          |
+| Customizable update interval             | Enables you to change the time between Tablist updates                                          |
 | Animated header and footer               | The header and footer can display dynamic animations                                            |
-| TabList based on server names or groups  | Enables you to have different looking TabLists on different servers                             |
+| Tablist based on server names or groups  | Enables you to have different looking Tablists on different servers                             |
 | Support for Adventure Minimessage format | Configurations are formatted using Adventure [MiniMessage](https://docs.advntr.dev/minimessage) |
 | Placeholders                             | see [here](#placeholders)                                                                       |
 
@@ -54,19 +54,19 @@ The Proxy Plugin is a versatile tool designed to enhance your server network's M
 1. [Download the plugin](https://github.com/theSimpleCloud/proxy-plugin/releases)
 2. Move the file`proxy-velocity.jar` or`proxy-bungeecord.jar` into the plugin folder of your proxy.
 3. Restart your proxy.
-4. Customize the`motd.yml` and`tablist.yml` files to match your preferences.
+4. Customize the`motd.yml` and`Tablist.yml` files to match your preferences.
 5. Restart the proxy once more.
 
 ## Configuring
 
-The plugin is configured via the files `motd.yml` and `tablist.yml`. In these files you will find all the options for customizing MOTD and TabList.
+The plugin is configured via the files `motd.yml` and `Tablist.yml`. In these files you will find all the options for customizing MOTD and Tablist.
 
 <Note>TODO: add config samples</Note>
 
 ## Placeholders
 Placeholders can be used in their respective configuration to make the displaying of dynamic properties possible.
-Some Placeholders are only available for the TabLists configuration.
-| Placeholder        | TabList / `tablist.yml` | MOTD / `motd.yml` | Description                           |
+Some Placeholders are only available for the Tablists configuration.
+| Placeholder        | Tablist / `Tablist.yml` | MOTD / `motd.yml` | Description                           |
 |--------------------|---------|------|---------------------------------------|
 | `%ONLINE_PLAYERS%` | ✅     | ✅  | The currently online players          |
 | `%MAX_PLAYERS%`    | ✅     | ✅  | The networks maximum online players   |
@@ -77,35 +77,35 @@ Some Placeholders are only available for the TabLists configuration.
 
 ## API usage
 
-The plugin offers an API for enabling interaction with the MOTD and TabList by other plugins. This API is accessible for both BungeeCord/Waterfall and Velocity.
+The plugin offers an API for enabling interaction with the MOTD and Tablist by other plugins. This API is accessible for both BungeeCord/Waterfall and Velocity.
 
-You can utilize either the `MotdConfigurationEvent` or `TabListConfigurationEvent` to make updates to the MOTD or TabList. These events encapsulate the configuration object, allowing for modifications.
+You can utilize either the `MotdConfigurationEvent` or `TablistConfigurationEvent` to make updates to the MOTD or Tablist. These events encapsulate the configuration object, allowing for modifications.
 
-In the case of the TabList event, you can customize the header and footer of the TabList. Velocity is employed in this example.
+In the case of the Tablist event, you can customize the header and footer of the Tablist. Velocity is employed in this example.
 
 <CodeGroup>
     ```java {{title: 'Java'}}
         @Subscribe
-        public void onTabListConfiguration(TabListConfigurationEvent event) {
-        TabListConfiguration tabListConfiguration = event.getTabListConfiguration();
-        Component header = tabListConfiguration.getHeader();
+        public void onTablistConfiguration(TablistConfigurationEvent event) {
+        TablistConfiguration TablistConfiguration = event.getTablistConfiguration();
+        Component header = TablistConfiguration.getHeader();
         header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
-        tabListConfiguration.setHeader(header);
+        TablistConfiguration.setHeader(header);
 
-        Component footer = tabListConfiguration.getFooter();
+        Component footer = TablistConfiguration.getFooter();
         footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
-        tabListConfiguration.setFooter(footer);
+        TablistConfiguration.setFooter(footer);
         }
     ```
     ```kotlin {{title: 'Kotlin'}}
-        fun onTabListConfiguration(event: TabListConfigurationEvent) {
-        var header = event.tabListConfiguration.header
+        fun onTablistConfiguration(event: TablistConfigurationEvent) {
+        var header = event.TablistConfiguration.header
         header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
-        event.tabListConfiguration.header = header
+        event.TablistConfiguration.header = header
 
-        var footer = event.tabListConfiguration.footer
+        var footer = event.TablistConfiguration.footer
         footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
-        event.tabListConfiguration.footer = footer
+        event.TablistConfiguration.footer = footer
         }
     ```
 </CodeGroup>
