@@ -9,15 +9,18 @@ export const metadata = {
 }
 
 
-<Button href="https://github.com/theSimpleCloud/proxy-plugin/releases" arrow="right">
-    <>Download</>
-</Button>
 
 # Proxy Plugin
 
 The Proxy Plugin is a versatile tool designed to enhance your server network's ServerInfo and Tablist features. It offers a range of customization options to tailor these aspects to your specific needs. {{ className: 'lead' }}
 
+<Button href="https://github.com/theSimpleCloud/proxy-plugin/releases" arrow="right">
+    <>Download</>
+</Button>
+
 ## Supported proxy versions
+A list of all maintained implementations. If you find
+your proxy in this list it means that your proxy is supported.
 
 | Proxy type           | Proxy Plugin |
 |----------------------|--------------|
@@ -27,6 +30,7 @@ The Proxy Plugin is a versatile tool designed to enhance your server network's S
 
 
 ## Features
+This plugin has many features for both Tablist and ServerInfo. Some features are limited to only work for only Tablist or ServerInfo.
 
 | Feature                                    | Explanation                                                                                           | Tablist | ServerInfo |
 |--------------------------------------------|-------------------------------------------------------------------------------------------------------|---------|------------|
@@ -35,27 +39,22 @@ The Proxy Plugin is a versatile tool designed to enhance your server network's S
 | Customizable PlayerInfo and server version | PlayerInfo and server version details can be personalized according to user preferences               | ❌       | ✅          |
 | Dynamic maximum player count               | The maximum number of players can be updated dynamically and can be configured within a certain range | ✅       | ✅          |
 | Support for Adventure MiniMessage format   | Configurations are formatted using Adventure [MiniMessage](https://docs.advntr.dev/minimessage)       | ✅       | ✅          |
-| Placeholders                               | see [here](#placeholders)                                                                             | ✅       | ✅          |
+| Placeholders                               | Placeholders are documented [here](#placeholders)                                                     | ✅       | ✅          |
 | Customizable update interval               | Enables you to change the time between Tablist updates                                                | ✅       | ❌          |
 | Animated header and footer                 | The header and footer can display dynamic animations                                                  | ✅       | ❌          |
 | Appearance based on server names or groups | Enables the player to have different appearance when playing on different child servers               | ✅       | ❌          |
 
-## Installation
+## Configuration
 
-1. [Download the plugin](https://github.com/theSimpleCloud/proxy-plugin/releases)
-2. Move the file`proxy-velocity.jar` or`proxy-bungeecord.jar` into the plugin folder of your proxy's [template](/templates).
+The plugin is configured via the files `motd.yml` and `tablist.yml`. In these files you will find all the options for customizing ServerInfo and Tablist.
+You can use [placeholders](#placeholders) as well.
 
-
-## Configuring
-
-The plugin is configured via the files `motd.yml` and `tablist.yml`. In these files you will find all the options for customizing MOTD and Tablist.
-
-<Note>TODO: add config samples</Note>
+<Note>Config examples are yet to be added.</Note>
 
 ## Placeholders
 Placeholders can be used in their respective configuration to make the displaying of dynamic properties possible.
 Some Placeholders are only available for the Tablists configuration.
-| Placeholder        | Tablist / `tablist.yml` | MOTD / `motd.yml` | Description                           |
+| Placeholder        | Tablist / `tablist.yml` | ServerInfo / `motd.yml` | Description                           |
 |--------------------|---------|------|---------------------------------------|
 | `%ONLINE_PLAYERS%` | ✅     | ✅  | The currently online players          |
 | `%MAX_PLAYERS%`    | ✅     | ✅  | The networks maximum online players   |
@@ -66,9 +65,9 @@ Some Placeholders are only available for the Tablists configuration.
 
 ## API usage
 
-The plugin offers an API for enabling interaction with the MOTD and Tablist by other plugins. This API is accessible for both BungeeCord/Waterfall and Velocity.
+The plugin offers an API for enabling interaction with the ServerInfo and Tablist by other plugins. This API is accessible for both BungeeCord/Waterfall and Velocity.
 
-You can utilize either the `MotdConfigurationEvent` or `TablistConfigurationEvent` to make updates to the MOTD or Tablist. These events encapsulate the configuration object, allowing for modifications.
+You can utilize either the `MotdConfigurationEvent` or `TablistConfigurationEvent` to make updates to the ServerInfo or Tablist. These events encapsulate the configuration object, allowing for modifications.
 
 In the case of the Tablist event, you can customize the header and footer of the Tablist. Velocity is employed in this example.
 
