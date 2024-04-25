@@ -1,24 +1,16 @@
-import {Note} from "../../components/mdx";
+import {DangerNote, Note} from "../../components/mdx";
 export const metadata = {
     title: 'SimpleCloud Controller',
     description:
         "The controller is the heart of SimpleCloud. It's responsible for managing all your servers and server groups.",
 }
 
-export const sections = [
-    { title: 'How does the controller work?', anchor: 'how-does-the-controller-work' },
-    { title: 'How to install the controller?', anchor: 'install-controller' },
-    { title: 'Can I run the controller in Docker?', anchor: 'run-controller-in-docker' },
-    { title: 'What happens if the controller crashes?', anchor: 'controller-crashes' },
-    { title: 'Is the controller like our old v2 Manager?', anchor: 'is-controller-like-v2-manager' },
-    { title: 'Does the controller start droplets?', anchor: 'does-controller-start-droplets' },
-]
 
 # SimpleCloud Controller
 
 The controller is pretty easy to understand. It's just a small program, that keeps track of [server groups](/server-group) and their online [servers](/server) and manages them. It's the heart of SimpleCloud v3. {{ className: 'lead' }}
 
-## How does the controller work?
+## Understanding the controller
 
 The structure of the controller is very simple. It checks every few seconds if there are any updated on servers or server groups. If there are any updates, it will try to talk to a [server-host](/server-host) and apply those changes. The contacted [server-host](/server-host) will do the rest of the work, like starting, stopping, or updating a server.
 
@@ -28,7 +20,7 @@ For example, if you want to start a server, the controller will send a message t
     The controller is a very important part of SimpleCloud, but there can be only one controller running at a time. If you have multiple controllers running at the same time, you will run into problems.
 </Note>
 
-## How to install the controller?
+## Installation
 
 When you install SimpleCloud, the controller is automatically installed. If you want, you can install the controller manually by running the [CLI](/cli) command below, but it's not recommended. Let SimpleCloud handle the installation of the controller.
 
@@ -37,15 +29,19 @@ When you install SimpleCloud, the controller is automatically installed. If you 
 simplecloud install controller
 ```
 
-## Can I run the controller in Docker?
+## Using docker
 
-Yes, you can run the controller in Docker. We provide a Docker image for the controller, you can use. You can find a guide on how to run SimpleCloud in Docker [here](#).
+<Note>
+    This is still work in progress.
+</Note>
+
+You can run the controller in Docker. We provide a Docker image for the controller, you can use. You can find a guide on how to run SimpleCloud in Docker [here](#).
 
 If you want every server to run in Docker, you can use the [server-host-docker](/droplet/server-host-docker) droplet.
 
-## What happens if the controller crashes?
+## Crash handling
 
-The quick answer is: Nothing. The controller is not responsible for running servers, it's just responsible for managing them. If the controller crashes, the servers will continue to run. The only thing that will not work is the management of the servers. You can't start, stop, or update a server until the controller is running again.
+The controller is not responsible for running servers, it's just responsible for managing them. If the controller crashes, the servers will continue to run. The only thing that will not work is the management of the servers. You can't start, stop, or update a server until the controller is running again.
 
 That also means, you can restart the controller at any time. The controller will automatically detect all running servers and server groups and update the database accordingly.
 
@@ -53,12 +49,12 @@ That also means, you can restart the controller at any time. The controller will
     Please make sure to check the logs of the controller if it crashes. The logs will tell you why the controller crashed and how to fix it. If you can't fix the problem, please join our [Discord](https://discord.simplecloud.app) and report it there.
 </Note>
 
-## Is the controller like our old v2 Manager?
+## Controller vs v2 manager
 
-You can argue a lot about that, but we would say no. The controller is a lot more lightweight and easier to manage than the old v2 Manager. The controller is just a small program that runs in the background and manages all your servers and server groups. The old v2 Manager was a big program that was responsible for managing servers, server groups, templates, modules and so on.
+The controller is a lot more lightweight and easier to manage than the old v2 Manager. The controller is just a small program that runs in the background and manages all your servers and server groups. The old v2 Manager was a big program that was responsible for managing servers, server groups, templates, modules and so on.
 
 But like the old v2 Manager, the controller is the heart of SimpleCloud. Without the controller, SimpleCloud would not work and at the moment there is no way to run multiple controllers at the same time.
 
-## Does the controller start droplets?
-
-No, the controller does not start droplets. That is the job of our [CLI](/cli) or yours. The controller is really just responsible for managing servers and server groups.
+<DangerNote>
+    The controller does not start droplets. This is the job of the [CLI](/cli)
+</DangerNote>
