@@ -15,7 +15,7 @@ export const metadata = {
 
 # Proxy Plugin
 
-The Proxy Plugin is a versatile tool designed to enhance your server network's Message of the Day (MOTD) and Tablist features. It offers a range of customization options to tailor these aspects to your specific needs. {{ className: 'lead' }}
+The Proxy Plugin is a versatile tool designed to enhance your server network's ServerInfo and Tablist features. It offers a range of customization options to tailor these aspects to your specific needs. {{ className: 'lead' }}
 
 ## Supported proxy versions
 
@@ -34,30 +34,28 @@ The Proxy Plugin is a versatile tool designed to enhance your server network's M
 | Multi-Options                              | Multiple options can be provided for each line, with one randomly selected for display                | ❌       | ✅          |
 | Customizable PlayerInfo and server version | PlayerInfo and server version details can be personalized according to user preferences               | ❌       | ✅          |
 | Dynamic maximum player count               | The maximum number of players can be updated dynamically and can be configured within a certain range | ✅       | ✅          |
-| Support for Adventure Minimessage format   | Configurations are formatted using Adventure [MiniMessage](https://docs.advntr.dev/minimessage)       | ✅       | ✅          |
+| Support for Adventure MiniMessage format   | Configurations are formatted using Adventure [MiniMessage](https://docs.advntr.dev/minimessage)       | ✅       | ✅          |
 | Placeholders                               | see [here](#placeholders)                                                                             | ✅       | ✅          |
 | Customizable update interval               | Enables you to change the time between Tablist updates                                                | ✅       | ❌          |
 | Animated header and footer                 | The header and footer can display dynamic animations                                                  | ✅       | ❌          |
-| Appearance based on server names or groups | Enables you to have different appearance on different servers                                         | ✅       | ❌          |
+| Appearance based on server names or groups | Enables the player to have different appearance when playing on different child servers               | ✅       | ❌          |
 
 ## Installation
 
 1. [Download the plugin](https://github.com/theSimpleCloud/proxy-plugin/releases)
-2. Move the file`proxy-velocity.jar` or`proxy-bungeecord.jar` into the plugin folder of your proxy.
-3. Restart your proxy.
-4. Customize the`motd.yml` and`Tablist.yml` files to match your preferences.
-5. Restart the proxy once more.
+2. Move the file`proxy-velocity.jar` or`proxy-bungeecord.jar` into the plugin folder of your proxy's [template](/templates).
+
 
 ## Configuring
 
-The plugin is configured via the files `motd.yml` and `Tablist.yml`. In these files you will find all the options for customizing MOTD and Tablist.
+The plugin is configured via the files `motd.yml` and `tablist.yml`. In these files you will find all the options for customizing MOTD and Tablist.
 
 <Note>TODO: add config samples</Note>
 
 ## Placeholders
 Placeholders can be used in their respective configuration to make the displaying of dynamic properties possible.
 Some Placeholders are only available for the Tablists configuration.
-| Placeholder        | Tablist / `Tablist.yml` | MOTD / `motd.yml` | Description                           |
+| Placeholder        | Tablist / `tablist.yml` | MOTD / `motd.yml` | Description                           |
 |--------------------|---------|------|---------------------------------------|
 | `%ONLINE_PLAYERS%` | ✅     | ✅  | The currently online players          |
 | `%MAX_PLAYERS%`    | ✅     | ✅  | The networks maximum online players   |
@@ -78,25 +76,25 @@ In the case of the Tablist event, you can customize the header and footer of the
     ```java {{title: 'Java'}}
         @Subscribe
         public void onTablistConfiguration(TablistConfigurationEvent event) {
-        TablistConfiguration TablistConfiguration = event.getTablistConfiguration();
-        Component header = TablistConfiguration.getHeader();
-        header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
-        TablistConfiguration.setHeader(header);
+            TablistConfiguration TablistConfiguration = event.getTablistConfiguration();
+            Component header = TablistConfiguration.getHeader();
+            header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
+            TablistConfiguration.setHeader(header);
 
-        Component footer = TablistConfiguration.getFooter();
-        footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
-        TablistConfiguration.setFooter(footer);
+            Component footer = TablistConfiguration.getFooter();
+            footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
+            TablistConfiguration.setFooter(footer);
         }
     ```
     ```kotlin {{title: 'Kotlin'}}
         fun onTablistConfiguration(event: TablistConfigurationEvent) {
-        var header = event.TablistConfiguration.header
-        header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
-        event.TablistConfiguration.header = header
+            var header = event.TablistConfiguration.header
+            header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
+            event.TablistConfiguration.header = header
 
-        var footer = event.TablistConfiguration.footer
-        footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
-        event.TablistConfiguration.footer = footer
+            var footer = event.TablistConfiguration.footer
+            footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
+            event.TablistConfiguration.footer = footer
         }
     ```
 </CodeGroup>
