@@ -15,11 +15,11 @@ export const metadata = {
 </Note>
 
 To make SimpleCloud work, we utilize a [Controller](/controller) (formerly known as Master), that manages server starts and handles API calls and Groups. This Controller itself is not able
-to start servers, so for it to do something you need a [Server Host Droplet](/server-host) (formerly known as Wrapper). This droplets main objective is to actually start Servers, therefore templates are also managed by this droplet.
-This means you can easily implement [Multi-Root](/multi-root) by just starting up a Server Host Droplet on each root server.
+to start servers, so for it to do something you need a [Server Host Droplet](/droplet/serverhost) (formerly known as Wrapper). This droplets main objective is to actually start Servers, therefore templates are also managed by this droplet.
+This means you can easily implement [Multi-Root](/droplet/serverhost#multi-root) by just starting up a Server Host Droplet on each root server.
 
 <Note>
-    Before you read further, please first understand how [Controller](/controller) and [Server Host Droplet](/server-host) operate.
+    Before you read further, please first understand how [Controller](/controller) and [Server Host Droplet](/droplet/serverhost) operate.
 </Note>
 
 ## File structure
@@ -61,7 +61,7 @@ We advise you to structure your files like this, as it works best in our experie
             └── ...
 ```
 
-To achieve this file structure, start up the controller [jar](github.com/thesimplecloud/simplecloud-controller/releases/latest) in your installation dir.
+To achieve this file structure, start up the controller [jar](https://github.com/thesimplecloud/simplecloud-controller/releases/latest) in your installation dir.
 
 <CodeGroup>
 ```bash {{title: 'Unix'}}
@@ -73,7 +73,7 @@ java -jar controller-runtime
 ```
 </CodeGroup>
 
-This will generate all needed files. Now stop the controller using `CTRL+C`, and drop the Server Host [jar](github.com/thesimplecloud/serverhost-droplet/releases/latest) into `droplets/serverhost-droplet`.
+This will generate all needed files. Now stop the controller using `CTRL+C`, and drop the Server Host Droplet [jar](https://github.com/thesimplecloud/serverhost-droplet/releases/latest) into `droplets/serverhost-droplet`.
 You can now start Controller and Server Host Droplet, to get a running SimpleCloud instance!
 
 <CodeGroup>
