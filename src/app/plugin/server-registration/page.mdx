@@ -1,6 +1,5 @@
-import { CodeGroup } from "../../../components/Code";
 import { Button } from "../../../components/Button";
-import { Note } from "../../../components/mdx";
+import {DangerNote, Note} from "../../../components/mdx";
 
 export const metadata = {
     title: 'Registration Plugin',
@@ -8,31 +7,34 @@ export const metadata = {
         'The registration plugin updates registered proxy child servers according to the clouds registered servers.',
 }
 
-<Button href="https://github.com/theSimpleCloud/server-registration-plugin/releases" arrow="right">
-        <>Download</>
-</Button>
+<Note>
+    This plugin internally uses the [server api](#) to get the online cloud servers. It also provides code to make [own implementations](#own-implementation) for other proxy software easy.
+</Note>
 
 # Server Registration Plugin
 
 The registration plugin updates registered proxy child servers according to the clouds registered servers. If your SimpleCloud installation uses a proxy, you need this plugin to make that proxy work correctly. {{ className: 'lead' }}
 
-<Note>
-    This plugin internally uses the [server API](/api#server) to get the online cloud servers. It also provides a generic registration framework to make [own implementations](#own-implementation) for other proxy software easy.
-</Note>
+<Button href="https://github.com/theSimpleCloud/server-registration-plugin/releases" arrow="right">
+    <>Download</>
+</Button>
+
 
 ## Supported proxy versions
+A list of all maintained implementations. If you find
+your proxy in this list it means that your proxy is supported.
 
-| Proxy type | Server API availability | Plugin availability | Out of the box support                                                                               |
-|-----------------------|---------------------|-------------------|---------------------------------------------------------------------------------------------------------|
-| Velocity      | ✅                   | ✅                 | ✅                                                                                                       |
-| Bungeecord      | ✅                 | ✅                 | ✅                                                                                                       |
-| Gate            | ✅                 | ❌ (but its planned)                 | ❌ (but its planned) |
-| Other           | ❓ (see available [languages](/api)) | ❌ | ❌  (you can easily get it working by using your [own implementation](#creating-api-and-indexing-groups), but only if the [server API](/api#server) and registration [framework](#registration-framework) are available)
+| Proxy type | Server API availability             | Plugin availability | Out of the box support                                                                                                                                           |
+|------------|-------------------------------------|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Velocity   | ✅                                   | ✅                   | ✅                                                                                                                                                                |
+| Bungeecord | ✅                                   | ✅                   | ✅                                                                                                                                                                |
+| Gate       | ✅                                   | ❌ (but its planned) | ❌ (but its planned)                                                                                                                                              |
+| Other      | ❓ (see available [languages](/api)) | ❌                   | ❌  (you can easily get it working by using your [own implementation](#creating-api-and-indexing-groups), but only if the [server API](/api#server) is available) |
 
 
-## Configuring
+## Configuration
 
-You will find the `config.yml` File in the data folder. These are the available options:
+The config `config.yml` File is located in the data folder. These are the available configuration options options:
 
 ````yml
   # The pattern on how registered server should be named. Available placeholders are:
@@ -53,8 +55,8 @@ You will find the `config.yml` File in the data folder. These are the available 
       port: 225555
 ````
 
-## Registration framework
-The registration framework adds the interface `ServerRegisterer`, which makes it easy to create your own version of this plugin.
+## Own implementation
+The registration plugin adds the interface `ServerRegisterer`, which makes it easy to create your own version of this plugin.
 
 ```kotlin
 interface ServerRegisterer {
@@ -62,17 +64,12 @@ interface ServerRegisterer {
     fun getRegistered(): List<Server>
     // Is called whenever a new server successfully mounted on the its port, or when a server is reattached (after cloud restart)
     fun register(server: Server)
-    // Is called whenever a server gets unmounted from its port
+    // Is called whenever a server is no longer mounted to its port
     fun unregister(server: Server)
 }
 ```
 
-### Available frameworks
-| Language | Availability |
-| --- | --- |
-| Java | ✅ |
-| Kotlin | ✅ |
-| Other | ❌ |
+<DangerNote>
+    There is more you need to do for your own implementation. You can use the [Velocity implementation](https://github.com/theSimpleCloud/server-registration-plugin/tree/main/registration-velocity/src/main/kotlin/app/simplecloud/plugin/registration/velocity) as reference for creating a custom registration plugin.
+</DangerNote>
 
-## Own implementation
-You can use the [Velocity implementation](https://github.com/theSimpleCloud/server-registration-plugin/tree/main/registration-velocity/src/main/kotlin/app/simplecloud/plugin/registration/velocity) as reference for creating a custom registration plugin.

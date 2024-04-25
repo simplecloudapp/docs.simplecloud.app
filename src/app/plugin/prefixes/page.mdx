@@ -8,9 +8,6 @@ export const metadata = {
         'The Prefixes Plugin allows you display Ranks in Chat and Tab.',
 }
 
-<Button href="https://github.com/theSimpleCloud/prefixes-plugin/releases" arrow="right">
-        <>Download</>
-</Button>
 
 # SimpleCloud Prefixes Plugin
 
@@ -21,15 +18,23 @@ for [LuckPerms](https://github.com/LuckPerms/LuckPerms).
 For prefixes and suffixes, [Adventure Components](https://github.com/KyoriPowered/adventure) are used, as well as [MiniMessage](https://github.com/KyoriPowered/adventure) in the LuckPerms default
 implementation. {{ className: 'lead' }}
 
-## Supported server versions
+<Button href="https://github.com/theSimpleCloud/prefixes-plugin/releases" arrow="right">
+    <>Download</>
+</Button>
 
-| server type      | PrefixesApi | LuckPerms | out of the box                                                                                          |
+## Supported server versions
+A list of all supported server versions. If your server version is listed here, it means that
+this plugin is supported and maintained on your server version.
+
+| Server type      | PrefixesApi | LuckPerms | out of the box                                                                                          |
 |------------------|-------------|-----------|---------------------------------------------------------------------------------------------------------|
 | Paper and Forks  | ✅           | ✅         | ✅                                                                                                       |
 | Spigot and Forks | ✅           | ✅         | ✅                                                                                                       |
 | Minestom         | ✅           | ❌         | ❌ (you can easily get it working by using your [own implementation](#creating-api-and-indexing-groups)) |
 
-## Configuring
+## Configuration
+There two ways to configure the plugin. You can configure the player display name using LuckPerms.
+The chat format is configured using the configuration.
 
 ### LuckPerms
 
@@ -47,9 +52,9 @@ On Spigot, color should be in ChatColor format (e.g. WHITE). On every other serv
 
 `/lp group <groupname> meta set color <color>`
 
-### Config
+### Chat configuration
 
-You will find the `config.json` File in the DataFolder. It will look like this:
+The `config.json` file is located in the data folder. It will look like this:
 
 ````json
 {
@@ -70,8 +75,10 @@ There also are placeholders you can use for the format:
 | message      | The sent message                                            |
 
 ## API usage
+You can use the API to directly modify prefixes and groups through third party plugins.
 
-### Getting the API object
+### Getting PrefixesAPI
+To use the API, you need to get the PrefixesAPI instance.
 
 #### Bukkit/Paper
 
@@ -253,6 +260,7 @@ class MyPrefixesActor : PrefixesActor {
 ````
 
 ### Custom plugin implementation
+If you want to make breaking changes to the plugin, you have to code your own implementation.
 
 #### Creating API and indexing groups
 
