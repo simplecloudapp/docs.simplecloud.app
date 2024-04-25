@@ -1,94 +1,99 @@
-import { CodeGroup } from "../../../components/Code";
+import {Button} from "../../../components/Button";
+import {CodeGroup} from "../../../components/Code";
+import {Note} from "../../../components/mdx";
 
 export const metadata = {
-  title: 'Proxy Plugin',
-  description:
-    'This proxy plugin provides a variety of features for MOTD and TabList in your server network.',
+    title: 'Proxy Plugin',
+    description:
+        'This proxy plugin provides a variety of features for MOTD and Tablist in your server network.',
 }
 
-export const sections = [
-    { title: 'What can the proxy plugin do?', anchor: 'what-can-the-proxy-plugin-do' },
-    { title: 'How can I set the proxy plugin?', anchor: 'how-can-i-set-the-proxy-plugin' },
-    { title: 'Is there a plugin API?', anchor: 'is-there-a-plugin-api?' },
-    { title: 'How can I install the plugin?', anchor: 'how-can-i-install-the-plugin' },
-    { title: 'What platforms does the plugin run on?', anchor: 'what-platforms-does-the-plugin-run-on' },
-]
 
-# Proxy Plugin with MOTD and TabList Functions
 
-The Proxy Plugin is a versatile tool designed to enhance your server network's Message of the Day (MOTD) and TabList features. It offers a range of customization options to tailor these aspects to your specific needs. {{ className: 'lead' }}
+# Proxy Plugin
 
-## What can the proxy plugin do?
+The Proxy Plugin is a versatile tool designed to enhance your server network's ServerInfo and Tablist features. It offers a range of customization options to tailor these aspects to your specific needs. {{ className: 'lead' }}
 
-### MOTD
+<Button href="https://github.com/theSimpleCloud/proxy-plugin/releases" arrow="right">
+    <>Download</>
+</Button>
 
-| Features                                                             | Explanation                                                                                                                  |
-|----------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| Configurable first and second line of the MOTD.                      | You can customize both the first and second line of the message of the day (MOTD).                                       |
-| Ability to specify multiple options for each line to be randomly selected. | Multiple options can be provided for each line, with one randomly selected for display.                                    |
-| Customizable PlayerInfo and server version.                          | PlayerInfo and server version details can be personalized according to user preferences.                                    |
-| Dynamic player counts with configurable range.                       | The maximum number of players can be updated dynamically and can be configured within a certain range.                                       |
-| Support for Adventure Minimessage format.                            | It utilizes the Adventure Minimessage format for customization.                                                |
-| Standard placeholders: `%ONLINE_PLAYERS%` and `%MAX_PLAYERS%`.        | Includes standard placeholders for online player count and maximum player count.                                             |
+## Supported proxy versions
+A list of all maintained implementations. If you find
+your proxy in this list it means that your proxy is supported.
 
-### TabList
+| Proxy type           | Proxy Plugin |
+|----------------------|--------------|
+| Velocity             | ✅            |
+| BungeeCord and forks | ✅            |
+| Other                | ❌            |
 
-| Features                           | Explanation                                                                 |
-|-----------------------------------|-----------------------------------------------------------------------------|
-| Customizable update interval.     | You can set how often the TabList should be updated.                          |
-| Animated header and footer.       | The header and footer can display dynamic animations.                        |
-| Ability to set tab lists based on server names or groups. | You can set TabList by server name or group name..  |
-| Support for Adventure Minimessage format. | It utilizes the Adventure Minimessage format for customization. |
-| Standard placeholders: `%ONLINE_PLAYERS%`, `%MAX_PLAYERS%`, `%SERVICE_NAME%`, `%CURRENT_TIME%`, `%CURRENT_DATE%`, and `%PING%`.  | Predefined placeholders include information like online players, maximum players, service name, current time, current date, and ping. |
 
-## How can I set the proxy plugin?
+## Features
+This plugin has many features for both Tablist and ServerInfo. Some features are limited to only work for only Tablist or ServerInfo.
 
-The plugin is configured via the files `motd.yml` and `tablist.yml`. In these files you will find all the options for customizing MOTD and TabList.
+| Feature                                    | Explanation                                                                                           | Tablist | ServerInfo |
+|--------------------------------------------|-------------------------------------------------------------------------------------------------------|---------|------------|
+| Customizable lines                         | Top and bottom line(s) are both customizable                                                          | ✅       | ✅          |
+| Multi-Options                              | Multiple options can be provided for each line, with one randomly selected for display                | ❌       | ✅          |
+| Customizable PlayerInfo and server version | PlayerInfo and server version details can be personalized according to user preferences               | ❌       | ✅          |
+| Dynamic maximum player count               | The maximum number of players can be updated dynamically and can be configured within a certain range | ✅       | ✅          |
+| Support for Adventure MiniMessage format   | Configurations are formatted using Adventure [MiniMessage](https://docs.advntr.dev/minimessage)       | ✅       | ✅          |
+| Placeholders                               | Placeholders are documented [here](#placeholders)                                                     | ✅       | ✅          |
+| Customizable update interval               | Enables you to change the time between Tablist updates                                                | ✅       | ❌          |
+| Animated header and footer                 | The header and footer can display dynamic animations                                                  | ✅       | ❌          |
+| Appearance based on server names or groups | Enables the player to have different appearance when playing on different child servers               | ✅       | ❌          |
 
-## Is there a plugin API?
+## Configuration
 
-The plugin offers an API for enabling interaction with the MOTD and TabList by other plugins. This API is accessible for both BungeeCord/Waterfall and Velocity.
+The plugin is configured via the files `motd.yml` and `tablist.yml`. In these files you will find all the options for customizing ServerInfo and Tablist.
+You can use [placeholders](#placeholders) as well.
 
-You can utilize either the `MotdConfigurationEvent` or `TabListConfigurationEvent` to make updates to the MOTD or TabList. These events encapsulate the configuration object, allowing for modifications.
+<Note>Configuration examples are yet to be added.</Note>
 
-In the case of the TabList event, you can customize the header and footer of the TabList. Velocity is employed in this example.
+## Placeholders
+Placeholders can be used in their respective configuration to make the displaying of dynamic properties possible.
+Some Placeholders are only available for the Tablists configuration.
+| Placeholder        | Tablist / `tablist.yml` | ServerInfo / `motd.yml` | Description                           |
+|--------------------|---------|------|---------------------------------------|
+| `%ONLINE_PLAYERS%` | ✅     | ✅  | The currently online players          |
+| `%MAX_PLAYERS%`    | ✅     | ✅  | The networks maximum online players   |
+| `%SERVER_NAME%`    | ✅     | ❌   | The server the player is currently on |
+| `%CURRENT_TIME%`   | ✅     | ❌   | The current time                      |
+| `%CURRENT_DATE%`   | ✅     | ❌   | The current date                      |
+| `%PING%`           | ✅     | ❌   | The players ping                      |
+
+## API usage
+
+The plugin offers an API for enabling interaction with the ServerInfo and Tablist by other plugins. This API is accessible for both BungeeCord/Waterfall and Velocity.
+
+You can utilize either the `MotdConfigurationEvent` or `TablistConfigurationEvent` to make updates to the ServerInfo or Tablist. These events encapsulate the configuration object, allowing for modifications.
+
+In the case of the Tablist event, you can customize the header and footer of the Tablist. Velocity is employed in this example.
 
 <CodeGroup>
-```java {{ title: 'Java' }}
-    @Subscribe
-    public void onTabListConfiguration(TabListConfigurationEvent event) {
-        TabListConfiguration tabListConfiguration = event.getTabListConfiguration();
-        Component header = tabListConfiguration.getHeader();
-        header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
-        tabListConfiguration.setHeader(header);
+    ```java {{title: 'Java'}}
+        @Subscribe
+        public void onTablistConfiguration(TablistConfigurationEvent event) {
+            TablistConfiguration TablistConfiguration = event.getTablistConfiguration();
+            Component header = TablistConfiguration.getHeader();
+            header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
+            TablistConfiguration.setHeader(header);
 
-        Component footer = tabListConfiguration.getFooter();
-        footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
-        tabListConfiguration.setFooter(footer);
-    }
-```
-```kotlin {{ title: 'Kotlin' }}
-    fun onTabListConfiguration(event: TabListConfigurationEvent) {
-        var header = event.tabListConfiguration.header
-        header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
-        event.tabListConfiguration.header = header
+            Component footer = TablistConfiguration.getFooter();
+            footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
+            TablistConfiguration.setFooter(footer);
+        }
+    ```
+    ```kotlin {{title: 'Kotlin'}}
+        fun onTablistConfiguration(event: TablistConfigurationEvent) {
+            var header = event.TablistConfiguration.header
+            header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
+            event.TablistConfiguration.header = header
 
-        var footer = event.tabListConfiguration.footer
-        footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
-        event.tabListConfiguration.footer = footer
-    }
-```
+            var footer = event.TablistConfiguration.footer
+            footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
+            event.TablistConfiguration.footer = footer
+        }
+    ```
 </CodeGroup>
-
-## How do I install the plugin?
-
-1. Visit the project page at https://wiki.simplecoud.app/plugin/proxy to download the plugin.
-2. Move the file `proxy-velocity.jar` or `proxy-bungeecord.jar` into the plugin folder of your proxy.
-3. Restart your proxy.
-4. Customize the `motd.yml` and `tablist.yml` files to match your preferences.
-5. Restart the proxy once more.
-
-## Which platforms does the plugin support?
-
-- BungeeCord/Waterfall
-- Velocity
