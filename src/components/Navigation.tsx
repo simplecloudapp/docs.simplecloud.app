@@ -193,7 +193,7 @@ function NavigationGroup({
         <ul role="list" className="border-l border-transparent">
           {group.links.map((link) => (
             <motion.li key={link.href} layout="position" className="relative">
-              <NavLink href={link.href} active={link.href === pathname} tag={link.tag} tagColor={link.tagColor ?? "sky"}>
+              <NavLink href={link.tag?.toLowerCase() == "soon" ? "/soon" : link.href} active={link.href === pathname} tag={link.tag} tagColor={link.tagColor ?? "sky"}>
                   {link.title}
               </NavLink>
               <AnimatePresence mode="popLayout" initial={false}>
@@ -242,6 +242,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Server Groups', href: "/server-group" },
       { title: 'Templates', href: "/template" },
       { title: 'Structure', href: "/structure" },
+      { title: 'Permissions', href: "/permissions", tag: "Soon", tagColor: "rose" }
     ],
   },
   {
@@ -250,7 +251,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Overview', href: '/droplet' },
       { title: 'Server Host Droplet', href: '/droplet/serverhost' },
       { title: 'Server Host Docker Droplet', href: '/droplet/serverhost-docker', tag: "Soon", tagColor: "rose" },
-      { title: 'Player Droplet', href: '/droplet/player' },
+      { title: 'Player Droplet', href: '/droplet/player', tag: "Soon", tagColor: "rose"},
       { title: 'Resource Pack Droplet', href: '/droplet/resourcepack', tag: "Soon", tagColor: "rose" },
     ],
   },
@@ -261,19 +262,16 @@ export const navigation: Array<NavGroup> = [
       { title: 'Server Registration Plugin', href: '/plugin/server-registration', tag: "Proxy" },
       { title: 'Server Connection Plugin', href: '/plugin/server-connection', tag: "Proxy" },
       { title: 'Proxy Plugin', href: '/plugin/proxy', tag: "Proxy"  },
-      { title: 'Notify Plugin', href: '/plugin/notify', tag: "Proxy"  },
+      { title: 'Notify Plugin', href: '/plugin/notify', tag: "Soon", tagColor: "rose"  },
       { title: 'Prefixes Plugin', href: '/plugin/prefixes', tag: "Server" },
-      { title: 'Signs Plugin', href: '/plugin/signs', tag: "Server"  },
-      { title: 'NPCs Plugin', href: '/plugin/npcs', tag: "Server"  },
+      { title: 'Signs Plugin', href: '/plugin/signs', tag: "Soon", tagColor: "rose"  },
+      { title: 'NPCs Plugin', href: '/plugin/npcs', tag: "Soon", tagColor: "rose"  },
     ],
   },
   {
     title: 'API',
     links: [
-      { title: 'Overview', href: '/api' },
-      { title: 'Kotlin', href: '/api/kotlin', tag: "Soon", tagColor: "rose" },
-      { title: 'Java', href: '/api/java', tag: "Soon", tagColor: "rose" },
-      { title: 'Go', href: '/api/go', tag: "Soon", tagColor: "rose" },
+      { title: 'Overview', href: '/api', tag: "Soon", tagColor: "rose" },
     ],
   },
 ]

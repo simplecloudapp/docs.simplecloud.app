@@ -1,3 +1,4 @@
+import {CodeGroup, Note} from "../../components/mdx";
 export const metadata = {
     title: 'Server groups',
     description:
@@ -26,12 +27,12 @@ They generally should not be modified by third party programs in both group and 
 | properties       | `ConfigurationSection`       | A key value set holding the servers initial [dynamic properties](#dynamic-properties) |
 
 ## Dynamic properties
-Dynamic properties are group properties, which are needed by the [Server Host Droplet](/serverhost-droplet) or custom properties for your personal use. You can use
+Dynamic properties are group properties, which are needed by the [Server Host Droplet](/droplet/serverhost) or custom properties for your personal use. You can use
 custom properties in your groups configuration, and there are property Getters/Setters for servers using the [API](/api).
 
 <Note>
     If you use the official Server Host Droplet, you can learn which dynamic properties are mandatory for you by going
-    [here](/serverhost-droplet#group-properties)
+    [here](/droplet/serverhost#group-properties)
 </Note>
 
 ## Examples
