@@ -8,7 +8,7 @@ export const metadata = {
 }
 
 <Note>
-    This plugin internally uses the [server API](/api#server) to get the online cloud servers. It also provides code to make [own implementations](#own-implementation) for other proxy software easy.
+    This plugin internally uses the [server api](#) to get the online cloud servers. It also provides code to make [own implementations](#own-implementation) for other proxy software easy.
 </Note>
 
 # Server Registration Plugin
@@ -64,14 +64,11 @@ interface ServerRegisterer {
     fun getRegistered(): List<Server>
     // Is called whenever a new server successfully mounted on the its port, or when a server is reattached (after cloud restart)
     fun register(server: Server)
-    // Is called whenever a server is not anymore mounted to its port
+    // Is called whenever a server is no longer mounted to its port
     fun unregister(server: Server)
 }
 ```
 
-<DangerNote>
-    This is only available for Java and Kotlin projects
-</DangerNote>
 <DangerNote>
     There is more you need to do for your own implementation. You can use the [Velocity implementation](https://github.com/theSimpleCloud/server-registration-plugin/tree/main/registration-velocity/src/main/kotlin/app/simplecloud/plugin/registration/velocity) as reference for creating a custom registration plugin.
 </DangerNote>
