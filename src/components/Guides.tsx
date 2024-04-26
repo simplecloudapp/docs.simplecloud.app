@@ -13,11 +13,6 @@ const guides = [
     description: 'Understand how to manage server server-group.',
   },
   {
-    href: '/server',
-    name: 'Servers',
-    description: 'See how servers work, and how you can customize them.',
-  },
-  {
     href: '/template',
     name: 'Templates',
     description: 'Learn how a template is structured and how you can use it.',
