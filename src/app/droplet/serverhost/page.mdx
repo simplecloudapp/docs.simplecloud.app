@@ -45,6 +45,19 @@ Additionally, the online server checker ensures that we don't need a plugin runn
     You have to make sure that the proxies send the correct player count, if you're not using our [proxy info plugin](/plugin/proxy), otherwise the player count will be wrong.
 </Note>
 
+## Needed group properties
+The serverhost droplet needs some [dynamic properties](/server-group#dynamic-properties) to work. For a group to start,
+the user has to provide every property that do not have a default value.
+
+| ID                    | Description                                           | User provided | Default value                                      |
+|-----------------------|-------------------------------------------------------|---------------|----------------------------------------------------|
+| `server-url`          | sets the [server URL](#server-versions)               | Yes           | `N/A`                                              |
+| `configurator`        | sets the [configurator](#server-versions)             | Yes           | `N/A`                                              |
+| `forwarding-secret`   | used in the velocity [configurator](#server-versions) | No            | secure secret set by the [controller](/controller) |
+| `max-startup-seconds` | sets the maximum time a server can take to start up   | Yes           | `120`                                              |
+| `template-id`         | the template used by the server                       | Yes           | the groups name (generated if not present)         |
+
+
 ## Server versions
 Server versions in the classic v2 sense don't exist anymore.
 Servers are now just started using the server URL and a server configurator. Both server URL and server configurator are required,
