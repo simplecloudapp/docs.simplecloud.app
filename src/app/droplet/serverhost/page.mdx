@@ -1,4 +1,4 @@
-import {CodeGroup} from "../../../components/mdx";
+import {CodeGroup, Note} from "../../../components/mdx";
 export const metadata = {
     title: 'Serverhost Droplet',
     description:
@@ -7,6 +7,43 @@ export const metadata = {
 
 
 # Server Host Droplet
+The serverhost droplet is one of our first and most important droplets. It is responsible for configuring and managing minecraft servers. {{ className: 'lead' }}
+
+## Understanding the serverhost droplet
+It's not that hard to understand the serverhost droplet. It is a simple droplet that is responsible for starting and managing minecraft servers.
+The nice thing about it is that it is very flexible and can be configured to work with any kind of server. It is also very easy to scale and can be installed on multiple machines.
+
+This droplet is an implementation of our serverhost api. You don't have to use this droplet to start and manage servers, but you have to use some kind of implementation of the serverhost api.
+
+<Note>
+    If you're looking for a dockerized version of the server host droplet, we're currently working on it. It will be available soon.
+</Note>
+
+## Multi-Root installation
+The serverhost droplet is designed to be installed on multiple machines. This is called a multi-root installation.
+This means that you can have multiple serverhost droplets running on different machines, all connected to our [controller](/controller).
+
+To set up a multi-root installation you need to install our [CLI](/cli#installation) on the machine you want to install the serverhost droplet on.
+
+After you have installed the cli, you can run the following command to install the serverhost droplet:
+```bash
+# Install the serverhost droplet
+simplecloud install droplet serverhost
+```
+
+<Note>
+    Make sure to set content of the `secrets/auth.secret` file to the same value as the `auth.secret` in the controller, otherwise the serverhost droplet won't be able to connect to the [controller](/controller#authentication).
+</Note>
+
+## Online server check
+The online server checker is a new concept where we check if a server is online or not. This is done by sending a ping request to the Minecraft server and checking if it responds.
+It's very useful because this makes it possible for the droplet to know if a server is online and should be registered, or if it is offline and should be removed.
+
+Additionally, the online server checker ensures that we don't need a plugin running on the Minecraft server, so you can basically use any kind of server; it just needs to respond to the ping request.
+
+<Note>
+    You have to make sure that the proxies send the correct player count, if you're not using our [proxy info plugin](/plugin/proxy), otherwise the player count will be wrong.
+</Note>
 
 ## Server versions
 Server versions in the classic v2 sense don't exist anymore.
@@ -126,6 +163,19 @@ This also means that you can change the executable, arguments and options freely
 You can also use any [group property](/server-group#controller-properties). Property placeholders follow this syntax:
 `%PROPERTY_NAME%`
 
+## Crash handling
+There are two types of crashes that can happen:
+1. The serverhost droplet crashes
+2. A minecraft server crashes
+
+### Serverhost droplet crash
+If the serverhost droplet crashes, you have to restart it manually. What's really cool is that the managed Minecraft servers will continue to run, even if the serverhost droplet is not running.
+After a restart, this droplet will automatically detect all running servers and reattach to them.
+
+This also means that you can restart the serverhost droplet without any downtime for the managed Minecraft servers, so you can update the droplet without any problems.
+
+### Minecraft server crash
+If a minecraft server crashes, the serverhost droplet will automatically inform the controller about the crash and the controller will start a new server, if needed.
 
 ## Tech-Stack
 These are the technologies used by the Serverhost droplet:
