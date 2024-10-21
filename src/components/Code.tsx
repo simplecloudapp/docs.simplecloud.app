@@ -172,7 +172,7 @@ function CodeGroupHeader({
   children,
   selectedIndex,
 }: {
-  title: string
+  title?: string
   children: React.ReactNode
   selectedIndex: number
 }) {
@@ -310,7 +310,7 @@ export function CodeGroup({
   children,
   title,
   ...props
-}: React.ComponentPropsWithoutRef<typeof CodeGroupPanels> & { title: string }) {
+}: React.ComponentPropsWithoutRef<typeof CodeGroupPanels> & { title?: string }) {
   let languages =
     Children.map(children, (child) =>
       getPanelTitle(isValidElement(child) ? child.props : {}),

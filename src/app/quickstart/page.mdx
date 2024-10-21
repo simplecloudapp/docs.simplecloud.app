@@ -1,6 +1,4 @@
 import { CodeGroup } from "../../components/Code";
-import { Button } from "../../components/Button";
-import { Note } from "../../components/mdx";
 
 export const metadata = {
   title: 'Quickstart',
@@ -14,50 +12,69 @@ This guide will get you all set up for a SimpleCloud installation that is compar
 
 ## Installing SimpleCloud
 
-The SimpleCloud Installer will install the SimpleCloud [CLI](/cli) as well as the core of the cloud.
-
-<Note>
-    To get started with SimpleCloud, it is advised to use our [CLI](/cli), since you will only receive support for most topics if you do so (the only other way to run SimpleCloud is to [put it together yourself](/structure)).
-</Note>
+SimpleCloud now offers an extensive [CLI](/cli) that cover everything you need to manage SimpleCloud. It's the easiest way to get started with SimpleCloud. You can install it with the following command:
 
 <CodeGroup>
 
 ```bash {{ title: 'Unix' }}
-wget https://github.com/theSimpleCloud/installer/releases/latest && ./install.sh
+curl https://github.com/theSimpleCloud/simplecloud-manifest/releases/download/latest/cli-install.sh -o install.sh && chmod +x install.sh && ./install.sh
 ```
 
 ```bash {{ title: 'Windows'}}
 # You have to download the Installer files manually.
+# You can find the installer files here: https://github.com/theSimpleCloud/simplecloud-manifest/releases/latest
 ./install.bat
 ```
 </CodeGroup>
 
-## Running SimpleCloud
+From now on, you can use the SimpleCloud CLI to manage SimpleCloud. You can find all commands in the [CLI documentation](/cli).
 
-<Note>
-    Only do this if you installed via the installer.
-</Note>
-
-For the CLI to be functional a running SimpleCloud instance is required. To start the cloud, execute the following command.
-
+Now that we have installed the [CLI](/cli), we can start installing our pre-built bundle of SimpleCloud. This bundle contains everything you need to get started with SimpleCloud. You can install it with the following command:
 <CodeGroup>
-```bash {{ title: 'Unix' }}
-./run.sh
-```
-```bash {{ title: 'Windows'}}
-./run.bat
+```bash
+sc install bundle
 ```
 </CodeGroup>
 
-## Setting up SimpleCloud
+This lets you choose where you want to install all our core components. If you already have a running SimpleCloud instance and you want to add another Root Server, you can take a look at the [Server Host Droplet](/droplet/serverhost) and [Server Host Docker Droplet](/droplet/serverhost-docker) when you're using Docker.
 
-If you chose to build a SimpleCloud environment by yourself, you have a lot more to go through before you can start.
+## Running SimpleCloud
 
-<div className="not-prose">
-  <Button href="/structure" variant="text" arrow="right">
-    <>Read the docs about setting up a working SimpleCloud environment</>
-  </Button>
-</div>
+Starting the cloud is very simple. By executing the following command, the cloud will try to access and start every component that is needed to run SimpleCloud.
+
+<CodeGroup>
+```bash
+sc start cloud
+```
+</CodeGroup>
+
+Under the hood, the CLI will run a script in your installation directory. This script will start everything you need to run SimpleCloud. If you want to customize the script, you can find it in the `scripts` directory.
+
+Currently, we don't have a way to start a specific component with the CLI, but we are working on it and each component has an own script. For now, you can start a specific component by searching for the correct script in the `scripts` directory.
+
+## Creating a Proxy Group
+
+Now that we have a running SimpleCloud instance, we can create our first group. A group is a group of Minecraft servers that are managed by the [Controller](/controller). You can create a group with the following command:
+
+<CodeGroup>
+```bash
+sc create group
+```
+</CodeGroup>
+
+// TODO: Show the entire interactive installation process
+
+## Creating a Server Group
+
+To run a Minecraft server, you need to create a [Server Group](/server-group). You can create a server group with the following command:
+
+<CodeGroup>
+```bash
+sc create group
+```
+</CodeGroup>
+
+// TODO: Show the entire interactive installation process & what's different to the proxy group
 
 ## What's next?
 
