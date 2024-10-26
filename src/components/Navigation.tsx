@@ -239,6 +239,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Introduction', href: '/' },
       { title: 'Quickstart', href: '/quickstart' },
       { title: 'Controller', href: "/controller" },
+      { title: 'CLI', href: "/cli", tag: "Soon", tagColor: "rose" },
       { title: 'Server Groups', href: "/server-group" },
       { title: 'Templates', href: "/template" },
       { title: 'Structure', href: "/structure" },
