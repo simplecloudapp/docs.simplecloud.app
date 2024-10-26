@@ -4,280 +4,170 @@ import { Note } from "../../../components/mdx";
 
 export const metadata = {
     title: 'Prefixes Plugin',
-    description:
-        'The Prefixes Plugin allows you display Ranks in Chat and Tab.',
+    description: 'Display and manage player ranks in chat and tab list'
 }
 
+# Prefixes Plugin
 
-# SimpleCloud Prefixes Plugin
-
-Prefixes is a plugin/extension that manages prefixes and suffixes in tab, and formats the chat to your
-liking. [API methods](#api-usage) for doing this are also provided.
-You can [implement it on your own](#own-implementation), or use the default implementation
-for [LuckPerms](https://github.com/LuckPerms/LuckPerms).
-For prefixes and suffixes, [Adventure Components](https://github.com/KyoriPowered/adventure) are used, as well as [MiniMessage](https://github.com/KyoriPowered/adventure) in the LuckPerms default
-implementation. {{ className: 'lead' }}
+The Prefixes Plugin provides comprehensive rank management for chat and tab list displays. It integrates with LuckPerms by default but can be extended with custom implementations. The plugin uses Adventure Components and MiniMessage for rich text formatting. {{ className: 'lead' }}
 
 <Button href="https://github.com/theSimpleCloud/prefixes-plugin/releases" arrow="right">
     <>Download</>
 </Button>
 
-## Supported server versions
-A list of all supported server versions. If your server version is listed here, it means that
-this plugin is supported and maintained on your server version.
+## Quick Setup
 
-| Server type      | PrefixesApi | LuckPerms | out of the box                                                                                          |
-|------------------|-------------|-----------|---------------------------------------------------------------------------------------------------------|
-| Paper and Forks  | ✅           | ✅         | ✅                                                                                                       |
-| Spigot and Forks | ✅           | ✅         | ✅                                                                                                       |
-| Minestom         | ✅           | ❌         | ❌ (you can easily get it working by using your [own implementation](#creating-api-and-indexing-groups)) |
+1. Download the plugin for your server software
+2. Place it in your server's plugins folder
+3. Start your server
+4. Configure using LuckPerms and `config.json`
+
+## Supported Servers
+
+| Server type      | API Support | LuckPerms | Out of box support |
+|------------------|-------------|-----------|-------------------|
+| Paper & Forks    | Yes         | Yes       | Yes               |
+| Spigot & Forks   | Yes         | Yes       | Yes               |
+| Minestom*        | Yes         | No        | No                |
+
+<Note>
+    *Minestom support requires custom implementation using the provided API.
+</Note>
 
 ## Configuration
-There two ways to configure the plugin. You can configure the player display name using LuckPerms.
-The chat format is configured using the configuration.
 
-### LuckPerms
+### LuckPerms Integration
 
-Prefixes will automatically register any LuckPerms Group as a PrefixGroup, alongside its prefix, suffix, and
-TeamColor.
+The plugin automatically syncs with LuckPerms groups, converting them to prefix groups with their respective prefixes, suffixes, and team colors.
 
-#### Setting a groups prefix/suffix
+#### Group Management
+```bash
+# Set group prefix
+/lp group admin meta addprefix 100 "<red>[Admin] "
 
-`/lp group <groupname> meta addprefix/addsuffix <weight> <prefix/suffix in MiniMessage format>`
+# Set group suffix
+/lp group admin meta addsuffix 100 " <gray>✦"
 
-#### Setting a groups TeamColor
+# Set team color (Spigot: use ChatColor, others: use hex)
+/lp group admin meta set color #FF0000
+```
 
-Depending on what server version your on, you have to set a hex value or a ChatColor enum as color.
-On Spigot, color should be in ChatColor format (e.g. WHITE). On every other server implementation you can use hex colors
+### Chat Configuration
 
-`/lp group <groupname> meta set color <color>`
+The chat format is configured in `config.json`:
 
-### Chat configuration
-
-The `config.json` file is located in the data folder. It will look like this:
-
-````json
+```json
 {
   "chatFormat": "<prefix><name_colored><suffix><gray>:</gray> <white><message></white>"
 }
-````
+```
 
-You can configure the chat message format by editing the value of `chatFormat`. [MiniMessage]() is used, to provide
-quick and easy color and gradient support to the format.
-There also are placeholders you can use for the format:
+Available placeholders:
 
-| Placeholder  | Value                                                       |
-|--------------|-------------------------------------------------------------|
-| name         | The players name                                            |
-| name_colored | The players name, colored the same way as in the scoreboard |
-| prefix       | The players prefix                                          |
-| suffix       | The players suffix                                          |
-| message      | The sent message                                            |
+| Placeholder    | Description                     |
+|---------------|---------------------------------|
+| name          | Player's name                   |
+| name_colored  | Name with team color            |
+| prefix        | Player's prefix                 |
+| suffix        | Player's suffix                 |
+| message       | Chat message                    |
 
-## API usage
-You can use the API to directly modify prefixes and groups through third party plugins.
+## API Usage
 
-### Getting PrefixesAPI
-To use the API, you need to get the PrefixesAPI instance.
+### Accessing the API
 
-#### Bukkit/Paper
+<CodeGroup>
+```kotlin {{title: 'Bukkit/Paper'}}
+val prefixesApiProvider = Bukkit.getServicesManager()
+    .getRegistration(PrefixesApi::class.java)
+val api: PrefixesApi = prefixesApiProvider.provider
 
-When Prefixes is active, a bukkit service provider is registered containing the Api object. To get it, use the
-following code.
+// Use API
+api.setPrefix(player.uniqueId, Component.text("[VIP] "))
+```
 
-````kotlin
-val prefixesApiProvider: RegisteredServiceProvider<PrefixesApi>? = Bukkit.getServicesManager().getRegisteredServiceProvider(PrefixesApi::class.java)
-if (prefixesApiProvider != null) {
-    val myPrefixesApi: PrefixesApi = prefixesApiProvider.provider
-    //Code using the PrefixesApi
-}
-````
-<Note>
-    **IMPORTANT**: To make sure everything works as expected, add `PrefixesApi` to your plugin.yml `depends` list.
-</Note>
-#### Minestom
+```kotlin {{title: 'Minestom'}}
+val api: PrefixesApi = PrefixesExtension.getApi()
 
-To get the `PrefixesApi` object on Minestom, you need to call the `getApi()` Singleton in the `PrefixesExtension` class.
+// Use API
+api.setPrefix(player.uniqueId, Component.text("[VIP] "))
+```
+</CodeGroup>
 
-````kotlin
-val myPrefixesApi: PrefixesApi = PrefixesExtension.getApi()
-//Code using the PrefixesApi
-````
-<Note>
-    **IMPORTANT**: To make sure everything works as expected, add `PrefixesApi` to your extension.json `dependencies` array.
-</Note>
+### Core API Methods
 
-### Using the API
+```kotlin
+// Player Management
+fun setWholeName(uniqueId: UUID, group: PrefixesGroup)
+fun setPrefix(uniqueId: UUID, prefix: Component)
+fun setSuffix(uniqueId: UUID, suffix: Component)
+fun setColor(uniqueId: UUID, color: String)
 
-Now that you have a `PrefixesApi` object, you have access to all of these Functions:
+// Group Management
+fun getGroups(): List<PrefixesGroup>
+fun getHighestGroup(uniqueId: UUID): PrefixesGroup
+fun addGroup(group: PrefixesGroup)
+```
 
-````kotlin
-    /**
-     * Sets the prefix and suffix of a player in both Tab and Chat
-     * @param uniqueId UUID of the target player
-     * @param group
-     */
-    fun setWholeName(uniqueId: UUID, group: PrefixesGroup)
+## Custom Implementation
 
-    /**
-     * Sets the prefix and suffix of a player in both Tab and Chat
-     * @param uniqueId UUID of the target player
-     * @param groupName
-     */
-    fun setWholeName(uniqueId: UUID, groupName: String)
+### Creating a Custom Group
 
-    /**
-     * Sets the prefix of a player in both Tab and Chat
-     * @param uniqueId UUID of the target player
-     * @param prefix prefix to set
-     */
-    fun setPrefix(uniqueId: UUID, prefix: Component)
-
-    /**
-     * Sets the prefix of a player in both Tab and Chat
-     * @param uniqueId UUID of the target player
-     * @param suffix suffix to set
-     */
-    fun setSuffix(uniqueId: UUID, suffix: Component)
-
-    /**
-     * Returns all registered PrefixesGroup ordered by priority
-     */
-    fun getGroups(): List<PrefixesGroup>
-
-    /**
-     * Returns the highest PrefixesGroup of a player
-     * @param uniqueId UUID of the target player
-     */
-    fun getHighestGroup(uniqueId: UUID): PrefixesGroup
-
-    /**
-     * Adds a [PrefixesGroup]
-     * @param group
-     */
-    fun addGroup(group: PrefixesGroup)
-
-    /**
-     * Changes the PrefixesActor of the server instance (e.g. to a bukkit actor)
-     * @param actor
-     */
-    fun setActor(actor: PrefixesActor)
-
-    /**
-     * Changes the Scoreboard Team color of the target player (Used in 1.12+ to make player names colorful)
-     * @param uniqueId UUID of the target player
-     * @param color Color string (ChatColor on spigot, hex colors on other server implementations)
-     */
-    fun setColor(uniqueId: UUID, color: String)
-
-    /**
-     * Sets the used PrefixesConfig
-     * @param config Specifies the new [PrefixesConfig]
-     */
-    fun setConfig(config: PrefixesConfig)
-````
-
-## Own implementation
-
-PrefixesApi supports the reimplementation of features through third-party Plugins.
-
-### PrefixesGroup
-
-The interface `PrefixesGroup` provides the structure to all necessary features for a PrefixesGroup. By implementing it
-in a custom class, you can add this group to the PrefixesApi by calling the `addGroup` function.
-
-#### Example group implementation
-
-````kotlin
-class MyPrefixesGroup : PrefixesGroup {
-    override fun getName(): String {
-        return "mygroup"
-    }
-
-    override fun getPrefix(): Component {
-        return Component.text("")
-    }
-
-    override fun getColor(): String {
-        return "WHITE"
-    }
-
-    override fun getSuffix(): Component {
-        return Component.text("")
-    }
-
-    override fun getPriority(): Int {
-        return 0
-    }
-
+```kotlin
+class CustomGroup : PrefixesGroup {
+    override fun getName(): String = "vip"
+    override fun getPrefix(): Component = Component.text("[VIP] ")
+    override fun getSuffix(): Component = Component.text(" ⭐")
+    override fun getColor(): String = "#FFD700"
+    override fun getPriority(): Int = 100
+    
     override fun containsPlayer(uniqueId: UUID): Boolean {
-        //Custom contains player logic
-    }
-
-    override fun containsPlayerFuture(uniqueId: UUID): CompletableFuture<Boolean> {
-        //Custom async contains player logic
+        // Custom logic
+        return true
     }
 }
-````
+```
 
-### PrefixesActor
+### Custom Actor Implementation
 
-A `PrefixesActor` is responsible for applying, and unapplying groups and prefixes as well as suffixes from players. It
-also manages Chat-Message formatting.
-To enable your custom `PrefixesActor`, you have to call the `setActor` function on the `PrefixesApi` object.
-
-#### Example actor implementation
-
-````kotlin
-class MyPrefixesActor : PrefixesActor {
-    override fun applyGroup(
-        target: UUID,
-        group: PrefixesGroup
-    ) {
-        //Custom group apply logic
+```kotlin
+class CustomActor : PrefixesActor {
+    override fun applyGroup(target: UUID, group: PrefixesGroup) {
+        // Apply group formatting
     }
-
-    override fun remove(target: UUID) {
-        //Custom remove logic
-    }
-
+    
     override fun setPrefix(target: UUID, prefix: Component) {
-        //Custom prefix apply logic
+        // Set player prefix
     }
-
-    override fun setSuffix(target: UUID, suffix: Component) {
-        //Custom suffix apply logic
-    }
-
+    
     override fun formatMessage(target: UUID, format: String, message: Component): Component {
-        //Custom chat formatting logic
-    }
-
-    override fun setColor(target: UUID, color: String) {
-        //Custom color apply logic
-    }
-}
-````
-
-### Custom plugin implementation
-If you want to make breaking changes to the plugin, you have to code your own implementation.
-
-#### Creating API and indexing groups
-
-To create an API object, you need to implement `PrefixesApiImpl`. From there, overwriting the `indexGroups` adds parsing
-groups from anywhere
-
-##### Example API implementation
-
-````kotlin
-class MyApiImplementation : PrefixesApiImpl() {
-    override fun indexGroups() {
-        //Custom group parsing implementation
+        // Format chat message
+        return Component.text()
+            .append(prefix)
+            .append(message)
+            .build()
     }
 }
-````
+```
 
-From there, you can register this as a service provider in your custom plugin.
 <Note>
-    **IMPORTANT**: You still need to register the events on your own! Take a look at the [source code](https://github.com/thesimplecloud/prefixes-plugin) to see how this is done.
+    For complete implementation examples, check our [GitHub repository](https://github.com/thesimplecloud/prefixes-plugin).
 </Note>
+
+## Best Practices
+
+1. **Group Management**
+- Use consistent prefix/suffix styles
+- Set appropriate group priorities
+- Document group hierarchies
+
+2. **Performance**
+- Cache group data when possible
+- Use async operations for database queries
+- Minimize chat format complexity
+
+## What's Next?
+
+- [LuckPerms Setup](/permissions)
+- [Chat Plugin Integration](/plugins/chat)
+- [API Documentation](/api)

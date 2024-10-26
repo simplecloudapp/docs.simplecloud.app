@@ -1,99 +1,108 @@
 import {Button} from "../../../components/Button";
 import {CodeGroup} from "../../../components/Code";
-import {Note} from "../../../components/mdx";
 
 export const metadata = {
     title: 'Proxy Plugin',
-    description:
-        'This proxy plugin provides a variety of features for MOTD and Tablist in your server network.',
+    description: 'Enhance your server network with customizable MOTD and Tablist features'
 }
-
-
 
 # Proxy Plugin
 
-The Proxy Plugin is a versatile tool designed to enhance your server network's ServerInfo and Tablist features. It offers a range of customization options to tailor these aspects to your specific needs. {{ className: 'lead' }}
+The Proxy Plugin enhances your server network with customizable MOTD (ServerInfo) and Tablist features, offering extensive customization options through simple configuration files. {{ className: 'lead' }}
 
 <Button href="https://github.com/theSimpleCloud/proxy-plugin/releases" arrow="right">
     <>Download</>
 </Button>
 
-## Supported proxy versions
-A list of all maintained implementations. If you find
-your proxy in this list it means that your proxy is supported.
+## Quick Setup
 
-| Proxy type           | Proxy Plugin |
-|----------------------|--------------|
-| Velocity             | ✅            |
-| BungeeCord and forks | ✅            |
-| Other                | ❌            |
+1. Download the plugin for your proxy software
+2. Place it in your proxy template's plugins folder
+3. Start your proxy server
+4. Configure using `motd.yml` and `tablist.yml`
 
+## Supported Proxies
 
-## Features
-This plugin has many features for both Tablist and ServerInfo. Some features are limited to only work for only Tablist or ServerInfo.
+| Proxy type           | Support Status |
+|---------------------|----------------|
+| Velocity            | Yes            |
+| BungeeCord & forks  | Yes            |
+| Other               | No             |
 
-| Feature                                    | Explanation                                                                                           | Tablist | ServerInfo |
-|--------------------------------------------|-------------------------------------------------------------------------------------------------------|---------|------------|
-| Customizable lines                         | Top and bottom line(s) are both customizable                                                          | ✅       | ✅          |
-| Multi-Options                              | Multiple options can be provided for each line, with one randomly selected for display                | ❌       | ✅          |
-| Customizable PlayerInfo and server version | PlayerInfo and server version details can be personalized according to user preferences               | ❌       | ✅          |
-| Dynamic maximum player count               | The maximum number of players can be updated dynamically and can be configured within a certain range | ✅       | ✅          |
-| Support for Adventure MiniMessage format   | Configurations are formatted using Adventure [MiniMessage](https://docs.advntr.dev/minimessage)       | ✅       | ✅          |
-| Placeholders                               | Placeholders are documented [here](#placeholders)                                                     | ✅       | ✅          |
-| Customizable update interval               | Enables you to change the time between Tablist updates                                                | ✅       | ❌          |
-| Animated header and footer                 | The header and footer can display dynamic animations                                                  | ✅       | ❌          |
-| Appearance based on server names or groups | Enables the player to have different appearance when playing on different child servers               | ✅       | ❌          |
+## MOTD Features
 
-## Configuration
+### Message Customization and Rotation
+The MOTD system allows you to create multiple messages that can either be displayed statically or rotate randomly. This is particularly useful for announcements, maintenance notices, or showcasing different aspects of your server. Combined with MiniMessage format support, you can create rich text displays with gradients, colors, and advanced formatting.
 
-The plugin is configured via the files `motd.yml` and `tablist.yml`. In these files you will find all the options for customizing ServerInfo and Tablist.
-You can use [placeholders](#placeholders) as well.
+```yaml
+# Configuration examples are yet to be added.
+```
 
-<Note>Configuration examples are yet to be added.</Note>
+### Player Information and Version Display
+Customize how your server presents itself in the server list. Configure custom player count displays, maximum player limits, and even modify the server version string. This feature allows you to create engaging server list entries that stand out.
+
+```yaml
+# Configuration examples are yet to be added.
+```
+
+## Tablist Features
+
+### Dynamic Headers and Footers
+Create engaging tablist headers and footers that update automatically. The plugin supports both static and animated content, with configurable update intervals. You can display real-time information like player counts, server status, or custom messages. All text supports MiniMessage formatting for advanced styling.
+
+```yaml
+# Configuration examples are yet to be added.
+```
+
+### Server-Specific Displays and Information
+Configure different tablist appearances based on which server a player is currently on. This feature allows you to create unique experiences for different game modes or server types. Combined with placeholders, you can display server-specific information like game statistics or server status.
+
+```yaml
+# Configuration examples are yet to be added.
+```
+
+### Real-Time Updates and Animations
+Control how often your tablist updates and what information it displays. The plugin can show real-time player statistics, ping information, and server status. Create animated sequences that cycle through different messages or information displays.
+
+```yaml
+# Configuration examples are yet to be added.
+```
 
 ## Placeholders
-Placeholders can be used in their respective configuration to make the displaying of dynamic properties possible.
-Some Placeholders are only available for the Tablists configuration.
-| Placeholder        | Tablist / `tablist.yml` | ServerInfo / `motd.yml` | Description                           |
-|--------------------|---------|------|---------------------------------------|
-| `%ONLINE_PLAYERS%` | ✅     | ✅  | The currently online players          |
-| `%MAX_PLAYERS%`    | ✅     | ✅  | The networks maximum online players   |
-| `%SERVER_NAME%`    | ✅     | ❌   | The server the player is currently on |
-| `%CURRENT_TIME%`   | ✅     | ❌   | The current time                      |
-| `%CURRENT_DATE%`   | ✅     | ❌   | The current date                      |
-| `%PING%`           | ✅     | ❌   | The players ping                      |
 
-## API usage
+| Placeholder        | MOTD | Tablist | Description                    |
+|-------------------|------|----------|--------------------------------|
+| %ONLINE_PLAYERS%  | Yes  | Yes      | Current online players         |
+| %MAX_PLAYERS%     | Yes  | Yes      | Maximum network players        |
+| %SERVER_NAME%     | No   | Yes      | Player's current server        |
+| %CURRENT_TIME%    | No   | Yes      | Current time                   |
+| %CURRENT_DATE%    | No   | Yes      | Current date                   |
+| %PING%            | No   | Yes      | Player's ping                  |
 
-The plugin offers an API for enabling interaction with the ServerInfo and Tablist by other plugins. This API is accessible for both BungeeCord/Waterfall and Velocity.
+## API Integration
 
-You can utilize either the `MotdConfigurationEvent` or `TablistConfigurationEvent` to make updates to the ServerInfo or Tablist. These events encapsulate the configuration object, allowing for modifications.
-
-In the case of the Tablist event, you can customize the header and footer of the Tablist. Velocity is employed in this example.
+The plugin provides events for custom modifications:
 
 <CodeGroup>
-    ```java {{title: 'Java'}}
-        @Subscribe
-        public void onTablistConfiguration(TablistConfigurationEvent event) {
-            TablistConfiguration TablistConfiguration = event.getTablistConfiguration();
-            Component header = TablistConfiguration.getHeader();
-            header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
-            TablistConfiguration.setHeader(header);
+```java {{title: 'Tablist Event Example'}}
+@Subscribe
+public void onTablistConfiguration(TablistConfigurationEvent event) {
+    TablistConfiguration config = event.getTablistConfiguration();
 
-            Component footer = TablistConfiguration.getFooter();
-            footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build());
-            TablistConfiguration.setFooter(footer);
-        }
-    ```
-    ```kotlin {{title: 'Kotlin'}}
-        fun onTablistConfiguration(event: TablistConfigurationEvent) {
-            var header = event.TablistConfiguration.header
-            header = header.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
-            event.TablistConfiguration.header = header
+    // Modify header
+    Component header = config.getHeader()
+        .replaceText(TextReplacementConfig.builder()
+        .match("%CUSTOM_PLACEHOLDER%")
+        .replacement("<red>Custom Text</red>")
+        .build());
 
-            var footer = event.TablistConfiguration.footer
-            footer = footer.replaceText(TextReplacementConfig.builder().match("%MY_FUNNY_PLACEHOLDER%").replacement("<red>Test" + 123).build())
-            event.TablistConfiguration.footer = footer
-        }
-    ```
+    config.setHeader(header);
+}
+```
 </CodeGroup>
+
+## What's Next?
+
+- [Server API Documentation](/api#server)
+- [Proxy Configuration](/proxy)
+- [Plugin Development](/plugins)
