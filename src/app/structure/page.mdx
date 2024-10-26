@@ -16,30 +16,48 @@ SimpleCloud has its core components that are needed, but they can be installed a
 
 ```
 .
-├── controller-runtime.jar
-├── droplets/
-│   └── serverhost-droplet/
-│       ├── serverhost-droplet.jar
-│       ├── config.yml
-│       ├── cache
-│       ├── options/
-│       │   ├── configurators/
-│       │   │   ├── spigot.yml
-│       │   │   ├── ...
-│       │   │   └── velocity.yml
-│       │   ├── lobby.yml
-│       │   └── proxy.yml
-│       └── templates/
-│           ├── lobby.yml
-│           └── proxy.yml
+├── controller
+│   ├── controller-runtime.jar
+│   ├── database.db
+│   └── logs
+│       └── controller.log
+├── droplets
+│   └── serverhost
+│       ├── logs
+│       │   └── serverhost-droplet.log
+│       ├── options
+│       │   └── configurators
+│       │       ├── spigot.yml
+│       │       ├── ...
+│       │       └── velocity.yml
+│       ├── serverhost-runtime.jar
+│       └── templates
+│           └── internal
+│               ├── dynamic
+│               │   ├── dynamic_spigot.yml
+│               │   ├── ...
+│               │   └── dynamic_velocity.yml
+│               ├── every
+│               │   ├── every_spigot.yml
+│               │   └── every_velocity.yml
+│               └── static
+│                   ├── static_spigot.yml
+│                   ├── ...
+│                   └── static_velocity.yml
+├── groups
+│   ├── lobby.yml
+│   └── proxy.yml
+├── libs
+│   └── ...
+├── scripts
+│   ├── run.bat
+│   ├── ...
+│   └── run.sh
 ├── templates/
 │   ├── lobby/
 │   │   └── ...
 │   └── proxy/
 │       └── ...
-├── groups/
-│   ├── lobby.yml
-│   └── proxy.yml
 └── running/
     ├── lobby/
     │   └── lobby-1/
