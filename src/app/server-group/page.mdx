@@ -1,98 +1,160 @@
-import {CodeGroup, Note} from "../../components/mdx";
+import { Note, CodeGroup } from "../../components/mdx";
+
 export const metadata = {
-    title: 'Server groups',
-    description:
-        'Learn about the structure of Server Groups',
+    title: 'ServerGroups',
+    description: 'Learn how to configure and manage server groups in SimpleCloud'
 }
 
-# Server groups
-SimpleCloud needs server groups to manage different server types and deployments dynamically. The controller starts servers of every group, each one inheriting the groups properties.
-Server groups are made up of [controller properties](#controller-properties), which are not dynamically changeable via the API, and [dynamic properties](#dynamic-properties).
-Group properties are modifiable using the [CLI](/cli#server-group) and by editing the [group config](/structure). {{ className: 'lead' }}
+# Server Groups
 
-## Controller properties
-Controller properties are group properties, which are needed by the [controller](/controller) to handle the server group.
-They generally should not be modified by third party programs in both group and server, while the cloud is running.
+Groups are the foundation of SimpleCloud's server management system. They define how your Minecraft servers are configured, deployed, and managed. Each server inherits properties from its group, allowing for consistent and automated server management. {{ className: 'lead' }}
 
-| property         | type                         | purpose                                                                               |
-|------------------|------------------------------|---------------------------------------------------------------------------------------|
-| name             | `string`                     | The name of this group                                                                |
-| type             | `SERVER`, `PROXY` or `OTHER` | The [server type](/server#type)                                                       |
-| min-memory       | `uint` in MB (e.g. `1024`)   | The minimum RAM for a server of this group                                            |
-| max-memory       | `uint` in MB (e.g. `2048`)   | The maximum RAM for a server of this group                                            |
-| min-online-count | `uint` (e.g. 1)              | The minimum amount of servers constantly online of this group                         |
-| max-online-count | `uint` (e.g. 2)              | The maximum amount of servers constantly online of this group                         |
-| max-players      | `uint` (e. g. 20)            | The maximum amount of players allowed in this group                                   |
-| start-port       | `uint` (e. g. 25565)         | The lowest possible port for servers of this group                                    |
-| properties       | `ConfigurationSection`       | A key value set holding the servers initial [dynamic properties](#dynamic-properties) |
+## Quick Setup
 
-## Dynamic properties
-Dynamic properties are group properties, which are needed by the [serverhost droplet](/droplet/serverhost) or custom properties for your personal use. You can use
-custom properties in your groups configuration, and there are property Getters/Setters for servers using the [API](/api).
+The fastest way to create a new group is through our CLI:
 
-<Note>
-    If you use the official Server Host Droplet, you can learn which dynamic properties are mandatory for you by going
-    [here](/droplet/serverhost#needed-group-properties)
-</Note>
-
-## Examples
 <CodeGroup>
-    ```yml {{title: "groups/survival_standalone.yml"}}
-    # A simple Survival group running on its own (no proxy connection)
-    name: survival
-    type: SERVER
-    min-memory: 1024
-    max-memory: 1024
-    start-port: 50000
-    max-players: 100
-    min-online-count: 1
-    max-online-count: 1
-    properties:
-    # These are used by the server-host droplet
-    configurator: "spigot_standalone" # See "configurators" page in server-host docs
-    template-id: "survival" # ID of the template used by the server-host
-    # Download link to ANY server runtime
-    server-url: https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/463/downloads/paper-1.20.4-463.jar
-    max-startup-seconds: "120" # Maximum time a server needs to start up
-    ```
-    ```yml {{title: "groups/proxy.yml"}}
-    # A simple proxy group using velocity
-    name: proxy
-    type: PROXY
-    min-memory: 1024
-    max-memory: 1024
-    start-port: 25565
-    max-players: 100
-    min-online-count: 1
-    max-online-count: 1
-    properties:
-    # These are used by the server-host droplet
-    configurator: "velocity" # See "configurators" page in server-host docs
-    template-id: "proxy" # ID of the template used by the server-host
-    # Download link to ANY server runtime
-    server-url:
-    https://api.papermc.io/v2/projects/velocity/versions/3.3.0-SNAPSHOT/builds/378/downloads/velocity-3.3.0-SNAPSHOT-378.jar
-    max-startup-seconds: "120" # Maximum time a server needs to start up
-    ```
-    ```yml {{title: "groups/test.yml"}}
-    # A simple server group registered to the proxy
-    name: test
-    type: SERVER
-    min-memory: 1024
-    max-memory: 1024
-    start-port: 50000
-    max-players: 10
-    min-online-count: 2
-    max-online-count: 2
-    properties:
-    # These are used by the server-host droplet
-    configurator: "paper_velocity" # See "configurators" page in server-host docs
-    template-id: "test" # ID of the template used by the server-host
-    # Download link to ANY server runtime
-    server-url: https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/463/downloads/paper-1.20.4-463.jar
-    max-startup-seconds: "120" # Maximum time a server needs to start up
+    ```bash
+    # Create a new group interactively
+    sc create group
+
+    # Create a group with specific parameters
+    sc create group --name lobby --type SERVER --min-memory 1024
+
+    # Create a proxy group
+    sc create group --name proxy --type PROXY --min-memory 512 --max-memory 512 --start-port 25565
+
+    # Create a game server group
+    sc create group --name survival --type SERVER --min-memory 2048 --max-memory 4096 --start-port 50000
     ```
 </CodeGroup>
 
+## Configuration Structure
+
+Groups are configured using YAML files located in the `groups/` directory. Here's a complete example:
+
+```yaml
+name: lobby
+type: SERVER
+min-memory: 1024
+max-memory: 1024
+start-port: 50000
+max-players: 100
+min-online-count: 1
+max-online-count: 1
+cloud-properties:
+  configurator: "paper_velocity"
+  template-id: "lobby"
+  server-url: "https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/463/downloads/paper-1.20.4-463.jar"
+  max-startup-seconds: "120"
+```
+
+## Group Types
+
+There are two types of groups in SimpleCloud, PROXY and SERVER. PROXY groups are used for proxy servers like Velocity or BungeeCord that handle player connections and server networking. SERVER groups are used for Minecraft game servers running software like Paper, Spigot, or Minestom.
+
+In general it's not important to the [Controller](/controller) to know which group type you're using. Basically, both types are the same, the main difference is that PROXY groups and SERVER groups are configured differently, so that a [Server Host Droplet](/droplet/serverhost) knows how to handle them.
+
+## Editing a Group
+
+### Using the CLI
+<CodeGroup>
+    ```bash
+    # Soon
+    ```
+</CodeGroup>
+
+### Manual Editing
+
+Groups can be edited by modifying their YAML files directly. When editing group files:
+
+- **Name Changes**: If you change the group name, you must also rename the file to match
+- **Type Changes**: Changing the group type is not recommended as it requires reconfiguration of cloud-properties
+- **Memory/Player Limits**: Can be changed freely, but minimum should always be lower than maximum
+- **Port Configuration**: Can be modified, if ports are already in use, the [Server Host Droplet](/droplet/serverhost) will pick up the next available port
+- **Cloud Properties**: Can be customized based on your needs (see [Cloud Properties](#cloud-properties)), but we have some required ones, if you use our [Server Host Droplet](/droplet/serverhost)
+
+<Note>
+    All changes are applied automatically without requiring restarts. Running servers maintain their original configuration until restarted.
+</Note>
+
+## File Operations
+
+Groups can be managed directly through the filesystem:
+
+1. **Location**
+- All group files are stored in the `groups/` directory by default
+- Files must use `.yml` extension
+- Filename must match the group name
+
+2. **File Permissions**
+- Ensure files are readable by the SimpleCloud process
+- Recommended: 644 (-rw-r--r--)
+- Directory permissions: 755 (drwxr-xr-x)
+
+3. **Automatic Processing**
+- New files are detected and loaded automatically
+- File modifications trigger immediate updates
+- Deleted files remove groups from the system
+
+<Note>
+    While editing files directly is supported, using the CLI is recommended for safer modifications.
+</Note>
+
+## Core Properties
+
+Every group requires these essential configuration properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| name | `string` | Unique identifier for the group |
+| type | `PROXY`/`SERVER` | Determines the server's role |
+| min-memory | `uint` | Minimum RAM allocation in MB |
+| max-memory | `uint` | Maximum RAM allocation in MB |
+| start-port | `uint` | Base port for server instances |
+| max-players | `uint` | Maximum player capacity |
+| min-online-count | `uint` | Minimum running instances |
+| max-online-count | `uint` | Maximum running instances |
+
+## Cloud Properties
+
+The `cloud-properties` section is primarily used by the [Server Host Droplet](/droplet/serverhost) to configure and manage servers. While you can add any custom properties here, certain properties are required when using our Server Host Droplet:
+
+```yaml
+cloud-properties:
+  # Required for Server Host Droplet
+  configurator: "paper_velocity"  # Server software configuration
+  template-id: "lobby"           # Template reference
+  server-url: "https://..."      # Server JAR download URL
+  max-startup-seconds: "120"     # Startup timeout
+
+  # Optional custom properties
+  custom-setting: "value"        # Add any custom properties needed
+```
+
+<Note>
+    See the [Server Host Droplet documentation](/droplet/serverhost) for a complete list of required properties and their configurations.
+</Note>
+
+## Best Practices
+
+1. **Naming Convention**
+- Use lowercase names without spaces
+- Keep names short but descriptive
+- Use hyphens for multi-word names
+
+2. **Resource Allocation**
+- Set realistic memory limits
+- Consider overhead when setting max-players
+- Configure appropriate port ranges (We do this automatically in our [Server Host Droplet](/droplet/serverhost))
+
+
 ## API reference
-You can create, delete, and edit dynamic properties for groups and servers using the [API](/api#server-group).
+We have a detailed guide on how to use the API to manage groups. You can find it in the [API documentation](/api#server-group).
+
+## What's Next?
+
+- [Configure Templates](/templates)
+- [Server Host Setup](/droplet/serverhost)
+- [API Integration](/api#server-group)
+- [Advanced Group Management](/advanced-groups)
