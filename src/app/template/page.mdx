@@ -3,71 +3,158 @@ import { Note } from "../../components/mdx";
 
 export const metadata = {
   title: 'Templates',
-  description:
-    'This guide will show you the endless templating possibilities with SimpleCloud',
+  description: 'Learn about SimpleCloud\'s flexible template system'
 }
 
 # Templates
 
-Templates are not living in one directory for each group like in v2. They are made up of user defined template actions, each with its own functionality. A unique template functionality is called template processor, and actions are grouped under these processors. You can have as many template actions per processor as you like. {{ className: 'lead' }}
+Templates in SimpleCloud v3 provide a powerful and flexible way to manage server configurations. Unlike v2's fixed directory structure, templates now use a processor-based system that allows for dynamic file management and advanced templating features. {{ className: 'lead' }}
 
-## Defining a template action
+## Understanding Templates
 
-Template actions copy files from one directory to another by provided paths. They are defined under a destination processor in the templates YML file.
-Template YML files are saved under `/droplets/serverhost-droplet/templates` (see [structure](/structure))
+Templates consist of actions that are processed by specific template processors. Each action defines how files should be copied between directories, allowing for:
+
+- Dynamic file copying during server startup/shutdown
+- Random file selection from template directories
+- Template inheritance and extending
+- Absolute and relative path support
+
+## Template Structure
+
+Templates are defined in YAML files located in `/droplets/serverhost-droplet/templates`. Each template can use multiple processors and define multiple actions:
+
+```yaml
+extends: "every_paper"
+destinations:
+  - copy-from: "cache/paper/%GROUP%/cache"
+    copy-to: "cache"
+  - copy-from: "cache/paper/%GROUP%/libraries"
+    copy-to: "libraries"
+  - copy-from: "%GROUP%"
+    copy-to: ""
+shutdown-destinations:
+  - copy-from: "cache"
+    copy-to: "cache/paper/%GROUP%/cache"
+  - copy-from: "libraries"
+    copy-to: "cache/paper/%GROUP%/libraries"
+```
+
+## Template Processors
+
+SimpleCloud provides three template processors:
+
+1. **destinations**
+- Copies files during server startup
+- Supports direct file and directory copying
+- Most commonly used processor
+
+2. **random-destinations**
+- Randomly selects and copies files
+- Useful for map rotation systems
+- Supports directory-based randomization
+
+3. **shutdown-destinations**
+- Executes copying when server stops
+- Perfect for log archiving
+- Allows backup of runtime files
+
+## Path Variables
+
+Templates support dynamic path variables:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| %SERVER% | Server name with ID | `lobby-1` |
+| %GROUP% | Group name | `lobby` |
+| %NUMERICAL_ID% | Server instance ID | `1` |
 
 <Note>
-    If a template action path starts with `/`, it is marked as an absolute path.
-
-    You can also use following placeholders for paths:
-    - `%SERVER%`: gets replaced by a server name and numerical id (e.g. `lobby-1`)
-    - `%NUMERICAL_ID%`: gets replaced by the numerical id (e.g. `1`)
-    - `%GROUP%`: gets replaced by the group (e.g. `lobby`)
+    Paths starting with `/` are treated as absolute paths. All others are relative to the server directory.
 </Note>
 
-## Destination processors
+## Template Inheritance
 
-In each template YML file, you can opt in to destination processors, by listing the processor as a key and a list of actions as its value.
+Templates can extend other templates using the `extends` property:
 
-As of now, only 3 template processors exist:
-- `destinations`: Copies a file/directory to the servers directory on the server start
-- `random-destinations`: Copies a random file/directory inside a directory to the servers directory on the server start
-- `shutdown-destinations`: Copies a file/directory from the server to a template directory on the server stop
-
-### Example: Dynamic templates like in SimpleCloud v2
-This example shows a default template implementation that would operate like SimpleCloud v2 templates,
-using the `destinations` destination processor.
-<CodeGroup>
-```yml
-# destination processor
+```yaml
+# paper_base.yml
+extends: "every_paper"
 destinations:
-   # template action
-   - copy-from: "%GROUP%"
-     copy-to: ""
+  - copy-from: "cache/paper/%GROUP%/cache"
+    copy-to: "cache"
+  - copy-from: "cache/paper/%GROUP%/libraries"
+    copy-to: "libraries"
+  - copy-from: "%GROUP%"
+    copy-to: ""
+shutdown-destinations:
+  - copy-from: "cache"
+    copy-to: "cache/paper/%GROUP%/cache"
+  - copy-from: "libraries"
+    copy-to: "cache/paper/%GROUP%/libraries"
+
+# minigame.yml
+extends: "paper_base"
+random-destinations:
+  - copy-from: "worlds/%GROUP%"
+    copy-to: "world"
+shutdown-destinations:
+  - copy-from: "world"
+    copy-to: "worlds/%GROUP%/backup_%SERVER%"
+  - copy-from: "logs"
+    copy-to: "logs/%GROUP%/%SERVER%"
 ```
+
+## Example Configurations
+
+### Paper Server Template
+<CodeGroup>
+    ```yaml {{title: 'templates/paper_base.yml'}}
+    extends: "every_paper"
+    destinations:
+    - copy-from: "cache/paper/%GROUP%/cache"
+    copy-to: "cache"
+    - copy-from: "cache/paper/%GROUP%/libraries"
+    copy-to: "libraries"
+    - copy-from: "%GROUP%"
+    copy-to: ""
+    shutdown-destinations:
+    - copy-from: "cache"
+    copy-to: "cache/paper/%GROUP%/cache"
+    - copy-from: "libraries"
+    copy-to: "cache/paper/%GROUP%/libraries"
+    ```
 </CodeGroup>
 
-## Template extending
-Templates can also extend other templates. you can list the extended templates by adding a `extends` list in the YML file.
+### Game Mode Template
+<CodeGroup>
+    ```yaml {{title: 'templates/minigame.yml'}}
+    extends: "paper_base"
+    random-destinations:
+    - copy-from: "worlds/%GROUP%"
+    copy-to: "world"
+    shutdown-destinations:
+    - copy-from: "world"
+    copy-to: "worlds/%GROUP%/backup_%SERVER%"
+    - copy-from: "logs"
+    copy-to: "logs/%GROUP%/%SERVER%"
+    ```
+</CodeGroup>
 
-### Example: lobby template extending the generic server template
+## Best Practices
 
-#### generic_server.yml
-```yml
-destinations:
-    - copy-from: "generic/server/plugins"
-      copy-to: "plugins"
-```
+1. **Template Organization**
+- Use clear template naming
+- Group common configurations in base templates
+- Document template dependencies
 
-#### lobby.yml
-```yml
-extends:
-    - "generic_server"
-destinations:
-    - copy-from: "%GROUP%"
-      copy-to: ""
-```
+2. **Path Management**
+- Use relative paths when possible
+- Leverage path variables for flexibility
+- Keep consistent directory structure
 
-## Assigning templates to a group
+## What's Next?
 
-To assign a template to a group, set `template-id` to your wanted template id (e.g. if your wanted template is stored in `lobby.yml`, your template id is `lobby`) in the [properties](/droplet/serverhost#group-properties) of the lobby group.
+- [Server Host Configuration](/droplet/serverhost)
+- [Group Management](/groups)
+- [Plugin Setup](/plugins)
+- [Advanced Templates](/advanced-templates)
