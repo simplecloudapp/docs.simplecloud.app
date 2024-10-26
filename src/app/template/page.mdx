@@ -76,8 +76,17 @@ Templates support dynamic path variables:
 
 Templates can extend other templates using the `extends` property:
 
-```yaml
-# paper_base.yml
+<CodeGroup>
+```yaml {{title: 'every_paper.yml'}}
+# droplets/serverhost/templates/internal/every/every_paper.yml
+extends: "every_spigot"
+destinations:
+- copy-from: "every_paper"
+copy-to: ""
+```
+
+```yaml {{title: 'dynamic_paper.yml'}}
+# droplets/serverhost/templates/internal/dynamic/dynamic_paper.yml
 extends: "every_paper"
 destinations:
   - copy-from: "cache/paper/%GROUP%/cache"
@@ -91,18 +100,9 @@ shutdown-destinations:
     copy-to: "cache/paper/%GROUP%/cache"
   - copy-from: "libraries"
     copy-to: "cache/paper/%GROUP%/libraries"
-
-# minigame.yml
-extends: "paper_base"
-random-destinations:
-  - copy-from: "worlds/%GROUP%"
-    copy-to: "world"
-shutdown-destinations:
-  - copy-from: "world"
-    copy-to: "worlds/%GROUP%/backup_%SERVER%"
-  - copy-from: "logs"
-    copy-to: "logs/%GROUP%/%SERVER%"
 ```
+
+</CodeGroup>
 
 ## Example Configurations
 
