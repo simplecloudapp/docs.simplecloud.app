@@ -241,6 +241,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Controller', href: "/controller" },
       { title: 'CLI', href: "/cli" },
       { title: 'Server Groups', href: "/server-group" },
+      { title: 'Servers', href: "/server" },
       { title: 'Templates', href: "/template" },
       { title: 'Structure', href: "/structure" },
       { title: 'Permissions', href: "/permissions" }
