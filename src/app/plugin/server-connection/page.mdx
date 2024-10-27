@@ -1,0 +1,242 @@
+import {Button} from "../../../components/mdx";
+
+export const metadata = {
+    title: 'Server Connection Plugin',
+    description: 'Manage player connections and server navigation in your network'
+}
+
+# Server Connection Plugin
+
+The Server Connection Plugin provides comprehensive player connection management for your network, including network join handling, fallback servers, and navigation commands. {{ className: 'lead' }}
+
+<Button href="https://github.com/theSimpleCloud/server-connection-plugin/releases" arrow="right">
+    <>Download</>
+</Button>
+
+## Quick Setup
+
+1. Download the plugin for your proxy software
+2. Place it in your proxy template's plugins folder
+3. Configure using `config.yml`
+
+## Connection Targets
+
+Connection targets define server groups that players can connect to. Each target can have specific permissions and matching rules:
+
+```yaml
+connections:
+  - name: "lobby"
+    permission: ""  # Empty for no permission requirement
+    server-name-matcher:
+      operation: "STARTS_WITH"
+      value: "lobby"
+
+  - name: "skyblock-spawn"
+    permission: ""
+    server-name-matcher:
+      operation: "EQUALS"
+      value: "sb-spawn"
+```
+
+### Matcher Operations
+
+| Operation | Description |
+|-----------|-------------|
+| EQUALS | Exact server name match |
+| STARTS_WITH | Server name begins with value |
+| ENDS_WITH | Server name ends with value |
+| CONTAINS | Server name contains value |
+
+## Features
+
+### Network Join Handling
+
+Manages initial player connections to your network. Configure default lobby servers and handling of unavailable targets:
+
+```yaml
+network-join-target:
+  enabled: true
+  no-target-connections-found-message: "Couldn't connect you to the network because no target servers are available."
+  target-connections:
+    - name: "lobby"
+      priority: 0
+```
+
+### Fallback System
+
+Handles player redirection when kicked from servers or during server shutdowns:
+
+```yaml
+fallback-connections:
+  enabled: true
+  no-target-connections-found-message: "You have been disconnected from the network since you have been kicked and no fallback server are available."
+  target-connections:
+    - name: "skyblock-spawn"
+      priority: 1
+      from:
+        - operation: "STARTS_WITH"
+          value: "skyblock-island-"
+    - name: "lobby"
+      priority: 0
+```
+
+### Navigation Commands
+
+Create custom commands for server navigation:
+
+```yaml
+commands:
+  - name: "lobby"
+    aliases:
+      - "l"
+      - "hub"
+      - "quit"
+      - "leave"
+    target-connections:
+      - name: "lobby"
+        priority: 0
+    already-connected-message: "<red>You are already connected to the lobby!"
+    no-target-connections-found-message: "There are no lobby servers available at the moment."
+    permission: ""
+```
+
+## Priority System
+
+Both fallback and command targets support priority levels:
+- Lower numbers indicate higher priority
+- System tries highest priority (0) first
+- Falls back to lower priorities if needed
+
+## Message Customization
+
+Each feature supports custom messages for various scenarios:
+
+```yaml
+# Network join messages
+network-join-target:
+  no-target-connections-found-message: "Custom message"
+
+# Fallback messages
+fallback-connections:
+  no-target-connections-found-message: "Custom message"
+
+# Command messages
+commands:
+  - name: "lobby"
+    already-connected-message: "Custom message"
+    no-target-connections-found-message: "Custom message"
+```
+
+## Common Configurations
+
+### Game Server Setup
+Here's an example configuration for a minigame network:
+
+```yaml
+connections:
+  - name: "lobby"
+    server-name-matcher:
+      operation: "STARTS_WITH"
+      value: "lobby"
+  - name: "bedwars"
+    permission: "minigame.bedwars"
+    server-name-matcher:
+      operation: "STARTS_WITH"
+      value: "bw-"
+
+network-join-target:
+  enabled: true
+  target-connections:
+    - name: "lobby"
+      priority: 0
+
+fallback-connections:
+  enabled: true
+  target-connections:
+    - name: "lobby"
+      priority: 0
+    - name: "bedwars"
+      priority: 1
+      from:
+        - operation: "STARTS_WITH"
+          value: "bw-"
+
+commands:
+  - name: "lobby"
+    aliases: ["hub", "l"]
+    target-connections:
+      - name: "lobby"
+        priority: 0
+  - name: "bedwars"
+    aliases: ["bw"]
+    permission: "minigame.bedwars"
+    target-connections:
+      - name: "bedwars"
+        priority: 0
+```
+
+### Multi-Lobby System
+Example for managing multiple lobby types:
+
+```yaml
+connections:
+  - name: "main-lobby"
+    server-name-matcher:
+      operation: "EQUALS"
+      value: "lobby-main"
+  - name: "premium-lobby"
+    permission: "vip.lobby"
+    server-name-matcher:
+      operation: "EQUALS"
+      value: "lobby-premium"
+
+network-join-target:
+  enabled: true
+  target-connections:
+    - name: "premium-lobby"
+      priority: 0
+    - name: "main-lobby"
+      priority: 1
+
+commands:
+  - name: "lobby"
+    aliases: ["hub"]
+    target-connections:
+      - name: "premium-lobby"
+        priority: 0
+        permission: "vip.lobby"
+      - name: "main-lobby"
+        priority: 1
+```
+
+## Advanced Usage
+
+### Permission-Based Routing
+The plugin can route players based on permissions:
+
+- VIP players can be sent to premium servers first
+- Staff members can be directed to specific lobbies
+- Game access can be restricted by permissions
+
+### Fallback Chains
+Create sophisticated fallback chains:
+
+1. Players are first redirected to game-specific lobbies
+2. Then to general game lobbies if specific ones are full
+3. Finally to main lobbies if no game lobbies are available
+
+### Command Hierarchies
+Implement complex command structures:
+
+- Main navigation commands (`/lobby`, `/hub`)
+- Game-specific commands (`/bedwars`, `/survival`)
+- VIP-only commands with permission checks
+- Staff commands for server management
+
+The plugin's flexible configuration system allows you to create intuitive and efficient player routing that scales with your network's needs.
+
+## What's Next?
+
+- [Proxy Configuration](/proxy)
+- [Group Management](/groups)
+- [Plugin Development](/plugins)
