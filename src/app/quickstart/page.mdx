@@ -28,8 +28,6 @@ install.bat
 ```
 </CodeGroup>
 
-From now on, you can use the SimpleCloud CLI to manage SimpleCloud. You can find all commands in the [CLI documentation](/cli).
-
 Now that we have installed the [CLI](/cli), we can start installing our pre-built bundle of SimpleCloud. This bundle contains everything you need to get started with SimpleCloud. You can install it with the following command:
 <CodeGroup>
 ```bash
@@ -37,7 +35,7 @@ sc install bundle
 ```
 </CodeGroup>
 
-This lets you choose where you want to install all our core components. If you already have a running SimpleCloud instance and you want to add another Root Server, you can take a look at the [Server Host Droplet](/droplet/serverhost) and [Server Host Docker Droplet](/droplet/serverhost-docker) when you're using Docker.
+This lets you choose where you want to install all our core components. If you already have a running SimpleCloud instance and you want to add another Root Server, you can take a look at the [Server Host Droplet](/droplet/serverhost) and [Server Host Docker Droplet](/droplet/serverhost-docker) if you're using Docker.
 
 ## Running SimpleCloud
 
@@ -51,7 +49,7 @@ sc start cloud
 
 Under the hood, the CLI will run a script in your installation directory. This script will start everything you need to run SimpleCloud. If you want to customize the script, you can find it in the `scripts` directory.
 
-Currently, we don't have a way to start a specific component with the CLI, but we are working on it and each component has an own script. For now, you can start a specific component by searching for the correct script in the `scripts` directory.
+Currently, we don't have a way to start a specific component with the CLI, but we are working on that. Since every component has its own script, you can start them individually by running the corresponding script in the scripts' directory.
 
 ## Creating a Proxy Group
 
