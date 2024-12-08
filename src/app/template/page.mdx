@@ -8,144 +8,183 @@ export const metadata = {
 
 # Templates
 
-Templates in SimpleCloud v3 provide a powerful and flexible way to manage server configurations. Unlike v2's fixed directory structure, templates now use a processor-based system that allows for dynamic file management and advanced templating features. {{ className: 'lead' }}
+Templates in SimpleCloud v3 provide a powerful and flexible way to manage server configurations. Unlike v2's fixed directory structure, templates now use an action-based system that allows for dynamic file management and advanced templating features. {{ className: 'lead' }}
 
 ## Understanding Templates
 
-Templates consist of actions that are processed by specific template processors. Each action defines how files should be copied between directories, allowing for:
+Templates consist of actions that are executed on certain triggers. Each action stands for a sorted list of references to other [actions](#actions) and [standard behaviours](#action-types), which are configurable with settings.
 
-- Dynamic file copying during server startup/shutdown
-- Random file selection from template directories
-- Template inheritance and extending
-- Absolute and relative path support
+## Template Triggers
+Actions can be specified under each template trigger. These will then be executed in order.
+
+|ID| Context |
+|-- | ------ |
+| `start` | Will be executed when a new server is created |
+| `stop` | Will be executed when a server is stopped |
 
 ## Template Structure
 
-Templates are defined in YAML files located in `/droplets/serverhost-droplet/templates`. Each template can use multiple processors and define multiple actions:
+Templates are defined in YAML files located in `/droplets/serverhost-droplet/templates/definitions` or its subdirectories. The template id of a YAML file is the name of the file (without extension). Each template defines which actions should be executed on what trigger:
 
 ```yaml
-extends: "every_paper"
-destinations:
-  - copy-from: "cache/paper/%GROUP%/cache"
-    copy-to: "cache"
-  - copy-from: "cache/paper/%GROUP%/libraries"
-    copy-to: "libraries"
-  - copy-from: "%GROUP%"
-    copy-to: ""
-shutdown-destinations:
-  - copy-from: "cache"
-    copy-to: "cache/paper/%GROUP%/cache"
-  - copy-from: "libraries"
-    copy-to: "cache/paper/%GROUP%/libraries"
+when:
+  start:
+    - default/setup # references the default/setup action
+    - ...
+  stop:
+    - default/delete # references the default/delete action
+    - ...
 ```
 
-## Template Processors
+## Context
+Each template trigger will create its own context and run in it. This means that actions can also influence each other.
 
-SimpleCloud provides three template processors:
+***
 
-1. **destinations**
-- Copies files during server startup
-- Supports direct file and directory copying
-- Most commonly used processor
+# Actions
 
-2. **random-destinations**
-- Randomly selects and copies files
-- Useful for map rotation systems
-- Supports directory-based randomization
+Actions are reusable components for doing something (e.g. copy files from template folder to server).
+You can reference actions in other actions and in templates. This allows for creating a reusable toolchain, keeping config files minimal and extension of existing configs easy.
+All actions are located in `/droplets/serverhost-droplet/templates/actions` or its subdirectories. All actions support placeholder matching like `%my-placeholder%`.
 
-3. **shutdown-destinations**
-- Executes copying when server stops
-- Perfect for log archiving
-- Allows backup of runtime files
+## Action referencing
+Actions can be referenced in other actions or in templates. An actions ref name consists of the YAML file name it is located in and the name of the action. For example, an action in `utils.yml` called `init-placeholders` will have the ref `utils/init-placeholders`.
 
-## Path Variables
+## Config structure
+An action in config files contains of a sorted list of action objects and references.
 
-Templates support dynamic path variables:
+### Action objects
+Action objects consist of the `type` field, which will set the action type executed, and [data](#action-data) that action requires.
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| %SERVER% | Server name with ID | `lobby-1` |
-| %GROUP% | Group name | `lobby` |
-| %NUMERICAL_ID% | Server instance ID | `1` |
+```yaml
+cache-pull-libs:
+  - from: "%libs-dir%"
+    to: "%server-dir%/libraries"
+    type: "copy"
+```
+### References
+A reference to another action can be made by setting ref to a action reference.
+```yaml
+my-action:
+    - ref: other/my-other-action
+```
+
+### Mixed example
+<CodeGroup>
+```yaml {{title: "actions/utils.yml"}}
+cache-pull:
+  - from: "%templates%/cache/%group%"
+    to: "%server-dir%"
+    type: "copy"
+  - ref: cache-pull-libs
+
+cache-pull-libs:
+  - from: "%libs-dir%"
+    to: "%server-dir%/libraries"
+    type: "copy"
+
+cache-push:
+  - ref: cache-push-paper
+  - ref: cache-push-spigot
+
+cache-push-paper:
+  - from: "%server-dir%/plugins/.paper-remapped/"
+    to: "%templates%/cache/%group%/plugins/.paper-remapped"
+    type: "copy"
+
+cache-push-spigot:
+  - from: "%server-dir%/libraries"
+    to: "%templates%/cache/%group%/libraries"
+    type: "copy"
+  - from: "%server-dir%/versions"
+    to: "%templates%/cache/%group%/versions"
+    type: "copy"
+```
+```yaml {{title: "actions/default.yml"}}
+static-setup:
+  - ref: util/init-placeholders
+  - ref: util/static-dir
+  - ref: default/setup
+
+setup:
+  - ref: util/init-placeholders
+  - ref: cache/cache-pull
+  - ref: util/every-with-software
+  - ref: util/copy
+  - ref: util/configurate
+
+delete:
+  - ref: util/init-placeholders
+  - ref: cache/cache-push
+  - path: "%server-dir%"
+    type: "delete"
+```
+</CodeGroup>
 
 <Note>
-    Paths starting with `/` are treated as absolute paths. All others are relative to the server directory.
+    An actions ref name consists of the YAML file name it is located in and the name of the action. For example, an action in `utils.yml` called `init-placeholders` will have the ref `utils/init-placeholders`.
 </Note>
 
-## Template Inheritance
+## Placeholders
 
-Templates can extend other templates using the `extends` property:
+Actions support dynamic placeholders, these can also be altered by the `placeholder` action:
 
-<CodeGroup>
-```yaml {{title: 'every_paper.yml'}}
-# droplets/serverhost/templates/internal/every/every_paper.yml
-extends: "every_spigot"
-destinations:
-- copy-from: "every_paper"
-copy-to: ""
-```
+| Variable | Description |
+|----------|-------------|
+| `%server-dir%` | Directory the server will run in |
+| `%libs-dir%` | Directory the (cloud) libraries are located in |
+| `%templates%` | Directory the actual templates folders (like in v2) are located in |
+| `%forwarding-secret%` | The velocity forwarding secret |
+| `%running%` | Directory running servers are located in |
 
-```yaml {{title: 'dynamic_paper.yml'}}
-# droplets/serverhost/templates/internal/dynamic/dynamic_paper.yml
-extends: "every_paper"
-destinations:
-  - copy-from: "cache/paper/%GROUP%/cache"
-    copy-to: "cache"
-  - copy-from: "cache/paper/%GROUP%/libraries"
-    copy-to: "libraries"
-  - copy-from: "%GROUP%"
-    copy-to: ""
-shutdown-destinations:
-  - copy-from: "cache"
-    copy-to: "cache/paper/%GROUP%/cache"
-  - copy-from: "libraries"
-    copy-to: "cache/paper/%GROUP%/libraries"
-```
+## Action data
+This is a list of all action data forms corresponding to the action type.
 
-</CodeGroup>
+### `copy`
+This will copy files from a to b
+| Field | Type | Description |
+| ----- | ----- | ------------ |
+| `from` | `path` | File or directory used as the source |
+| `to` | `path` | File or directory used as the destination |
+| `replace` | `boolean` (default `true`) | Whether to replace files on copy or not |
+| `init-dir-if-missing` | `boolean` (default `false`) | Initializes non existing from paths when set to `true` |
 
-## Example Configurations
+### `configurate`
+This will configure servers using configurators
+| Field | Type | Description |
+| ----- | ----- | ------------ |
+| `configurator` | `string` (configurator id) | Configurator to use |
+| `dir` | `path` | Directory to use the configurator on |
 
-### Paper Server Template
-<CodeGroup>
-    ```yaml {{title: 'templates/paper_base.yml'}}
-    extends: "every_paper"
-    destinations:
-    - copy-from: "cache/paper/%GROUP%/cache"
-    copy-to: "cache"
-    - copy-from: "cache/paper/%GROUP%/libraries"
-    copy-to: "libraries"
-    - copy-from: "%GROUP%"
-    copy-to: ""
-    shutdown-destinations:
-    - copy-from: "cache"
-    copy-to: "cache/paper/%GROUP%/cache"
-    - copy-from: "libraries"
-    copy-to: "cache/paper/%GROUP%/libraries"
-    ```
-</CodeGroup>
+### `delete`
+This will copy files from a to b
+| Field | Type | Description |
+| ----- | ----- | ------------ |
+| `path` | `path` | Directory or file to delete |
+| `force` | `boolean` (default `true`) | Whether to force deletion or not |
 
-### Game Mode Template
-<CodeGroup>
-    ```yaml {{title: 'templates/minigame.yml'}}
-    extends: "paper_base"
-    random-destinations:
-    - copy-from: "worlds/%GROUP%"
-    copy-to: "world"
-    shutdown-destinations:
-    - copy-from: "world"
-    copy-to: "worlds/%GROUP%/backup_%SERVER%"
-    - copy-from: "logs"
-    copy-to: "logs/%GROUP%/%SERVER%"
-    ```
-</CodeGroup>
+### `infer`
+This will configure servers using configurators
+| Field | Type | Description |
+| ----- | ----- | ------------ |
+| `field` | `string` (configurator id) | Field of server object to infer the value from (if starts with `$.` the servers properties are targeted instead of the server itself) |
+| `key` | `string` | Placeholder key to override |
+| `lowercase` | `boolean` (default `false`) | Whether to lowercase the value or not |
+
+### `placeholder`
+This will copy files from a to b
+| Field | Type | Description |
+| ----- | ----- | ------------ |
+| `key` | `string` | Placeholder key to override |
+| `value` | `string` | New value of said key |
+
 
 ## Best Practices
 
 1. **Template Organization**
 - Use clear template naming
-- Group common configurations in base templates
-- Document template dependencies
+- Leverage referencing to keep files minimal and clean
+- Document actions and references
 
 2. **Path Management**
 - Use relative paths when possible
@@ -155,6 +194,3 @@ shutdown-destinations:
 ## What's Next?
 
 - [Server Host Configuration](/droplet/serverhost)
-- [Group Management](/groups)
-- [Plugin Setup](/plugins)
-- [Advanced Templates](/advanced-templates)
