@@ -264,7 +264,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Server Registration Plugin', href: '/plugin/server-registration', tag: "Proxy" },
       { title: 'Server Connection Plugin', href: '/plugin/server-connection', tag: "Proxy" },
       { title: 'Cloud Command Plugin', href: '/plugin/cloud-command', tag: "Proxy" },
-      { title: 'Proxy Plugin', href: '/plugin/proxy', tag: "Proxy"  },
+      { title: 'Proxy Info Plugin', href: '/plugin/proxy-info', tag: "Proxy"  },
       { title: 'Notify Plugin', href: '/plugin/notify', tag: "Soon", tagColor: "rose"  },
       { title: 'Prefixes Plugin', href: '/plugin/prefixes', tag: "Server" },
       { title: 'Signs Plugin', href: '/plugin/signs', tag: "Soon", tagColor: "rose"  },

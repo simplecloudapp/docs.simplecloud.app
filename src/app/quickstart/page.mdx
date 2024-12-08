@@ -1,4 +1,5 @@
 import { CodeGroup } from "../../components/Code";
+import {Note} from "../../components/mdx";
 
 export const metadata = {
   title: 'Quickstart',
@@ -8,11 +9,19 @@ export const metadata = {
 
 # Quickstart
 
-This guide will get you all set up for a SimpleCloud installation that is comparable to the [SimpleCloud v2](https://github.com/theSimpleCloud/SimpleCloud) experience. We'll cover the [CLI](/cli), standardized official [Droplets](/droplets) and the new [API](/api) design.  {{ className: 'lead' }}
+This guide will get you all set up for a SimpleCloud installation that is comparable to the [SimpleCloud v2](https://github.com/theSimpleCloud/SimpleCloud) experience. We'll cover the [CLI](/cli), standardized official [Droplets](/droplets), and the new [API](/api) design.  {{ className: 'lead' }}
+
+## Prerequisites
+
+Before installing SimpleCloud, ensure that the following programs are installed on your system, as they are required for the cloud to function correctly:
+
+-    **Java 21**: Required to run Minecraft servers and other Java-based components.
+-    **screen**: Allows you to run processes in the background on Linux.
+-    **lsof**: Used for checking open files and network connections. (Already installed on most Linux distributions)
 
 ## Installing SimpleCloud
 
-SimpleCloud now offers an extensive [CLI](/cli) that cover everything you need to manage SimpleCloud. It's the easiest way to get started with SimpleCloud. You can install it with the following command:
+SimpleCloud now offers an extensive [CLI](/cli) that covers everything you need to manage SimpleCloud. It's the easiest way to get started with SimpleCloud. You can install it with the following command:
 
 <CodeGroup>
 
@@ -28,60 +37,125 @@ install.bat
 ```
 </CodeGroup>
 
-Now that we have installed the [CLI](/cli), we can start installing our pre-built bundle of SimpleCloud. This bundle contains everything you need to get started with SimpleCloud. You can install it with the following command:
-<CodeGroup>
-```bash
-sc install bundle
-```
-</CodeGroup>
+After installing the [CLI](/cli), the setup process will automatically start. You will be presented with the following options:
 
-This lets you choose where you want to install all our core components. If you already have a running SimpleCloud instance and you want to add another Root Server, you can take a look at the [Server Host Droplet](/droplet/serverhost) and [Server Host Docker Droplet](/droplet/serverhost-docker) if you're using Docker.
+-    **New Installation**: Install and set up a new SimpleCloud instance.
+-    **Add Server Host**: Add a new server host to an existing cloud installation.
+-    **Droplet**: Install one or more droplets.
+-    **CLI Only**: Continue with CLI usage.
+
+Select **New Installation** to install the complete bundle. This process includes setting up all core components needed for SimpleCloud.
+
+If you already have a running SimpleCloud instance and want to add another Root Server, consider using the [Server Host Droplet](/droplet/serverhost) or [Server Host Docker Droplet](/droplet/serverhost-docker) if you're using Docker.
 
 ## Running SimpleCloud
 
-Starting the cloud is very simple. By executing the following command, the cloud will try to access and start every component that is needed to run SimpleCloud.
+Starting the cloud is straightforward. By executing the following command, the cloud will access and start every component needed to run SimpleCloud.
 
 <CodeGroup>
-```bash
-sc start cloud
-```
+    ```bash
+    sc start cloud
+    ```
 </CodeGroup>
 
-Under the hood, the CLI will run a script in your installation directory. This script will start everything you need to run SimpleCloud. If you want to customize the script, you can find it in the `scripts` directory.
+The CLI will run a script in your installation directory to start everything necessary for SimpleCloud. You can customize this script if needed, located in the `scripts` directory.
 
-Currently, we don't have a way to start a specific component with the CLI, but we are working on that. Since every component has its own script, you can start them individually by running the corresponding script in the scripts' directory.
+Currently, starting specific components via the CLI is not supported. However, you can start them individually by executing the corresponding script in the `scripts` directory.
 
 ## Creating a Proxy Group
 
-Now that we have a running SimpleCloud instance, we can create our first group. A group is a group of Minecraft servers that are managed by the [Controller](/controller). You can create a group with the following command:
+With a running SimpleCloud instance, you can create your first group. A group consists of Minecraft servers managed by the [Controller](/controller). Create a group using the following command:
 
 <CodeGroup>
-```bash
-sc create group
-```
+    ```bash
+    sc create group
+    ```
 </CodeGroup>
 
 // TODO: Show the entire interactive installation process
 
 ## Creating a Server Group
 
-To run a Minecraft server, you need to create a [Server Group](/server-group). You can create a server group with the following command:
+To run a Minecraft server, you need to create a [Server Group](/server-group). Use the following command to create a server group:
 
 <CodeGroup>
-```bash
-sc create group
-```
+    ```bash
+    sc create group
+    ```
 </CodeGroup>
 
-// TODO: Show the entire interactive installation process & what's different to the proxy group
+// TODO: Show the entire interactive installation process & what's different from the proxy group
+
+<Note>
+    Normally, the [Proxy Info Plugin](/plugin/proxy-info) sums up all the players on each proxy server. However, when using the cloud locally, it shows the real player count of the proxy server.
+</Note>
+
+## Configuring a Lobby
+
+After creating the necessary groups, configure the [Connection Plugin](/plugin/server-connection) to ensure that the lobby is correctly set up. Follow these steps to configure the lobby:
+
+1. **Download and Install the Plugin**: Obtain the plugin from the [releases page](https://github.com/theSimpleCloud/server-connection-plugin/releases) and place it in your proxy template's plugins folder.
+
+2. **Edit the `config.yml`**: Configure the connection targets in the `config.yml` file to define which server groups players can connect to. For example:
+
+    ```yaml
+    connections:
+      - name: "lobby"
+        permission: ""  # No permission required
+        server-name-matcher:
+          operation: "STARTS_WITH"
+          value: "lobby"
+    ```
+
+3. **Set Network Join Handling**: Ensure that players are directed to the lobby upon joining the network by configuring the network join target:
+
+    ```yaml
+    network-join-target:
+      enabled: true
+      no-target-connections-found-message: "Couldn't connect you to the network because no target servers are available."
+      target-connections:
+        - name: "lobby"
+          priority: 0
+    ```
+
+4. **Configure Fallback System**: Set up fallback connections to redirect players to the lobby if they are kicked from other servers:
+
+    ```yaml
+    fallback-connections:
+      enabled: true
+      no-target-connections-found-message: "You have been disconnected from the network since you have been kicked and no fallback server are available."
+      target-connections:
+        - name: "lobby"
+          priority: 0
+    ```
+
+5. **Define Navigation Commands**: Create custom commands to allow players to navigate to the lobby easily:
+
+    ```yaml
+    commands:
+      - name: "lobby"
+        aliases:
+          - "l"
+          - "hub"
+          - "quit"
+          - "leave"
+        target-connections:
+          - name: "lobby"
+            priority: 0
+        already-connected-message: "<red>You are already connected to the lobby!"
+    no-target-connections-found-message: "There are no lobby servers available at the moment."
+    permission: ""
+    ```
+
+These configurations ensure that players are seamlessly directed to the lobby upon joining the network and provide fallback options if needed.
 
 ## What's next?
 
 Great, you're now set up with SimpleCloud. Here are a few links that might be helpful as you continue to explore SimpleCloud:
 
-- [Select wanted plugins](/plugin)
-- [Select wanted droplets](/droplet)
-- [Create your first group](/cli#server-group)
-- [Learn about the structure](/structure)
-- [Create a template](/droplet/serverhost#template)
-- [Learn about the APIs](/api)
+-    [Select wanted plugins](/plugin)
+-    [Select wanted droplets](/droplet)
+-    [Create your first group](/cli#server-group)
+-    [Learn about the structure](/structure)
+-    [Create a template](/droplet/serverhost#template)
+-    [Learn about the APIs](/api)
