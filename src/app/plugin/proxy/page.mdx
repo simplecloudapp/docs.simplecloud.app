@@ -8,7 +8,7 @@ export const metadata = {
 
 # Proxy Plugin
 
-The Proxy Plugin enhances your server network with customizable MOTD (ServerInfo) and Tablist features, offering extensive customization options through simple configuration files. {{ className: 'lead' }}
+The Proxy Plugin enhances your server network with customizable MOTD (ServerInfo) and Tablist features, offering extensive customization options through simple configuration files. All settings are synchronized across all proxies. {{ className: 'lead' }}
 
 <Button href="https://github.com/theSimpleCloud/proxy-plugin/releases" arrow="right">
     <>Download</>
@@ -19,7 +19,7 @@ The Proxy Plugin enhances your server network with customizable MOTD (ServerInfo
 1. Download the plugin for your proxy software
 2. Place it in your proxy template's plugins folder
 3. Start your proxy server
-4. Configure using `motd.yml` and `tablist.yml`
+4. Configure using `messages.yml`, `tablist.yml` the layouts in `layout/your-layout.yml`
 
 ## Supported Proxies
 
@@ -32,18 +32,23 @@ The Proxy Plugin enhances your server network with customizable MOTD (ServerInfo
 ## MOTD Features
 
 ### Message Customization and Rotation
-The MOTD system allows you to create multiple messages that can either be displayed statically or rotate randomly. This is particularly useful for announcements, maintenance notices, or showcasing different aspects of your server. Combined with MiniMessage format support, you can create rich text displays with gradients, colors, and advanced formatting.
+Our MOTD system supports multiple layouts that you can create in the `layout/` folder. These layouts allow you to generate multiple messages that can be displayed either statically or rotated randomly. This feature is especially useful for announcements, maintenance notices, or highlighting different aspects of your server. With support for MiniMessage format, you can create visually rich text displays that include gradients, colors, and advanced formatting options.
 
 ```yaml
-# Configuration examples are yet to be added.
+first-lines:
+- <gradient:#00fcff:#0da1a3><bold>SimpleCloud</bold></gradient> <dark_gray>»<gray>
+    Simplify your network <dark_gray>|<bold><#4595ff> 1.12<#545454> - <#4595ff>1.20</bold>
+second-lines:
+- '<dark_gray>× <#178fff>Status<dark_gray>: <bold><#22cc22>Online</bold> <dark_gray>-
+    <#ffffff>%PROXY%'
+player-info: []
+version-name: ''
+server-icon: server-icon.png
+max-player-display-type: REAL #or DYNAMIC
+dynamic-player-range: 1 #Only enabled if max-player-display-type is DYNAMIC
 ```
 
-### Player Information and Version Display
-Customize how your server presents itself in the server list. Configure custom player count displays, maximum player limits, and even modify the server version string. This feature allows you to create engaging server list entries that stand out.
-
-```yaml
-# Configuration examples are yet to be added.
-```
+If a layout's filename contains the word `maintenance`, it will be designated as a layout for Maintenance Mode.
 
 ## Tablist Features
 
@@ -51,22 +56,77 @@ Customize how your server presents itself in the server list. Configure custom p
 Create engaging tablist headers and footers that update automatically. The plugin supports both static and animated content, with configurable update intervals. You can display real-time information like player counts, server status, or custom messages. All text supports MiniMessage formatting for advanced styling.
 
 ```yaml
-# Configuration examples are yet to be added.
+groups:
+-   group-or-service: '*'
+    tab-lists:
+    -   header:
+        - <dark_gray>                                                                        <dark_gray>
+        - <aqua>SimpleCloud <dark_gray>» <gray>Simplify <white><italic>your</italic>
+            <gray>network
+        - <dark_aqua>Online <dark_gray>» <gray><online_players><dark_gray>/<gray><max_players>
+            <dark_gray>┃ <dark_aqua>Server <dark_gray>» <gray><server_name>
+        - <dark_gray>
+        footer:
+        - <dark_gray>
+        - <dark_aqua>Twitter <dark_gray>» <gray>@theSimpleCloud
+        - <dark_aqua>Discord <dark_gray>» <gray>discord.simplecloud.app
+        - <dark_gray>
+tab-list-update-time: 3000
 ```
 
 ### Server-Specific Displays and Information
 Configure different tablist appearances based on which server a player is currently on. This feature allows you to create unique experiences for different game modes or server types. Combined with placeholders, you can display server-specific information like game statistics or server status.
 
 ```yaml
-# Configuration examples are yet to be added.
+groups:
+-   group-or-service: 'lobby'
+    tab-lists:
+    -   header:
+        - <white>Welcome back on %SERVER_NAME%
+        footer:
+        - <gray>%ONLINE_PLAYERS%<dark_gray>/<gray>%MAX_PLAYERS%
 ```
 
 ### Real-Time Updates and Animations
 Control how often your tablist updates and what information it displays. The plugin can show real-time player statistics, ping information, and server status. Create animated sequences that cycle through different messages or information displays.
 
 ```yaml
-# Configuration examples are yet to be added.
+groups:
+-   group-or-service: '*'
+    tab-lists:
+    -   header:
+        - <dark_gray>My custom Tablist Header
+        footer:
+        - <white>Your Ping <purple>%PING%ms
+        - <dark_gray>My beatiful Tablist Footer
+    -   header:
+        - <dark_gray>My pretty Tablist Header
+        footer:
+        - <white>Your Ping <purple>%PING%ms
+        - <dark_gray>My beatiful Tablist Footer, yeah
+    -   header:
+        - <dark_gray>My beatiful Tablist Header
+        footer:
+        - <white>Your Ping <purple>%PING%ms
+        - <dark_gray>My beatiful Tablist Footer, ohh
+tab-list-update-time: 3000
 ```
+When `tab-list-update-time` is set to `0`, the tab list will no longer be updated afterward.
+
+## Maintenance Features
+/proxy maintenance toggle/activate/deactivate
+/proxy layout nonmaintenance/maintenance set "layout"
+
+- /proxy maintenance toggle 
+- /proxy maintenance activate
+- /proxy maintenance deactivate
+
+/proxy layout maintenance set default-maintenance-motd
+/proxy layout nonmaintenance set default-motd
+#1
+sc edit group proxy --properties maintenance=false
+#2
+Proxy neustarten
 
 ## Placeholders
 
@@ -106,3 +166,5 @@ public void onTablistConfiguration(TablistConfigurationEvent event) {
 - [Server API Documentation](/api#server)
 - [Proxy Configuration](/proxy)
 - [Plugin Development](/plugins)
+
+
