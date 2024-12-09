@@ -157,14 +157,14 @@ This will configure servers using configurators
 | `dir` | `path` | Directory to use the configurator on |
 
 ### `delete`
-This will copy files from a to b
+This delete a file or folder on the specified path
 | Field | Type | Description |
 | ----- | ----- | ------------ |
 | `path` | `path` | Directory or file to delete |
 | `force` | `boolean` (default `true`) | Whether to force deletion or not |
 
 ### `infer`
-This will configure servers using configurators
+This infers data from the current server into placeholders
 | Field | Type | Description |
 | ----- | ----- | ------------ |
 | `field` | `string` (configurator id) | Field of server object to infer the value from (if starts with `$.` the servers properties are targeted instead of the server itself) |
@@ -172,7 +172,7 @@ This will configure servers using configurators
 | `lowercase` | `boolean` (default `false`) | Whether to lowercase the value or not |
 
 ### `placeholder`
-This will copy files from a to b
+This changes placeholders
 | Field | Type | Description |
 | ----- | ----- | ------------ |
 | `key` | `string` | Placeholder key to override |
