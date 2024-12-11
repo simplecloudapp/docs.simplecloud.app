@@ -8,11 +8,22 @@ export const metadata = {
 
 # Proxy Plugin
 
-The Proxy Plugin enhances your server network with customizable MOTD (ServerInfo) and Tablist features, offering extensive customization options through simple configuration files. All settings are synchronized across all proxies. {{ className: 'lead' }}
+The Proxy Plugin enhances your server network with customizable MOTD (Server Info) and Tablist features, offering extensive customization options through simple configuration files. All settings are synchronized across all proxies. {{ className: 'lead' }}
 
 <Button href="https://github.com/theSimpleCloud/proxy-plugin/releases" arrow="right">
     <>Download</>
 </Button>
+
+## Supported Server Softwares
+
+The following table shows all currently supported proxy implementations:
+
+| Software   | This Plugin |
+| ---------- | ----------- |
+| Velocity   | Yes         | 
+| Bungeecord | Yes         | 
+
+If you would like to add support for a missing server software, feel free to submit a pull request on [GitHub](#).
 
 ## Quick Setup
 
@@ -21,17 +32,9 @@ The Proxy Plugin enhances your server network with customizable MOTD (ServerInfo
 3. Start your proxy server
 4. Configure using `messages.yml`, `tablist.yml` the layouts in `layout/your-layout.yml`
 
-## Supported Proxies
+## Features
 
-| Proxy type           | Support Status |
-|---------------------|----------------|
-| Velocity            | Yes            |
-| BungeeCord & forks  | Yes            |
-| Other               | No             |
-
-## MOTD Features
-
-### Message Customization and Rotation
+### MOTD
 Our MOTD system supports multiple layouts that you can create in the `layout/` folder. These layouts allow you to generate multiple messages that can be displayed either statically or rotated randomly. This feature is especially useful for announcements, maintenance notices, or highlighting different aspects of your server. With support for MiniMessage format, you can create visually rich text displays that include gradients, colors, and advanced formatting options.
 
 ```yaml
@@ -47,16 +50,17 @@ server-icon: server-icon.png
 max-player-display-type: REAL #or DYNAMIC
 dynamic-player-range: 1 #Only enabled if max-player-display-type is DYNAMIC
 ```
+<Note>
+    If the proxy runs locally on your computer, the actual slots are displayed because the controller performs health checks and information requests by pinging the proxy. Players, however, see different information.
+</Note>
 
-If a layout's filename contains the word `maintenance`, it will be designated as a layout for Maintenance Mode.
+### Tablist Header and Footer
 
-## Tablist Features
-
-### Dynamic Headers and Footers
 Create engaging tablist headers and footers that update automatically. The plugin supports both static and animated content, with configurable update intervals. You can display real-time information like player counts, server status, or custom messages. All text supports MiniMessage formatting for advanced styling.
 
 ```yaml
 groups:
+
 -   group-or-service: '*'
     tab-lists:
     -   header:
@@ -71,62 +75,20 @@ groups:
         - <dark_aqua>Twitter <dark_gray>» <gray>@theSimpleCloud
         - <dark_aqua>Discord <dark_gray>» <gray>discord.simplecloud.app
         - <dark_gray>
-tab-list-update-time: 3000
-```
-
-### Server-Specific Displays and Information
-Configure different tablist appearances based on which server a player is currently on. This feature allows you to create unique experiences for different game modes or server types. Combined with placeholders, you can display server-specific information like game statistics or server status.
-
-```yaml
-groups:
 -   group-or-service: 'lobby'
     tab-lists:
     -   header:
         - <white>Welcome back on %SERVER_NAME%
         footer:
         - <gray>%ONLINE_PLAYERS%<dark_gray>/<gray>%MAX_PLAYERS%
+tab-list-update-time: 3000 #When 0, the tablist will no longer be updated afterward.
 ```
 
-### Real-Time Updates and Animations
-Control how often your tablist updates and what information it displays. The plugin can show real-time player statistics, ping information, and server status. Create animated sequences that cycle through different messages or information displays.
+### Joinstates
 
-```yaml
-groups:
--   group-or-service: '*'
-    tab-lists:
-    -   header:
-        - <dark_gray>My custom Tablist Header
-        footer:
-        - <white>Your Ping <purple>%PING%ms
-        - <dark_gray>My beatiful Tablist Footer
-    -   header:
-        - <dark_gray>My pretty Tablist Header
-        footer:
-        - <white>Your Ping <purple>%PING%ms
-        - <dark_gray>My beatiful Tablist Footer, yeah
-    -   header:
-        - <dark_gray>My beatiful Tablist Header
-        footer:
-        - <white>Your Ping <purple>%PING%ms
-        - <dark_gray>My beatiful Tablist Footer, ohh
-tab-list-update-time: 3000
-```
-When `tab-list-update-time` is set to `0`, the tab list will no longer be updated afterward.
-
-## Maintenance Features
-/proxy maintenance toggle/activate/deactivate
-/proxy layout nonmaintenance/maintenance set "layout"
-
-- /proxy maintenance toggle 
-- /proxy maintenance activate
-- /proxy maintenance deactivate
-
-/proxy layout maintenance set default-maintenance-motd
-/proxy layout nonmaintenance set default-motd
-#1
-sc edit group proxy --properties maintenance=false
-#2
-Proxy neustarten
+<DangerNote>
+    Documentation will be available in the coming days.
+</DangerNote>
 
 ## Placeholders
 

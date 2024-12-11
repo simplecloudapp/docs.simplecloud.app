@@ -10,6 +10,20 @@ export const metadata = {
 
 SimpleCloud v3 has a new and more customizable structure. We have encapsulated all the core components to make it easier to extend your setup. This means you can easily replace all our [droplets](/droplet) and [plugins](/plugin) with your own implementations. {{ className: 'lead' }}
 
+<img
+    src={"https://github.com/theSimpleCloud/branding/blob/main/docs/images/structure.png?raw=true"}
+    alt=""
+    className="w-full aspect-video object-cover"
+/>
+
+## Key Components
+- **Controller**: The heart of v3, managing server groups, online servers, and communicating with Server Hosts.
+- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the CLI, you can send commands to the controller or install and manage droplets.
+- **Server Host Droplet**: Handles server startup/shutdown with templates, running on Screens or Docker containers.
+- **Droplets & Plugins**:
+  - **Droplets**: Microservices for non-Minecraft tasks like player data (Player Droplet) or stats (Metrics Droplet).
+  - **Plugins**: Enhance server features with Proxy (e.g., Notify, CloudCommand) or Server Plugins (e.g., Signs, NPCs).
+
 ## File structure
 
 SimpleCloud has its core components that are needed, but they can be installed and used however you want. This means theoretically you can use any file structure you want. However, we **don't recommend** that and advise you to structure your files like this, as it works best in our experience and makes it easier to extend your setup with our [CLI](/cli).
