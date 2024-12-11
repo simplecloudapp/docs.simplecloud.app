@@ -178,6 +178,23 @@ This changes placeholders
 | `key` | `string` | Placeholder key to override |
 | `value` | `string` | New value of said key |
 
+### `modrinth_download`
+| Field | Type | Description |
+| ----- | ----- | ------------ |
+| `mod-id` | `string` | Modrinth resource ID |
+| `game-version` | `string` | The minecraft version |
+| `loader` | `string` | The server software this resource is for |
+| `path` | `path` | The path to put the download in (either file or directory) |
+| `replace` | `boolean` (default `true`) | Whether to override files or not |
+| `init-dir-if-missing` | `boolean` (default `true`) | Whether to init the target paths dir or not |
+
+### `download`
+| Field | Type | Description |
+| ----- | ----- | ------------ |
+| `url` | `url` | URL to download from |
+| `path` | `path` | The path to put the download in (either file or directory) |
+| `replace` | `boolean` (default `true`) | Whether to override files or not |
+| `init-dir-if-missing` | `boolean` (default `true`) | Whether to init the target paths dir or not |
 
 ## Best Practices
 
