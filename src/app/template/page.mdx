@@ -1,9 +1,9 @@
-import { CodeGroup } from "../../components/Code";
-import { Note } from "../../components/mdx";
+import {CodeGroup} from "../../components/Code";
+import {Note} from "../../components/mdx";
 
 export const metadata = {
-  title: 'Templates',
-  description: 'Learn about SimpleCloud\'s flexible template system'
+    title: 'Templates',
+    description: 'Learn about SimpleCloud\'s flexible template system'
 }
 
 # Templates
@@ -17,10 +17,10 @@ Templates consist of actions that are executed on certain triggers. Each action 
 ## Template Triggers
 Actions can be specified under each template trigger. These will then be executed in order.
 
-|ID| Context |
-|-- | ------ |
+| ID      | Context                                       |
+|---------|-----------------------------------------------|
 | `start` | Will be executed when a new server is created |
-| `stop` | Will be executed when a server is stopped |
+| `stop`  | Will be executed when a server is stopped     |
 
 ## Template Structure
 
@@ -71,71 +71,72 @@ my-action:
 
 ### Mixed example
 <CodeGroup>
-```yaml {{title: "actions/utils.yml"}}
-cache-pull:
-  - from: "%templates%/cache/%group%"
+    ```yaml {{title: "actions/utils.yml"}}
+    cache-pull:
+    - from: "%templates%/cache/%group%"
     to: "%server-dir%"
     type: "copy"
-  - ref: cache-pull-libs
+    - ref: cache-pull-libs
 
-cache-pull-libs:
-  - from: "%libs-dir%"
+    cache-pull-libs:
+    - from: "%libs-dir%"
     to: "%server-dir%/libraries"
     type: "copy"
 
-cache-push:
-  - ref: cache-push-paper
-  - ref: cache-push-spigot
+    cache-push:
+    - ref: cache-push-paper
+    - ref: cache-push-spigot
 
-cache-push-paper:
-  - from: "%server-dir%/plugins/.paper-remapped/"
+    cache-push-paper:
+    - from: "%server-dir%/plugins/.paper-remapped/"
     to: "%templates%/cache/%group%/plugins/.paper-remapped"
     type: "copy"
 
-cache-push-spigot:
-  - from: "%server-dir%/libraries"
+    cache-push-spigot:
+    - from: "%server-dir%/libraries"
     to: "%templates%/cache/%group%/libraries"
     type: "copy"
-  - from: "%server-dir%/versions"
+    - from: "%server-dir%/versions"
     to: "%templates%/cache/%group%/versions"
     type: "copy"
-```
-```yaml {{title: "actions/default.yml"}}
-static-setup:
-  - ref: util/init-placeholders
-  - ref: util/static-dir
-  - ref: default/setup
+    ```
+    ```yaml {{title: "actions/default.yml"}}
+    static-setup:
+    - ref: util/init-placeholders
+    - ref: util/static-dir
+    - ref: default/setup
 
-setup:
-  - ref: util/init-placeholders
-  - ref: cache/cache-pull
-  - ref: util/every-with-software
-  - ref: util/copy
-  - ref: util/configurate
+    setup:
+    - ref: util/init-placeholders
+    - ref: cache/cache-pull
+    - ref: util/every-with-software
+    - ref: util/copy
+    - ref: util/configurate
 
-delete:
-  - ref: util/init-placeholders
-  - ref: cache/cache-push
-  - path: "%server-dir%"
+    delete:
+    - ref: util/init-placeholders
+    - ref: cache/cache-push
+    - path: "%server-dir%"
     type: "delete"
-```
+    ```
 </CodeGroup>
 
 <Note>
-    An actions ref name consists of the YAML file name it is located in and the name of the action. For example, an action in `utils.yml` called `init-placeholders` will have the ref `utils/init-placeholders`.
+    An actions ref name consists of the YAML file name it is located in and the name of the action. For example, an
+    action in `utils.yml` called `init-placeholders` will have the ref `utils/init-placeholders`.
 </Note>
 
 ## Placeholders
 
 Actions support dynamic placeholders, these can also be altered by the `placeholder` action:
 
-| Variable | Description |
-|----------|-------------|
-| `%server-dir%` | Directory the server will run in |
-| `%libs-dir%` | Directory the (cloud) libraries are located in |
-| `%templates%` | Directory the actual templates folders (like in v2) are located in |
-| `%forwarding-secret%` | The velocity forwarding secret |
-| `%running%` | Directory running servers are located in |
+| Variable              | Description                                                        |
+|-----------------------|--------------------------------------------------------------------|
+| `%server-dir%`        | Directory the server will run in                                   |
+| `%libs-dir%`          | Directory the (cloud) libraries are located in                     |
+| `%templates%`         | Directory the actual templates folders (like in v2) are located in |
+| `%forwarding-secret%` | The velocity forwarding secret                                     |
+| `%running%`           | Directory running servers are located in                           |
 
 ## Action data
 This is a list of all action data forms corresponding to the action type.
@@ -179,22 +180,37 @@ This changes placeholders
 | `value` | `string` | New value of said key |
 
 ### `modrinth_download`
-| Field | Type | Description |
-| ----- | ----- | ------------ |
-| `mod-id` | `string` | Modrinth resource ID |
-| `game-version` | `string` | The minecraft version |
-| `loader` | `string` | The server software this resource is for |
-| `path` | `path` | The path to put the download in (either file or directory) |
-| `replace` | `boolean` (default `true`) | Whether to override files or not |
-| `init-dir-if-missing` | `boolean` (default `true`) | Whether to init the target paths dir or not |
+| Field                 | Type                       | Description                                                |
+|-----------------------|----------------------------|------------------------------------------------------------|
+| `mod-id`              | `string`                   | Modrinth resource ID                                       |
+| `game-version`        | `string`                   | The minecraft version                                      |
+| `loader`              | `string`                   | The server software this resource is for                   |
+| `path`                | `path`                     | The path to put the download in (either file or directory) |
+| `replace`             | `boolean` (default `true`) | Whether to override files or not                           |
+| `init-dir-if-missing` | `boolean` (default `true`) | Whether to init the target paths dir or not                |
 
 ### `download`
-| Field | Type | Description |
-| ----- | ----- | ------------ |
-| `url` | `url` | URL to download from |
-| `path` | `path` | The path to put the download in (either file or directory) |
-| `replace` | `boolean` (default `true`) | Whether to override files or not |
-| `init-dir-if-missing` | `boolean` (default `true`) | Whether to init the target paths dir or not |
+| Field                 | Type                       | Description                                                |
+|-----------------------|----------------------------|------------------------------------------------------------|
+| `url`                 | `url`                      | URL to download from                                       |
+| `path`                | `path`                     | The path to put the download in (either file or directory) |
+| `replace`             | `boolean` (default `true`) | Whether to override files or not                           |
+| `init-dir-if-missing` | `boolean` (default `true`) | Whether to init the target paths dir or not                |
+
+### `compress`
+| Field     | Type                        | Description                                                |
+|-----------|-----------------------------|------------------------------------------------------------|
+| `path`    | `path`                      | Path to the Directory that shall be compressed             |
+| `dest`    | `path`                      | The path to put the compressed Archive in (Absolute)       |
+| `format`  | `string` (default `zip`)    | Available formats: `tar.gz`, `tar.bz2`, `zip`, `tar`, `7z` |
+| `replace` | `boolean` (default `false`) | Whether to replace an existing Archive                     |
+
+### `decompress`
+| Field     | Type                        | Description                                           |
+|-----------|-----------------------------|-------------------------------------------------------|
+| `path`    | `path`                      | Path to the Archive that shall be decompressed        |
+| `dest`    | `path`                      | The path to put the decompressed Files in  (Absolute) |
+| `replace` | `boolean` (default `false`) | Whether to replace an existing folder                 |
 
 ## Best Practices
 
