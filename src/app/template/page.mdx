@@ -198,19 +198,19 @@ This changes placeholders
 | `init-dir-if-missing` | `boolean` (default `true`) | Whether to init the target paths dir or not                |
 
 ### `compress`
-| Field     | Type                        | Description                                                                                                                    |
-|-----------|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| `path`    | `path`                      | Path to the Directory that shall be compressed                                                                                 |
-| `dest`    | `path` (default `""`)       | The path to put the compressed Archive in (leave blank to put it in the same directory as the folder you're compressing is in) |
-| `format`  | `string` (default `zip`)    | Available formats: `tar.gz`, `tar.bz2`, `zip`, `tar`, `7z`                                                                     |
-| `replace` | `boolean` (default `false`) | Whether to replace an existing Archive                                                                                         |
+| Field     | Type                        | Description                                                |
+|-----------|-----------------------------|------------------------------------------------------------|
+| `path`    | `path`                      | Path to the Directory that shall be compressed             |
+| `dest`    | `path`                      | The path to put the compressed Archive in (Absolute)       |
+| `format`  | `string` (default `zip`)    | Available formats: `tar.gz`, `tar.bz2`, `zip`, `tar`, `7z` |
+| `replace` | `boolean` (default `false`) | Whether to replace an existing Archive                     |
 
 ### `decompress`
-| Field     | Type                        | Description                                                                                                                     |
-|-----------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| `path`    | `path`                      | Path to the Archive that shall be decompressed                                                                                  |
-| `dest`    | `path` (default `""`)       | The path to put the decompressed Files in  (leave blank to put it in the same directory as the file you're decompressing is in) |
-| `replace` | `boolean` (default `false`) | Whether to replace an existing folder                                                                                           |
+| Field     | Type                        | Description                                           |
+|-----------|-----------------------------|-------------------------------------------------------|
+| `path`    | `path`                      | Path to the Archive that shall be decompressed        |
+| `dest`    | `path`                      | The path to put the decompressed Files in  (Absolute) |
+| `replace` | `boolean` (default `false`) | Whether to replace an existing folder                 |
 
 ## Best Practices
 
