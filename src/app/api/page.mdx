@@ -1,22 +1,74 @@
-import { Libraries } from '@/components/Libraries'
-import {DangerNote} from "../../components/mdx";
-
 export const metadata = {
-    title: 'SimpleCloud API',
+    title: 'Getting Started with SimpleCloud API',
     description:
-        'SimpleCloud offers fine-tuned Kotlin, Java and Go API to make your life easier and give you the best experience when using SimpleCloud.',
+        'Discover SimpleCloud\'s powerful API ecosystem supporting multiple languages through gRPC and Protocol Buffers, enabling unlimited possibilities for cloud service integration.',
 }
 
 export const sections = [
-    { title: 'Official libraries', id: 'official-libraries' },
+    { title: 'Introduction', id: 'introduction' },
+    { title: 'Architecture', id: 'architecture' },
+    { title: 'Authentication', id: 'authentication' }
 ]
 
-# SimpleCloud API
+# Getting Started with SimpleCloud API
 
-The recommended way to interact with the SimpleCloud API is by using one of our official APIs. Today, SimpleCloud offers fine-tuned Kotlin, Java, and Go libraries to make your life easier and give you the best experience when using SimpleCloud. {{ className: 'lead' }}
+Welcome to SimpleCloud's API documentation. Our API ecosystem provides a powerful, flexible foundation for building and integrating cloud services, extending far beyond traditional Minecraft server management. {{ className: 'lead' }}
 
-<DangerNote>
-    Our API is not (well) documented yet. Please contact us on [discord](https://discord.simplecloud.app) if you already want to use it and have questions.
-</DangerNote>
+## Introduction
 
-<Libraries />
+SimpleCloud's API represents a major leap forward in cloud service management. At its core, it provides a component-based architecture enabling modular development across your infrastructure. Through our implementation of [gRPC](https://grpc.io/), we deliver cross-platform compatibility that breaks free from traditional constraints. The API is completely language-agnostic, allowing integrations in virtually any programming environment. Our extensible plugin system and powerful droplet architecture provide the building blocks for creating sophisticated cloud solutions.
+
+## Architecture
+
+### Component-Based Design
+
+SimpleCloud's ecosystem is structured into distinct components that work together seamlessly while maintaining independence. The Controllers serve as central management units, handling service orchestration and resource allocation across your infrastructure. Our Droplets function as independent service units, providing scalable components and specialized functionality where needed. The Plugin system extends the platform's capabilities through modular additions, enabling custom functionality and integration points.
+
+This component-based approach allows developers to import only the dependencies they need, maintaining clean architecture and optimizing resource usage throughout their implementations.
+
+### Protocol Buffers & gRPC
+
+The foundation of our API rests on two powerful technologies: [Protocol Buffers](https://protobuf.dev/) and [gRPC](https://grpc.io/). Protocol Buffers provide efficient binary serialization with a strong typing system that ensures consistency across all implementations. The schema-based approach generates code automatically while maintaining backward compatibility as your services evolve.
+
+Our gRPC implementation delivers high-performance remote procedure calls with built-in support for bi-directional streaming and load balancing. The framework automatically generates client and server stubs, significantly reducing development overhead and ensuring consistent communication patterns across your entire infrastructure.
+
+You can find our complete Protocol Buffer specifications at [buf.build/simplecloud/proto-specs](https://buf.build/simplecloud/proto-specs/), where you can explore our API definitions and generate client code for your preferred language.
+
+## Authentication
+
+### API Secret Management
+
+SimpleCloud's API is designed to be accessible both from within Minecraft servers and external applications. This flexibility requires secure authentication:
+
+#### **Minecraft Server Authentication**
+Every Minecraft server automatically receives an API key through environment variables. Our official APIs are designed to automatically detect and use these credentials, making integration seamless within the Minecraft ecosystem.
+
+```bash
+# Automatically set in Minecraft server environment
+CONTROLLER_SECRET=sk_....
+```
+
+Theoretically, you can use this environment variable to authenticate with the API on any Minecraft server that we start.
+
+#### **External Application Authentication**
+For applications outside the Minecraft server environment, you'll need to use the master authentication secret located at:
+```bash
+/components/.secrets/auth.secret
+```
+
+This master secret provides full API access and requires careful handling. Never commit it to version control, store it securely in production environments, use environment variables or secure secret management systems, and implement regular secret rotation practices.
+
+### Access Control System
+
+SimpleCloud implements a comprehensive access control system with fine-grained permission management, token-based authentication, and role-based access control. The system includes robust usage monitoring and audit logging capabilities to maintain security and transparency across your infrastructure.
+
+The access control system is fully implemented and operational. We're currently implementing it in tools like the [CLI](/cli) and [Dashboard](/dashboard), which will allow you to create and manage access keys from the command line and through the web interface, respectively.
+
+## Next Steps
+
+To start building with SimpleCloud:
+
+1. [Controller API documentation](/api/controller)
+2. [Server Host Droplet API documentation](/api/server-host)
+3. [Player Droplet API documentation](/api/player)
+
