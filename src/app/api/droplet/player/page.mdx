@@ -1,0 +1,338 @@
+import {CodeGroup, Note} from "../../../../components/mdx";
+
+export const metadata = {
+    title: 'Player API',
+    description:
+        'The Player API provides comprehensive player management and interaction capabilities across your SimpleCloud network.',
+}
+
+export const sections = [
+    { title: 'Installation', id: 'installation' },
+    { title: 'Authentication', id: 'authentication' },
+    { title: 'Player Management', id: 'player-management' },
+    { title: 'Adventure Integration', id: 'adventure-integration' },
+    { title: 'Player Properties', id: 'player-properties' }
+]
+
+# Player API
+
+The Player API provides comprehensive player management and interaction capabilities across your SimpleCloud network, featuring Adventure API integration and cross-server player management. {{ className: 'lead' }}
+
+<Note>
+A Kotlin coroutine-based API is currently in development and will be available soon. This will provide a more idiomatic way to interact with the API for Kotlin users.
+</Note>
+
+## Installation
+
+<CodeGroup>
+
+```kotlin {{ title: 'Kotlin' }}
+repositories {
+    maven("https://repo.simplecloud.app/snapshots/")
+}
+
+dependencies {
+    api("app.simplecloud.droplet:player-api:0.0.0")
+}
+```
+
+```groovy {{ title: 'Groovy' }}
+repositories {
+    maven {
+        url "https://repo.simplecloud.app/snapshots/"
+    }
+}
+
+dependencies {
+    api 'app.simplecloud.droplet:player-api:0.0.0'
+}
+```
+
+```xml {{ title: 'Maven' }}
+<repositories>
+    <repository>
+        <id>simplecloud-snapshots</id>
+        <url>https://repo.simplecloud.app/snapshots/</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>app.simplecloud.droplet</groupId>
+    <artifactId>player-api</artifactId>
+    <version>0.0.0</version>
+    <scope>compile</scope>
+</dependency>
+```
+
+</CodeGroup>
+
+## Authentication
+
+The Player API uses the same authentication mechanism as the Controller playerApi. When running inside a SimpleCloud managed server, the token is automatically provided via environment variables.
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Environment Auth' }}
+    // Uses CONTROLLER_SECRET from environment
+    val playerApi = PlayerplayerApi.createFutureApi()
+    ```
+
+    ```kotlin {{ title: 'Direct Auth' }}
+    // Provide token directly
+    val playerApi = PlayerplayerApi.createFutureApi("your-auth-token")
+    ```
+
+</CodeGroup>
+
+## Player Management
+
+### getOfflinePlayer
+Retrieves player data regardless of online status. This method provides access to persistent player data even when the player is offline.
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'By Name' }}
+    val player = playerApi.getOfflinePlayer("Steve")
+    ```
+
+    ```kotlin {{ title: 'By UUID' }}
+    val player = playerApi.getOfflinePlayer(UUID.fromString("..."))
+    ```
+
+</CodeGroup>
+
+### getOnlinePlayer
+Retrieves data for currently online players. This method will only return data for players that are currently connected to the network.
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'By Name' }}
+    val player = playerApi.getOnlinePlayer("Steve")
+    ```
+
+    ```kotlin {{ title: 'By UUID' }}
+    val player = playerApi.getOnlinePlayer(UUID.fromString("..."))
+    ```
+
+</CodeGroup>
+
+### getOnlinePlayers
+Retrieves a list of all currently online players across the entire network.
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Kotlin' }}
+    val players = playerApi.getOnlinePlayers()
+    ```
+
+    ```java {{ title: 'Java' }}
+    playerApi.getOnlinePlayers().thenAccept(players -> {
+        // Handle online players
+    });
+    ```
+
+</CodeGroup>
+
+### getOnlinePlayerCount
+Returns the total number of online players across all servers.
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Kotlin' }}
+    val count = playerApi.getOnlinePlayerCount()
+    ```
+
+    ```java {{ title: 'Java' }}
+    playerApi.getOnlinePlayerCount().thenAccept(count -> {
+        // Handle player count
+    });
+    ```
+
+</CodeGroup>
+
+### connectPlayer
+Connects a player to a specific server. This method works across the entire network, allowing you to transfer players between any servers.
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Kotlin' }}
+    val result = playerApi.connectPlayer(playerUUID, "lobby-1")
+    ```
+
+    ```java {{ title: 'Java' }}
+    playerApi.connectPlayer(playerUUID, "lobby-1").thenAccept(result -> {
+        // Handle connection result
+    });
+    ```
+
+</CodeGroup>
+
+### isOnline
+Checks if a player is currently connected to the network.
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Kotlin' }}
+    val online = playerApi.isOnline(playerUUID)
+    ```
+
+    ```java {{ title: 'Java' }}
+    playerApi.isOnline(playerUUID).thenAccept(online -> {
+        // Handle online status
+    });
+    ```
+
+</CodeGroup>
+
+### updateServer
+Updates a player's current server information in the network registry.
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Kotlin' }}
+    val success = playerApi.updateServer(playerUUID, "minigames-1")
+    ```
+
+    ```java {{ title: 'Java' }}
+    playerApi.updateServer(playerUUID, "minigames-1").thenAccept(success -> {
+        // Handle update result
+    });
+    ```
+
+</CodeGroup>
+
+## Adventure Integration
+
+The Player API includes full support for Adventure, Minecraft's modern text playerApi. This enables rich content interaction with players:
+
+### Messages
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Simple Message' }}
+    player.sendMessage(Component.text("Hello, world!"))
+    ```
+
+    ```kotlin {{ title: 'Formatted Message' }}
+    player.sendMessage(
+        Component.text("Welcome! ")
+            .color(NamedTextColor.GOLD)
+            .decoration(TextDecoration.BOLD, true)
+            .append(Component.text("Click here!")
+            .color(NamedTextColor.AQUA)
+            .clickEvent(ClickEvent.openUrl("https://example.com"))
+            .hoverEvent(HoverEvent.showText(Component.text("Click to visit")))
+        )
+    )
+    ```
+
+</CodeGroup>
+
+### Titles
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Title' }}
+    player.showTitle(Title.title(
+        Component.text("Game Over"),
+        Component.text("Better luck next time!"),
+        Title.Times.of(
+            Duration.ofSeconds(1),
+            Duration.ofSeconds(3),
+            Duration.ofSeconds(1)
+        )
+    ))
+    ```
+
+    ```kotlin {{ title: 'Action Bar' }}
+    player.sendActionBar(
+        Component.text("+ 100 XP")
+          .color(NamedTextColor.GREEN)
+    )
+    ```
+
+</CodeGroup>
+
+### Sound Effects
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Simple Sound' }}
+    player.playSound(
+        Sound.sound(Key.key("entity.player.levelup"), Sound.Source.MASTER, 1f, 1f)
+    )
+    ```
+
+    ```kotlin {{ title: 'Positioned Sound' }}
+    player.playSound(
+        Sound.sound(Key.key("block.note_block.pling"), Sound.Source.BLOCK, 1f, 1f),
+        x = 0.0,
+        y = 64.0,
+        z = 0.0
+    )
+    ```
+
+</CodeGroup>
+
+### Books
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Open Book' }}
+    val book = Book.book(
+        Component.text("My Book")
+        <div className="co"></div>lor(NamedTextColor.GOLD),
+        Component.text("Author"),
+        Component.text("Page 1 content")
+            .append(Component.newline())
+            .append(Component.text("More content")),
+        Component.text("Page 2 content")
+    )
+    player.openBook(book)
+    ```
+
+</CodeGroup>
+
+### Boss Bars
+
+<CodeGroup>
+
+    ```kotlin {{ title: 'Boss Bar' }}
+    val bossBar = BossBar.bossBar(
+        Component.text("Time remaining: 60s"),
+            1.0f,
+            BossBar.Color.PURPLE,
+            BossBar.Overlay.PROGRESS
+        )
+    player.showBossBar(bossBar)
+    ```
+
+</CodeGroup>
+
+## Player Properties
+
+The Player API stores and manages various player properties:
+
+### Basic Information
+- Unique ID (UUID) for player identification
+- Current username
+- Custom display name (if set)
+- Online status
+
+### Timestamps
+- First login time (when the player first joined the network)
+- Last login time (most recent connection)
+- Total online time (cumulative time spent on network)
+- Current session time
+
+### Connection Details
+- Current server name
+- Connected proxy name
+- Client language setting
+- Minecraft protocol version
+- Online mode status (authenticated with Mojang)
+
+### Session Management
+- Last known server
+- Current connection details
+- Player state information

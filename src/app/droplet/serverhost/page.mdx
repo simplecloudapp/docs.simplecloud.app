@@ -2,40 +2,39 @@ import {CodeGroup, Note} from "../../../components/mdx";
 export const metadata = {
     title: 'Serverhost Droplet',
     description:
-        "The serverhost droplet is responsible for configuring and starting up minecraft servers",
+        "The server host droplet is responsible for configuring and starting up minecraft servers",
 }
 
 
 # Server Host Droplet
-The serverhost droplet is one of our first and most important droplets. It is responsible for configuring and managing minecraft servers. {{ className: 'lead' }}
+The server host droplet is one of our first and most important droplets. It is responsible for configuring and managing minecraft servers. {{ className: 'lead' }}
 
-## Understanding the serverhost droplet
-It's not that hard to understand the serverhost droplet. It is a simple droplet that is responsible for starting and managing minecraft servers.
+## Understanding the Server Host Droplet
+It's not that hard to understand the server host droplet. It is a simple droplet that is responsible for starting and managing minecraft servers.
 The nice thing about it is that it is very flexible and can be configured to work with any kind of server. It is also very easy to scale and can be installed on multiple machines.
 
-This droplet is an implementation of our serverhost api. You don't have to use this droplet to start and manage servers, but you have to use some kind of implementation of the serverhost api.
+This droplet is an implementation of our server host api. You don't have to use this droplet to start and manage servers, but you have to use some kind of implementation of the server host api.
 
-<Note>
-    If you're looking for a dockerized version of the server host droplet, we're currently working on it. It will be available soon.
-</Note>
+## Multi-Root Installation
+The server host droplet is designed to be installed on multiple machines. This is called a multi-root installation.
+This means that you can have multiple server host droplets running on different machines, all connected to our [controller](/controller).
 
-## Multi-Root installation
-The serverhost droplet is designed to be installed on multiple machines. This is called a multi-root installation.
-This means that you can have multiple serverhost droplets running on different machines, all connected to our [controller](/controller).
+To set up a multi-root installation you need to install our [CLI](/cli#installation) on the machine you want to install the server host droplet on.
 
-To set up a multi-root installation you need to install our [CLI](/cli#installation) on the machine you want to install the serverhost droplet on.
-
-After you have installed the cli, you can run the following command to install the serverhost droplet:
+After you have installed the cli, you can run the following command to install the server host droplet:
 ```bash
-# Install the serverhost droplet
+# Install the server host droplet
 simplecloud install droplet serverhost
 ```
 
 <Note>
-    Make sure to set content of the `secrets/auth.secret` file to the same value as the `auth.secret` in the controller, otherwise the serverhost droplet won't be able to connect to the [controller](/controller#authentication).
+    Make sure to set content of the `secrets/auth.secret` file to the same value as the `auth.secret` in the controller, otherwise the server host droplet won't be able to connect to the [controller](/controller#authentication).
 </Note>
 
-## Online server check
+## Docker Support
+We are currently working on dockerizing Minecraft servers with the server host droplet. This will be possible through [actions](/template#actions).
+
+## Online Server Check
 The online server checker is a new concept where we check if a server is online or not. This is done by sending a ping request to the Minecraft server and checking if it responds.
 It's very useful because this makes it possible for the droplet to know if a server is online and should be registered, or if it is offline and should be removed.
 
@@ -45,8 +44,8 @@ Additionally, the online server checker ensures that we don't need a plugin runn
     You have to make sure that the proxies send the correct player count, if you're not using our [proxy info plugin](/plugin/proxy), otherwise the player count will be wrong.
 </Note>
 
-## Needed group properties
-The serverhost droplet needs some [dynamic properties](/server-group#dynamic-properties) to work. For a group to start,
+## Needed Group Properties
+The server host droplet needs some [dynamic properties](/server-group#dynamic-properties) to work. For a group to start,
 the user has to provide every property that do not have a default value.
 
 | ID                    | Description                                           | User provided | Default value                                      |
@@ -66,7 +65,7 @@ group will not start.
 
 ### Server URL
 The server URL is nothing more than a simple download link to the wanted minecraft server jar.
-In fact, it can be any link you want. The serverhost droplet will try to download and execute it using
+In fact, it can be any link you want. The server host droplet will try to download and execute it using
 user specified [options](#server-options). You can set the server URL through the `server-url` [dynamic group property](/server-group#dynamic-properties).
 
 ### Configurator
@@ -155,7 +154,7 @@ jvm:
     options: [-Xms%MIN_MEMORY%M, -Xmx%MAX_MEMORY%M, -Dcom.mojang.eula.agree=true,
         -jar]
     arguments: [nogui]
-# whether the group is ignored by the serverhost droplet
+# whether the group is ignored by the server host droplet
 ignore: false
 # path to a custom running/temp directory for this group
 parentDir: null
@@ -176,19 +175,19 @@ This also means that you can change the executable, arguments and options freely
 You can also use any [group property](/server-group#controller-properties). Property placeholders follow this syntax:
 `%PROPERTY_NAME%`
 
-## Crash handling
+## Crash Handling
 There are two types of crashes that can happen:
-1. The serverhost droplet crashes
+1. The server host droplet crashes
 2. A minecraft server crashes
 
-### Serverhost droplet crash
-If the serverhost droplet crashes, you have to restart it manually. What's really cool is that the managed Minecraft servers will continue to run, even if the serverhost droplet is not running.
+### Server Host Droplet Crash
+If the server host droplet crashes, you have to restart it manually. What's really cool is that the managed Minecraft servers will continue to run, even if the server host droplet is not running.
 After a restart, this droplet will automatically detect all running servers and reattach to them.
 
-This also means that you can restart the serverhost droplet without any downtime for the managed Minecraft servers, so you can update the droplet without any problems.
+This also means that you can restart the server host droplet without any downtime for the managed Minecraft servers, so you can update the droplet without any problems.
 
-### Minecraft server crash
-If a minecraft server crashes, the serverhost droplet will automatically inform the controller about the crash and the controller will start a new server, if needed.
+### Minecraft Server Crash
+If a minecraft server crashes, the server host droplet will automatically inform the controller about the crash and the controller will start a new server, if needed.
 
 ## Tech-Stack
 These are the technologies used by the Serverhost droplet:

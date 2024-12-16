@@ -252,8 +252,7 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Overview', href: '/droplet' },
       { title: 'Server Host Droplet', href: '/droplet/serverhost' },
-      { title: 'Server Host Docker Droplet', href: '/droplet/serverhost-docker', tag: "Soon", tagColor: "rose" },
-      { title: 'Player Droplet', href: '/droplet/player', tag: "Soon", tagColor: "rose"},
+      { title: 'Player Droplet', href: '/droplet/player' },
       { title: 'Resource Pack Droplet', href: '/droplet/resourcepack', tag: "Soon", tagColor: "rose" },
     ],
   },
@@ -277,7 +276,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Getting Started', href: '/api' },
       { title: 'Controller API', href: '/api/controller' },
       { title: 'Server Host Droplet API', href: '/api/server-host', tag: "Soon", tagColor: "rose" },
-      { title: 'Player Droplet API', href: '/api/player', tag: "Soon", tagColor: "rose" },
+      { title: 'Player Droplet API', href: '/api/player' },
     ],
   },
 ]
