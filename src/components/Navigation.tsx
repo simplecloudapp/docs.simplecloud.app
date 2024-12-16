@@ -275,8 +275,8 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Getting Started', href: '/api' },
       { title: 'Controller API', href: '/api/controller' },
-      { title: 'Server Host Droplet API', href: '/api/server-host', tag: "Soon", tagColor: "rose" },
-      { title: 'Player Droplet API', href: '/api/player' },
+      { title: 'Server Host Droplet API', href: '/api/droplet/server-host', tag: "Soon", tagColor: "rose" },
+      { title: 'Player Droplet API', href: '/api/droplet/player' },
     ],
   },
 ]
