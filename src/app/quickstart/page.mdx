@@ -1,4 +1,5 @@
 import { CodeGroup } from "../../components/Code";
+import {Note} from "../../components/mdx";
 
 export const metadata = {
   title: 'Quickstart',
@@ -67,7 +68,9 @@ Currently, starting specific components via the CLI is not supported. However, y
 
 ## Creating a Proxy Group
 
-With a running SimpleCloud instance, you can create your first group. A group consists of Minecraft servers managed by the [Controller](/controller). Create a group using the following command:
+With a running SimpleCloud instance, you can create your first group. A group consists of Minecraft or proxy servers and is managed by the [**Controller**](https://docs.simplecloud.app/controller).
+
+For a functioning Minecraft server network you first need to create a [**Proxy Group**](/server-group):
 
 <CodeGroup>
     ```bash
@@ -79,7 +82,7 @@ With a running SimpleCloud instance, you can create your first group. A group co
 
 ## Creating a Server Group
 
-To run a Minecraft server, you need to create a [Server Group](/server-group). Use the following command to create a server group:
+To run an actual Minecraft server, you also need to create a [**Server Group**](/server-group):
 
 <CodeGroup>
     ```bash
@@ -93,7 +96,7 @@ To run a Minecraft server, you need to create a [Server Group](/server-group). U
 
 After setting up the groups, configure the [Connection Plugin](/plugin/server-connection) to route players to the lobby group when joining a proxy or switching servers. Follow these steps:
 
-1. **Download and Install the Plugin**: Get the plugin from the [releases page](https://github.com/theSimpleCloud/server-connection-plugin/releases) and place it in your proxy template's plugins folder.
+1. **Download and Install the Plugin**: Get the plugin from the [releases page](https://github.com/theSimpleCloud/server-connection-plugin/releases) and place it in your proxy template's plugins folder. It's installed by default in the bundle.
 
 2. **Edit the `config.yml`**: Configure the connection targets in the `config.yml` file to define which server groups players can connect to. For example:
 

@@ -302,11 +302,11 @@ Retrieves a specific server by its unique ID.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val server = api.getServers().getServerById("lobby-1")
+    val server = api.getServers().getServerById("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8")
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().getServerById("lobby-1").thenAccept(server -> {
+    api.getServers().getServerById("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8").thenAccept(server -> {
         // Handle server
     });
     ```
@@ -375,13 +375,13 @@ Updates the state of a server.
 
     ```kotlin {{ title: 'Kotlin' }}
     api.getServers().updateServerState(
-        id = "lobby-1",
+        id = "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
         state = ServerState.AVAILABLE
     )
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().updateServerState("lobby-1", ServerState.AVAILABLE).thenAccept(server -> {
+    api.getServers().updateServerState("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8", ServerState.AVAILABLE).thenAccept(server -> {
         // State updated
     });
     ```
@@ -396,7 +396,7 @@ Updates a custom property of a server.
 
     ```kotlin {{ title: 'Kotlin' }}
     api.getServers().updateServerProperty(
-        id = "lobby-1",
+        id = "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
         key = "gameMode",
         value = "CAPTURE_THE_FLAG"
     )
@@ -404,7 +404,7 @@ Updates a custom property of a server.
 
     ```java {{ title: 'Java' }}
     api.getServers().updateServerProperty(
-        "lobby-1",
+        "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
         "gameMode",
         "CAPTURE_THE_FLAG"
     ).thenAccept(server -> {
@@ -437,7 +437,7 @@ Stops a running server instance.
 
     ```java {{ title: 'Java' }}
     // Stop by ID
-    api.getServers().stopServer("lobby-1", ServerStopCause.API_STOP).thenAccept(server -> {
+    api.getServers().stopServer("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8", ServerStopCause.API_STOP).thenAccept(server -> {
         // Server stopped
     });
 
@@ -474,7 +474,7 @@ The `Server` class represents a running server instance with the following prope
 
 | Property | Type | Description |
 |----------|------|-------------|
-| uniqueId | `string` | Unique identifier (e.g., "lobby-1") |
+| uniqueId | `string` | Unique identifier (e.g., "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8") |
 | type | `enum` | Server type (UNKNOWN_SERVER, SERVER, PROXY) |
 | group | `string` | Parent group name |
 | host | `string` | Host machine identifier |
