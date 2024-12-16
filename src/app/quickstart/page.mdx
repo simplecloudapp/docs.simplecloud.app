@@ -8,9 +8,9 @@ export const metadata = {
 
 # Quickstart
 
-This guide will get you all set up for a SimpleCloud installation that is comparable to the [SimpleCloud v2](https://github.com/theSimpleCloud/SimpleCloud) experience. We'll cover the [CLI](/cli), standardized official [Droplets](/droplets), and the new [API](/api) design.  {{ className: 'lead' }}
+This guide will help you set up a basic SimpleCloud installation using the CLI, including a proxy and an initial server group functioning as a lobby. We'll cover the [CLI](/cli) and standardized official [Droplets](/droplets).  {{ className: 'lead' }}
 
-## Prerequisites
+## System Requirements
 
 Before installing SimpleCloud, ensure that the following programs are installed on your system, as they are required for the cloud to function correctly:
 
@@ -20,7 +20,7 @@ Before installing SimpleCloud, ensure that the following programs are installed 
 
 ## Installing SimpleCloud
 
-SimpleCloud now offers an extensive [CLI](/cli) that covers everything you need to manage SimpleCloud. It's the easiest way to get started with SimpleCloud. You can install it with the following command:
+SimpleCloud now offers an extensive [CLI](/cli) that covers everything you need to manage SimpleCloud. It’s a small application that serves as an interface for sending commands to your SimpleCloud instance and is the easiest way to get started with SimpleCloud. You can install it with the following command:
 
 <CodeGroup>
 
@@ -57,6 +57,10 @@ Starting the cloud is straightforward. By executing the following command, the c
     ```
 </CodeGroup>
 
+<Note>
+    You can only start the controller locally. Remote access via the CLI is only possible once the controller is running.
+</Note>
+
 The CLI will run a script in your installation directory to start everything necessary for SimpleCloud. You can customize this script if needed, located in the `scripts` directory.
 
 Currently, starting specific components via the CLI is not supported. However, you can start them individually by executing the corresponding script in the `scripts` directory.
@@ -87,9 +91,9 @@ To run a Minecraft server, you need to create a [Server Group](/server-group). U
 
 ## Configuring a Lobby
 
-After creating the necessary groups, configure the [Connection Plugin](/plugin/server-connection) to ensure that the lobby is correctly set up. Follow these steps to configure the lobby:
+After setting up the groups, configure the [Connection Plugin](/plugin/server-connection) to route players to the lobby group when joining a proxy or switching servers. Follow these steps:
 
-1. **Download and Install the Plugin**: Obtain the plugin from the [releases page](https://github.com/theSimpleCloud/server-connection-plugin/releases) and place it in your proxy template's plugins folder.
+1. **Download and Install the Plugin**: Get the plugin from the [releases page](https://github.com/theSimpleCloud/server-connection-plugin/releases) and place it in your proxy template's plugins folder.
 
 2. **Edit the `config.yml`**: Configure the connection targets in the `config.yml` file to define which server groups players can connect to. For example:
 

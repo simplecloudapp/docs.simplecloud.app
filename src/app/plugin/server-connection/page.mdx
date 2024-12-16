@@ -13,6 +13,21 @@ The Server Connection Plugin provides comprehensive player connection management
     <>Download</>
 </Button>
 
+## Supported Server Softwares
+
+The following table shows all currently supported proxy implementations:
+
+| Software   | This Plugin | Server API |
+| ---------- | ----------- | ---------- |
+| Velocity   | Yes         | Yes        |
+| Bungeecord | Yes         | Yes        |
+| Gate       | Planned     | Yes        |
+| Other*     | Varies      | No         |
+
+<Note>
+    *Support for other proxies is possible through custom implementation if the [server API](/api#server) is available in your preferred [programming language](/api).
+</Note>
+
 ## Quick Setup
 
 1. Download the plugin for your proxy software
@@ -40,12 +55,12 @@ connections:
 
 ### Matcher Operations
 
-| Operation | Description |
-|-----------|-------------|
-| EQUALS | Exact server name match |
+| Operation   | Description                   |
+| ----------- | ----------------------------- |
+| EQUALS      | Exact server name match       |
 | STARTS_WITH | Server name begins with value |
-| ENDS_WITH | Server name ends with value |
-| CONTAINS | Server name contains value |
+| ENDS_WITH   | Server name ends with value   |
+| CONTAINS    | Server name contains value    |
 
 ## Features
 
