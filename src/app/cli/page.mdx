@@ -58,13 +58,32 @@ simplecloud connection
 
 The `create` command is used to create new resources in your cloud system.
 
-### Create Group
+## Create Group
 
 Create a new server group with specified configuration.
 
 ```bash
 simplecloud create group [flags]
 ```
+
+**Flags**
+- `--configurator string`: Server configurator
+- `--max-memory string`: Maximum memory allocation for each server
+- `--max-online string`: Maximum number of servers that can be online
+- `--max-players string`: Maximum players per server
+- `--min-memory string`: Minimum memory allocation for each server
+- `--min-online string`: Minimum number of servers that must be online
+- `--name string`: Group name
+- `--port string`: Starting port number for servers
+- `--server-url string`: Server software download URL (optional)
+- `--software string`: Server software type
+- `--template string`: Template type (`dynamic` or `static`)
+- `--type string`: Server type (`PROXY` or `SERVER`)
+- `--minecraft-version string`: Minecraft version
+- `--software-version string`: Server Software version
+
+When all flags are set (except `--server-url`), the interactive setup wizard will be skipped. This is particularly useful for automated group creation or when you want to bypass the step-by-step configuration process.
+The server url will be automatically set to the default url for the selected software and software version.
 
 ## Delete Command
 
