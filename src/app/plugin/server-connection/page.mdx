@@ -1,8 +1,8 @@
-import {Button} from "../../../components/mdx";
+import { Button } from "../../../components/mdx";
 
 export const metadata = {
-    title: 'Server Connection Plugin',
-    description: 'Manage player connections and server navigation in your network'
+   title: 'Server Connection Plugin',
+   description: 'Manage player connections and server navigation in your network'
 }
 
 # Server Connection Plugin
@@ -36,7 +36,7 @@ The following table shows all currently supported proxy implementations:
 
 ## Connection Targets
 
-Connection targets define server groups that players can connect to. Each target can have specific permissions and matching rules:
+Connection targets are matchers for servers in your network. Based on their server-name-matcher, they can match single servers or one / multiple server groups. Each target can have specific permissions and matching rules:
 
 ```yaml
 connections:
@@ -66,7 +66,7 @@ connections:
 
 ### Network Join Handling
 
-Manages initial player connections to your network. Configure default lobby servers and handling of unavailable targets:
+Manages initial servers for player connections to your network. Configure which servers players will be connected to and handling of unavailable targets:
 
 ```yaml
 network-join-target:
@@ -115,25 +115,35 @@ commands:
     permission: ""
 ```
 
-## Priority System
+## Priority System and Target Selection
 
-Both fallback and command targets support priority levels:
+All above features support priority levels for their target-connections:
 - Lower numbers indicate higher priority
-- System tries highest priority (0) first
-- Falls back to lower priorities if needed
+- The system tries the highest priority (0) first
+- Falls back to lower priorities if needed (e.g.: insufficient permissions or no available target servers)
+
+Target-connections can also specify a from-criteria which works exactly like the server-name-matcher of connections. It allows to only consider a target if the name of the server the player was previously on matches specified criteria.
+```yaml
+target-connections:
+  - name: "lobby"
+    priority: 0
+    from:
+      - operation: "STARTS_WITH"
+        value: "bw"
+```
 
 ## Message Customization
 
-Each feature supports custom messages for various scenarios:
+Each feature supports custom messages for various scenarios. [**MiniMessage**](https://docs.advntr.dev/minimessage/format#standard-tags) format is supported for styling.:
 
 ```yaml
 # Network join messages
 network-join-target:
-  no-target-connections-found-message: "Custom message"
+  no-target-connections-found-message: "<green>Custom message"
 
 # Fallback messages
 fallback-connections:
-  no-target-connections-found-message: "Custom message"
+  no-target-connections-found-message: "<bold>Custom message"
 
 # Command messages
 commands:
@@ -157,7 +167,7 @@ connections:
     permission: "minigame.bedwars"
     server-name-matcher:
       operation: "STARTS_WITH"
-      value: "bw-"
+      value: "bw"
 
 network-join-target:
   enabled: true
@@ -170,11 +180,11 @@ fallback-connections:
   target-connections:
     - name: "lobby"
       priority: 0
-    - name: "bedwars"
+    - name: "bedwars" # Will fall back to another bedwars server if the player is kicked from a bedwars server and no lobby is available 
       priority: 1
       from:
         - operation: "STARTS_WITH"
-          value: "bw-"
+          value: "bw"
 
 commands:
   - name: "lobby"
@@ -219,7 +229,6 @@ commands:
     target-connections:
       - name: "premium-lobby"
         priority: 0
-        permission: "vip.lobby"
       - name: "main-lobby"
         priority: 1
 ```
