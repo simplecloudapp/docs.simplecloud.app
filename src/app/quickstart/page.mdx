@@ -1,5 +1,5 @@
 import { CodeGroup } from "../../components/Code";
-import {Note} from "../../components/mdx";
+import { Note } from "../../components/mdx";
 
 export const metadata = {
   title: 'Quickstart',
@@ -82,7 +82,7 @@ For a functioning Minecraft server network you first need to create a [**Proxy G
 
 ## Creating a Server Group
 
-To run an actual Minecraft server, you also need to create a [**Server Group**](/server-group):
+To run actual Minecraft servers, you also need to create a [**Server Group**](/server-group):
 
 <CodeGroup>
     ```bash
@@ -92,64 +92,66 @@ To run an actual Minecraft server, you also need to create a [**Server Group**](
 
 // TODO: Show the entire interactive installation process & what's different from the proxy group
 
-## Configuring a Lobby
+## Configuring the Connection Plugin
 
-After setting up the groups, configure the [Connection Plugin](/plugin/server-connection) to route players to the lobby group when joining a proxy or switching servers. Follow these steps:
+Configure the [Connection Plugin](/plugin/server-connection) to route players to your created server group when joining a proxy. Additionally you can configure your group to be used as a fallback group and provide a navigation command for it. Follow these steps:
 
-1. **Download and Install the Plugin**: Get the plugin from the [releases page](https://github.com/theSimpleCloud/server-connection-plugin/releases) and place it in your proxy template's plugins folder. It's installed by default in the bundle.
+1. **Ensure the plugin is installed**: The plugin is installed by default in the bundle. In other cases you can get it from the [releases page](https://github.com/theSimpleCloud/server-connection-plugin/releases) and place it in your proxy template's plugins folder.
 
-2. **Edit the `config.yml`**: Configure the connection targets in the `config.yml` file to define which server groups players can connect to. For example:
+2. **Edit the `config.yml`**: Configure your server group as a connection in the `config.yml` file. For example:
 
     ```yaml
     connections:
-      - name: "lobby"
+      - name: "lobby" # Name of this connection target
         permission: ""  # No permission required
         server-name-matcher:
           operation: "STARTS_WITH"
-          value: "lobby"
+          value: "lobby" # The name of your server group
     ```
 
-3. **Set Network Join Handling**: Ensure that players are directed to the lobby upon joining the network by configuring the network join target:
+3. **Set Network Join Handling**: Configure that players are routed to your server group upon joining the network by configuring the network join target:
 
     ```yaml
     network-join-target:
       enabled: true
       no-target-connections-found-message: "Couldn't connect you to the network because no target servers are available."
       target-connections:
-        - name: "lobby"
+        - name: "lobby" # The name of the connection target you configured above
           priority: 0
     ```
 
-4. **Configure Fallback System**: Set up fallback connections to redirect players to the lobby if they are kicked from other servers:
+The following steps are only useful if you plan on having a setup with multiple server groups.
+
+4. **Configure Fallback System**: Configure your server group as a fallback group for when players are kicked from other servers:
 
     ```yaml
     fallback-connections:
       enabled: true
       no-target-connections-found-message: "You have been disconnected from the network since you have been kicked and no fallback server are available."
       target-connections:
-        - name: "lobby"
+        - name: "lobby" # The name of the connection target you configured above
           priority: 0
     ```
 
-5. **Define Navigation Commands**: Create custom commands to allow players to navigate to the lobby easily:
+5. **Define a Navigation Command**: Create a custom command to allow players to navigate from other server groups to the one you created:
 
     ```yaml
     commands:
-      - name: "lobby"
+      - name: "lobby" # The name of the command
         aliases:
           - "l"
           - "hub"
           - "quit"
           - "leave"
         target-connections:
-          - name: "lobby"
+          - name: "lobby" # The name of the above configured connection target
             priority: 0
         already-connected-message: "<red>You are already connected to the lobby!"
     no-target-connections-found-message: "There are no lobby servers available at the moment."
-    permission: ""
+    permission: "" # No permission required
     ```
 
-These configurations ensure that players are seamlessly directed to the lobby upon joining the network and provide fallback options if needed.
+These example configurations ensure you have a proper lobby server group set up.
 
 ## What's next?
 
