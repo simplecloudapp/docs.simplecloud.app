@@ -2,12 +2,13 @@ import {Button, DangerNote, Note} from "../../../components/mdx";
 
 export const metadata = {
     title: 'NPCs Plugin',
-    description: 'Short Description'
+    description: ' '
 }
 
 # NPCs Plugin
-
-Description
+The all new NPC plugin opens up limitless creative possibilities.
+If you don't fancy the self-developed NPC system, you can now use your [favourite NPC system](#usage-of-other-npc-plugins) and continue to enjoy all the functions of SimpleCloud.
+Enrich your NPCs with fascinating new [actions](#understanding-actions) to further enhance your players gaming experience.
 
 <Button href="https://github.com/theSimpleCloud/npc-plugin/releases" arrow="right">
     <>Download</>
@@ -31,18 +32,22 @@ The following table shows all currently supported server implementations:
 4. Start your server
 
 ## Usage of other NPC plugins
-You don't want to use our own implementation of [juliarns NPC-Lib](https://github.com/juliarn/npc-lib)?
+You don't want to use our own [NPC implementation](https://github.com/juliarn/npc-lib)?
 No problem! Thanks to the new structure, you can also use other NPC plugins such as Citizens.
 This allows you to use all the features of your NPC plugin together with the functions of SimpleCloud.
 The following NPC plugins are supported:
 
-| Software                                                                              | Supported Versions      | This Plugin |
+| Plugin                                                                                | Supported Versions      | This Plugin |
 |---------------------------------------------------------------------------------------|-------------------------|-------------|
 | [Citizens](https://citizensnpcs.co)                                                   | 1.19 - latest version   | Yes         |
 | [FancyNpcs](https://fancyplugins.de/FancyNpcs)                                        | 1.19.4 - latest version | Yes         |
 | [PlayerNPC](https://www.spigotmc.org/resources/✅-api-player-npc-✅-1-17-1-20-1.93625/) | 1.17.1 - 1.20.1         | Yes         |
 
-If you would like to add support for a missing npc plugin, feel free to submit a pull request on [GitHub](https://github.com/theSimpleCloud/npc-plugin/pulls).
+If you would like to add support for a missing npc plugin, feel free to submit a issue on [GitHub](https://github.com/theSimpleCloud/npc-plugin/pulls).
+
+<Note>
+    As you have installed one of the supported NPC plugins on your server, the system automatically takes over the appropriate implementation. You don't have to do anything else!
+</Note>
 
 ## Understanding Actions
 Actions allow you to interact with NPCs and set the trigger of an action individually.
@@ -58,6 +63,7 @@ Here you will find all available actions and their options:
 | transfer_to_server  | server.ip, server.port | Send a player to an external server with the transfer method |
 | quick_join          |                        | soon                                                         |
 
+### How can I save these actions?
 Now you know all the available actions, but not yet how to assign them to an NPC.
 Use `/scnpc <id> interact <type> setAction <action>` for this!
 To add an option, you can use the `/scnpc <id> interact <type> setOption <key> <value>` command.
@@ -76,11 +82,8 @@ You can send a message, play a sound or realise other creative ideas. With the f
 | play.sound     | Plays a sound                   |
 
 You can also select these options for all interactions.
+Interactions can be either `right_click` or `left_click`.
 Simply enter `/scnpc <id> setOption <key> <value>` to set the option as a global setting.
-
-<Note>
-    Interactions can be either `right_click` or `left_click`
-</Note>
 
 ## What's Next?
 
