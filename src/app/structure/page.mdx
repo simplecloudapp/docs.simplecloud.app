@@ -18,7 +18,7 @@ SimpleCloud v3 has a new and more customizable structure. We have encapsulated a
 
 ## Key Components
 - **Controller**: The heart of v3, managing server groups, online servers, and communicating with Server Hosts.
-- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the CLI, you can send commands to the controller or install and manage droplets.
+- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the [CLI](/cli), you can send commands to the controller or install and manage droplets.
 - **Server Host Droplet**: Handles server startup/shutdown with templates, running on Screens or Docker containers.
 - **Droplets & Plugins**:
   - **Droplets**: Microservices for non-Minecraft tasks like player data (Player Droplet) or stats (Metrics Droplet).
@@ -83,9 +83,9 @@ SimpleCloud has its core components that are needed, but they can be installed a
 
 ## Understanding Components
 
-The v3 is structured into components, which are the building blocks of the system and can be compared to [dropelts](/droplet). The ony difference is that components also include the [Controller](/controller), Envoy (necessary for the Dashboard), the auto updater and the [CLI](/cli).
+SimpleCloud v3 is structured into components - a broad category that includes both core system elements and [dropelts](/droplet). These components serve as the building blocks of the system, encompassing essential elements like the [Controller](/controller), [Envoy](https://www.envoyproxy.io/) (necessary for the Dashboard), the Auto-updater, and the [CLI](/cli), alongside [droplets](/droplet).
 
-We could've also used [dropelts](/droplet) as components, but we decided to go with a more generic name. This allows us to also have a general name for parts of the system that are not directly [droplets](/droplet).
+We chose to use the term "components" to reflect this inclusive scope. This generic terminology allows us to consistently refer to all parts of the system, whether they are core elements or [droplets](/droplet).
 
 ## Auto-Updater
 
@@ -93,13 +93,22 @@ The auto-updater is a crucial part of SimpleCloud, ensuring that all components 
 
 ## Scripts
 
-We use Lua scripts for component management, providing a cross-platform solution that works on both Unix-like systems and Windows. The scripts are located in the `components/scripts` directory and are organized into components and libraries.
+SimpleCloud uses Lua scripts as a dynamic component management system that enables seamless integration between the [CLI](/cli) and various components. When you execute a [CLI](/cli) command, these scripts act as bridges between the components and the [CLI](/cli), providing standardized methods for component control.
+
+### How Scripts Work
+
+When a [CLI](/cli) command is executed, it runs all scripts in the `components/scripts` directory. Each script must return three essential methods that the [CLI](/cli) can call:
+- **start**: Launches the component
+- **stop**: Terminates the component
+- **status**: Checks the component's current state
+
+This design makes the [CLI](/cli) dynamically extendable - you can integrate any standalone program (component or [droplet](/droplet)) into SimpleCloud by creating a corresponding Lua script that implements these methods.
 
 ### Script Structure
 
 The scripts are organized into two main directories:
-- **components/**: Contains individual component scripts
-- **lib/**: Contains shared libraries and utilities
+- **components/scripts/components/**: Contains individual component scripts
+- **components/scripts/lib/**: Contains shared libraries and utilities
 
 ### Example Script
 
@@ -114,6 +123,8 @@ return component.create({
     jar = "controller-runtime.jar"
 })
 ```
+
+`component.create` returns the `start`, `stop`, and `status` methods that the [CLI](/cli) can call to manage the component.
 
 ### Creating Custom Components
 
