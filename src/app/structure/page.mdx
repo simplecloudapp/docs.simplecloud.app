@@ -81,6 +81,12 @@ SimpleCloud has its core components that are needed, but they can be installed a
     Keep in mind that if you change your file structure, there might be some things that will not work with our [CLI](/cli).
 </Note>
 
+## Understanding Components
+
+The v3 is structured into components, which are the building blocks of the system and can be compared to [dropelts](/droplet). The ony difference is that components also include the [Controller](/controller), Envoy (necessary for the Dashboard), the auto updater and the [CLI](/cli).
+
+We could've also used [dropelts](/droplet) as components, but we decided to go with a more generic name. This allows us to also have a general name for parts of the system that are not directly [droplets](/droplet).
+
 ## Auto-Updater
 
 The auto-updater is a crucial part of SimpleCloud, ensuring that all components stay up-to-date with the latest features and security patches. It resides in the `components/auto-updater` directory and manages version control through `versions.yml`. The auto-updater is configured through its own `application.yml` file and updates itself before updating other components.
@@ -134,7 +140,7 @@ return component.create({
 
 We also support creating components that are not based on Java. It's basically the same as above, but you need to specify the `command` field instead of `jar`. Here's an example on how to do so:
 
-``````lua {{title: "components/scripts/components/custom_no_jvm.lua"}}
+```lua {{title: "components/scripts/components/custom_no_jvm.lua"}}
 local component = require("component")
 
 return component.create({
