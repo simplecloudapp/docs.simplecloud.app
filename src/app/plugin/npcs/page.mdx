@@ -1,0 +1,90 @@
+import {Button, DangerNote, Note} from "../../../components/mdx";
+
+export const metadata = {
+    title: 'NPCs Plugin',
+    description: ' '
+}
+
+# NPCs Plugin
+The all new NPC plugin opens up limitless creative possibilities.
+If you don't fancy the self-developed NPC system, you can now use your [favourite NPC system](#usage-of-other-npc-plugins) and continue to enjoy all the functions of SimpleCloud.
+Enrich your NPCs with fascinating new [actions](#understanding-actions) to further enhance your players gaming experience.
+
+<Button href="https://github.com/theSimpleCloud/npc-plugin/releases" arrow="right">
+    <>Download</>
+</Button>
+
+## Supported Server Softwares
+
+The following table shows all currently supported server implementations:
+
+| Server type    | This Plugin |
+|----------------|-------------|
+| Paper & Forks  | Yes         |
+| Spigot & Forks | Yes         |
+| Other          | No          |
+
+## Quick Setup
+
+1. Download the plugin
+2. Download a supported NPC software
+3. Place it in your server's plugins folder
+4. Start your server
+
+## Usage of other NPC plugins
+You don't want to use our own [NPC implementation](https://github.com/juliarn/npc-lib)?
+No problem! Thanks to the new structure, you can also use other NPC plugins such as Citizens.
+This allows you to use all the features of your NPC plugin together with the functions of SimpleCloud.
+The following NPC plugins are supported:
+
+| Plugin                                                                                | Supported Versions      | This Plugin |
+|---------------------------------------------------------------------------------------|-------------------------|-------------|
+| [Citizens](https://citizensnpcs.co)                                                   | 1.19 - latest version   | Yes         |
+| [FancyNpcs](https://fancyplugins.de/FancyNpcs)                                        | 1.19.4 - latest version | Yes         |
+| [PlayerNPC](https://www.spigotmc.org/resources/✅-api-player-npc-✅-1-17-1-20-1.93625/) | 1.17.1 - 1.20.1         | Yes         |
+
+If you would like to add support for a missing npc plugin, feel free to submit a issue on [GitHub](https://github.com/theSimpleCloud/npc-plugin/pulls).
+
+<Note>
+    As you have installed one of the supported NPC plugins on your server, the system automatically takes over the appropriate implementation. You don't have to do anything else!
+</Note>
+
+## Understanding Actions
+Actions allow you to interact with NPCs and set the trigger of an action individually.
+Each action has its own option with which you can customise it. Exactly as required for your NPC.
+Here you will find all available actions and their options:
+
+| Action              | Option                 | Description                                                  |
+|---------------------|------------------------|--------------------------------------------------------------|
+| open_inventory      | inventory.name         | Open an inventory to select a server                         |
+| run_command         | command.name           | Execute a command via the player                             |
+| run_console_command | command.name           | Execute a command via the console                            |
+| connect_to_server   | server.name            | Send a player to a server                                    |
+| transfer_to_server  | server.ip, server.port | Send a player to an external server with the transfer method |
+| quick_join          |                        | soon                                                         |
+
+### How can I save these actions?
+Now you know all the available actions, but not yet how to assign them to an NPC.
+Use `/scnpc <id> interact <type> setAction <action>` for this!
+To add an option, you can use the `/scnpc <id> interact <type> setOption <key> <value>` command.
+
+## Send a feedback during an action
+
+There are other options that allows you to send a feedback to the player so that they know that the action has been executed.
+You can send a message, play a sound or realise other creative ideas. With the following options, the possibilities are almost endless:
+
+| Option key     | Description                     |
+|----------------|---------------------------------|
+| send.message   | Sends a message                 |
+| send.actionbar | Sends a message as an actionbar |
+| send.title     | Sends a title                   |
+| send.subtitle  | Sends a subtitle                |
+| play.sound     | Plays a sound                   |
+
+You can also select these options for all interactions.
+Interactions can be either `right_click` or `left_click`.
+Simply enter `/scnpc <id> setOption <key> <value>` to set the option as a global setting.
+
+## What's Next?
+
+- [Placeholder Plugin](/plugin/placeholder)

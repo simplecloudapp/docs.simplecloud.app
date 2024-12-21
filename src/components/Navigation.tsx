@@ -269,7 +269,8 @@ export const navigation: Array<NavGroup> = [
       { title: 'Notify Plugin', href: '/plugin/notify', tag: "Soon", tagColor: "rose"  },
       { title: 'Prefixes Plugin', href: '/plugin/prefixes', tag: "Server" },
       { title: 'Signs Plugin', href: '/plugin/signs', tag: "Soon", tagColor: "rose"  },
-      { title: 'NPCs Plugin', href: '/plugin/npcs', tag: "Soon", tagColor: "rose"  },
+      { title: 'NPCs Plugin', href: '/plugin/npcs', tag: "Server",  },
+      { title: 'Placeholders Plugin', href: '/plugin/placeholder', tag: "Server" },
     ],
   },
   {

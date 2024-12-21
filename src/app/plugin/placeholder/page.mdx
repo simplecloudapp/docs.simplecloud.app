@@ -1,0 +1,69 @@
+import {Button} from "../../../components/mdx";
+
+export const metadata = {
+    title: 'Placeholders Plugin',
+    description: 'The placeholder plugin allows you to use Controller API parameters for servers and groups as placeholders'
+}
+
+# Placeholders Plugin
+
+The placeholder plugin allows you to use all important parameters of the [Controller API](/api/controller) as placeholders with the help of the [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI). This allows you to retrieve all information about a server or group as a placeholder.
+
+<div className="not-prose mb-16 mt-6 flex gap-3">
+    <Button href="https://github.com/theSimpleCloud/placeholder-plugin/releases" arrow="right">
+        <>Download</>
+    </Button>
+    <Button href="https://www.spigotmc.org/resources/placeholderapi.6245/" arrow="right">
+        <>Download PlaceholderAPI</>
+    </Button>
+</div>
+
+## Supported Servers
+
+The following table shows all currently supported server implementations:
+
+| Server type    | PlaceholderAPI | This Plugin |
+|----------------|----------------|-------------|
+| Paper & Forks  | Yes            | Yes         |
+| Spigot & Forks | Yes            | Yes         |
+| Other          | No             | No          |
+
+## Quick Setup
+
+1. Download the plugin
+2. Download the PlaceholderAPI plugin
+3. Place it in your server's plugins folder
+4. Start your server
+
+## Available Placeholders
+You can use the parameters of the current server and the group to which the server belongs as placeholders.
+
+### Server Placeholder
+| Placeholder           | Description                                                                    |
+|-----------------------|--------------------------------------------------------------------------------|
+| %server_id%           | Unique identifier (e.g., "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8")               |
+| %server_type%         | Server type (UNKNOWN_SERVER, SERVER, PROXY)                                    |
+| %server_state%        | Server state (UNKNOWN_STATE, PREPARING, STARTING, AVAILABLE, INGAME, STOPPING) |
+| %server_host%         | Host machine identifier                                                        |
+| %server_numerical_id% | Numerical ID within group                                                      |
+| %server_ip%           | Server IP address                                                              |
+| %server_port%         | Server port                                                                    |
+| %server_max_players%  | Maximum allowed players                                                        |
+| %server_min_memory%   | Minimum RAM allocation in MB                                                   |
+| %server_max_memory%   | Maximum RAM allocation in MB                                                   |
+| %server_player_count% | Current player count                                                           |
+
+### Group Placeholder
+| Placeholder          | Description                                 |
+|----------------------|---------------------------------------------|
+| %group_name%         | Unique identifier for the group             |
+| %group_type%         | Server type (UNKNOWN_SERVER, SERVER, PROXY) |
+| %group_min_memory%   | Minimum RAM allocation in MB                |
+| %group_max_memory%   | Maximum RAM allocation in MB                |
+| %group_max_players%  | Maximum players per server                  |
+| %group_player_count% | Current players count                       |
+
+## What's Next?
+
+- [API Documentation](/api)
+- [Controller API](/api/controller)
