@@ -241,12 +241,17 @@ export const navigation: Array<NavGroup> = [
       { title: 'Structure', href: "/structure" },
       { title: 'Controller', href: "/controller" },
       { title: 'CLI', href: "/cli" },
+      { title: 'Dashboard', href: '/dashboard', tag: "Soon", tagColor: "rose" },
+      { title: 'Comparison', href: '/comparison', tag: "Soon", tagColor: "rose" }
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
       { title: 'Server Groups', href: "/server-group" },
       { title: 'Servers', href: "/server" },
       { title: 'Templates', href: "/template" },
       { title: 'Permissions', href: "/permissions" },
-      { title: 'Dashboard', href: '/dashboard', tag: "Soon", tagColor: "rose" },
-      { title: 'Comparison', href: '/comparison', tag: "Soon", tagColor: "rose" }
     ],
   },
   {
