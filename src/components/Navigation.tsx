@@ -245,7 +245,8 @@ export const navigation: Array<NavGroup> = [
       { title: 'Servers', href: "/server" },
       { title: 'Templates', href: "/template" },
       { title: 'Permissions', href: "/permissions" },
-      { title: 'Dashboard', href: '/dashboard', tag: "Soon", tagColor: "rose" }
+      { title: 'Dashboard', href: '/dashboard', tag: "Soon", tagColor: "rose" },
+      { title: 'Comparison', href: '/comparison', tag: "Soon", tagColor: "rose" }
     ],
   },
   {
