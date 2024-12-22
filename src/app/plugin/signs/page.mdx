@@ -1,73 +1,118 @@
 import {Button} from "../../../components/mdx";
 
 export const metadata = {
-    title: 'Plugin Name',
-    description: 'Short Description'
+    title: 'Signs Plugin',
+    description: 'Create Signs to connect to other servers within SimpleCloud'
 }
 
-# Plugin Name
+# Signs Plugin
 
-Description
+The Signs Plugin is an intuitive tool that enhances server navigation within SimpleCloud. With this plugin, users can click on designated signs to instantly connect to different servers within your network.
 
-{/* Note Box if dependencies are needed */}
-<Note>
-    This plugin internally uses the [server api](#) to get the online cloud servers. It also provides code to make [own implementations](#own-implementation) for other proxy software easy.
-</Note>
-
-<Button href="#" arrow="right">
+<Button href="https://github.com/theSimpleCloud/sign-plugin/releases" arrow="right">
     <>Download</>
 </Button>
 
-## Supported Server Softwares
+## Supported Server Software
 
 The following table shows all currently supported proxy implementations:
 
-| Software   | This Plugin | Dependencies |
-| ---------- | ----------- | ------------ |
-| Velocity   | Yes         | Yes          | 
-| Bungeecord | Yes         | Yes          | 
-| Gate       | Yes         | Planned      |
-
-If you would like to add support for a missing server software, feel free to submit a pull request on [GitHub](#).
-
-{/* Note Box if dependencies are needed */}
-<Note>
-    *Footnote
-</Note>
+| Server type    | This Plugin |
+|----------------|-------------|
+| Paper & Forks  | Yes         |
+| Spigot & Forks | Planned     |
 
 ## Quick Setup
 
-1. Download the plugin for your proxy software
-2. Place it in your proxy template's plugins folder
-3. Configure using `config.yml`
+1. Download the plugin for your server software
+2. Place it in your server template's plugins folder
 
 ## Features
 
-### Feature 1
+### Configuration of the Signs Plugin
+The Sign Plugin is highly configurable, allowing you to create dynamic and engaging displays for your server signs. Each configuration entry defines how signs behave based on the server's state.
 
-Feature Description
+1. **Name**
+A unique identifier for the configuration, such as `"empty"` or `"online"`.
 
-```yaml
-my-config: test
+2. **Rule**
+Specifies the server state this configuration applies to, e.g., `"ONLINE"`, `"OFFLINE"`, or `"MAINTENANCE"`.
+
+3. **Display Name**
+The template for the server name shown on the sign, using placeholders like `%group%` or `%numerical-id%` to dynamically generate content.
+
+4. **Priority**
+Determines which configuration takes precedence if multiple rules apply. Higher priority values override lower ones.
+
+5. **Frame Update Interval**
+Specifies the interval (in milliseconds) at which the sign’s content updates.
+
+6. **Frames**
+Defines the animated text content for the sign. Each frame contains lines that will rotate in sequence.
+
+## Available Sign Rules
+
+Each rule corresponds to a specific server state or condition and determines how the sign behaves:
+
+1. **STARTING**
+- **Description**: Applies to servers in the `STARTING` state.
+- **Condition**: The server state is `STARTING`.
+
+2. **OFFLINE**
+- **Description**: Indicates servers that are not currently active.
+- **Condition**: The server is `null` (does not exist in the network).
+
+3. **MAINTENANCE**
+- **Description**: For servers under maintenance mode.
+- **Condition**: The server is in the `AVAILABLE` state and has a property `"maintenance"` set to `true`.
+
+4. **FULL**
+- **Description**: Displays when a server has reached its maximum player capacity.
+- **Condition**: The server is in the `AVAILABLE` state, and `playerCount == maxPlayers`.
+
+5. **EMPTY**
+- **Description**: For servers with no players currently connected.
+- **Condition**: The server is in the `AVAILABLE` state, and `playerCount == 0`.
+
+6. **ONLINE**
+- **Description**: For servers that are available and actively running.
+- **Condition**: The server is in the `AVAILABLE` state.
+
+## Example Configuration
+
+Here’s an example that demonstrates how to configure signs for various server states:
+```yml {{title: "starting.yml"}}
+name: "starting"
+rule: "STARTING"
+display-name: "%group%-%numerical-id%"
+priority: 0
+frame-update-interval: 500
+frames:
+  - lines:
+      - "starting."
+      - "<group>-<numerical-id>"
+  - lines:
+      - "starting.."
+      - "<group>-<numerical-id>"
+  - lines:
+      - "starting..."
+      - "<group>-<numerical-id>"
 ```
-
-<img
-    src={"https://github.com/theSimpleCloud/branding/blob/main/docs/images/header.png?raw=true"}
-    alt=""
-    className="w-full aspect-video object-cover"
-/>
 
 ## Commands
 
-{/* Use <> needed args and [] for optional args */}
-| Command                                     | Description                                 |
-| ------------------------------------------- | ------------------------------------------- |
-| `/simplecloud start <serverGroup> [Amount]` | Download the plugin for your proxy software |
-| `/simplecloud start <serverGroup> [Amount]` | Download the plugin for your proxy software |
-| `/simplecloud start <serverGroup> [Amount]` | Download the plugin for your proxy software |
+The Signs Plugin provides a set of commands for managing server signs. Required arguments are enclosed in `< >`, and optional arguments are enclosed in `[ ]`. Additionally, these commands require specific permissions to execute:
+- `signs.command.add`
+- `signs.command.remove`
+- `signs.command.remove.group`
 
-## What's Next?
+| **Command**            | **Description**                                                                           |
+|------------------------|-------------------------------------------------------------------------------------------|
+| `/sign add <group>`    | Registers a new sign for the specified server group.                                      |
+| `/sign remove [group]` | Unregisters a sign. You can either look at a sign to remove it or specify the group name. |
 
-- [Proxy Configuration](/proxy)
-- [Group Management](/groups)
-- [Plugin Development](/plugins)
+    ## What's Next?
+
+    - [Proxy Configuration](/proxy)
+    - [Group Management](/groups)
+    - [Plugin Development](/plugins)
