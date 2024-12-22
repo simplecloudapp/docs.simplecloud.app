@@ -42,7 +42,7 @@ Monitor and notify about crucial server state changes in your network. Configure
 ```yaml
 server-state-filter:
   - server-state: STARTING
-    permission: "notify.receive.state-changed.starting"
+    permission: 'notify.receive.state-changed.starting'
     message: |-
       <color:#38bdf8><bold>⚡</bold></color> <hover:show_text:'Server Information:
          Group: <server_group>
@@ -50,12 +50,12 @@ server-state-filter:
          Players: <online_players>/<max_players>'>Server <server_group> <server_id></hover> is starting up.
 
   - server-state: AVAILABLE
-    permission: "notify.receive.state-changed.available"
+    permission: 'notify.receive.state-changed.available'
     message: |-
       <color:#38bdf8><bold>⚡</bold></color> Server <server_group> <server_id> is now available.
 
   - server-state: STOPPING
-    permission: ""  # Empty for no permission requirement
+    permission: ''  # Empty for no permission requirement
     message: |-
       <color:#38bdf8><bold>⚡</bold></color> Server <server_group> <server_id> is shutting down.
 ```
@@ -64,10 +64,9 @@ server-state-filter:
 
 ### Time Format Settings
 
-Customize timestamp displays in your notifications:
+Customize timestamp displays in your notifications by using the SimpleDateFormat pattern used in Java: https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/SimpleDateFormat.html
 
 ```yaml
-# Uses Java's SimpleDateFormat pattern
 date-format: dd.MM.yyyy HH:mm:ss
 ```
 
@@ -90,60 +89,13 @@ date-format: dd.MM.yyyy HH:mm:ss
 
 server-state-filter:
   - server-state: STARTING
-    permission: ""
-    message: "<color:#38bdf8>Server <server_group> <server_id> is starting up."
+    permission: 'staff.server-state.starting'
+    message: '<color:#38bdf8>Server <server_group> <server_id> is starting up.'
 
   - server-state: STOPPING
-    permission: ""
-    message: "<color:#38bdf8>Server <server_group> <server_id> is shutting down."
+    permission: 'staff.server-state.stopping'
+    message: '<color:#38bdf8>Server <server_group> <server_id> is shutting down.'
 ```
-
-### Advanced Staff System
-Detailed notifications for network administrators:
-
-```yaml
-server-state-filter:
-  - server-state: STARTING
-    permission: "notify.staff"
-    message: |-
-      <color:#38bdf8><bold>⚡</bold></color> <hover:show_text:'Detailed Information:
-         Group: <server_group>
-         ID: <server_id>
-         IP: <server_ip>
-         Port: <server_port>
-         Created: <server_create_date>'>Server <server_group> <server_id></hover> is starting up.
-
-  - server-state: AVAILABLE
-    permission: "notify.staff"
-    message: |-
-      <color:#38bdf8><bold>⚡</bold></color> Server <server_group> <server_id> is now available.
-      Players can connect on port <server_port>
-```
-
-## Advanced Configuration
-
-### Permission System
-Implement granular notification control:
-
-- Staff-only notifications for sensitive states
-- Public notifications for general server status
-- Custom permission groups for specific notifications
-
-### Message Enhancement
-Leverage MiniMessage's formatting capabilities:
-
-- Interactive hover tooltips
-- Click actions for server interaction
-- Custom color schemes
-- Dynamic content integration
-
-### State Monitoring
-Configure notifications for various server states:
-
-- Server startup notifications
-- Availability announcements
-- Shutdown alerts
-- Custom state messages
 
 ## Available Placeholders
 
@@ -169,6 +121,7 @@ Configure notifications for various server states:
 | `notify.receive.state-changed.stopping` | Receive notifications when servers are stopping |
 
 <Note>
+    Of course, the permissions listed above are only examples of what it could look. You still can customize everything like you want.
     Leave the permission field empty in the configuration to allow all players to receive specific notifications.
 </Note>
 
