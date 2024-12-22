@@ -1,0 +1,179 @@
+import { Button, Note } from "../../../components/mdx";
+
+export const metadata = {
+    title: 'Notify Plugin',
+    description: 'An in-game plugin that notifies about SimpleCloud server changes.',
+}
+
+# Notify Plugin
+
+Keep your staff informed about server state changes with real-time notifications using MiniMessage formatting. {{ className: 'lead' }}
+
+<Note>
+    This plugin internally uses MiniMessage for text formatting. Make sure to check out the [MiniMessage Documentation](https://docs.advntr.dev/minimessage/index.html) for message customization.
+</Note>
+
+<Button href="https://github.com/theSimpleCloud/notify-plugin/releases" arrow="right">
+    <>Download</>
+</Button>
+
+## Supported Server Softwares
+
+The following table shows all currently supported proxy implementations:
+
+| Software    | This Plugin | Dependencies |
+|------------|-------------|--------------|
+| Velocity   | Yes         | Yes          |
+| Bungeecord | Yes         | Yes          |
+
+If you would like to add support for a missing server software, feel free to submit a pull request on [GitHub](https://github.com/theSimpleCloud/notify-plugin).
+
+## Quick Setup
+
+1. Download the plugin for your proxy software
+2. Place it in your proxy template's plugins folder
+3. Start your server once to generate the configuration
+4. Configure using `plugins/notify-[velocity/bungeecord]/config.yml`
+
+## Server State Management
+
+Monitor and notify about crucial server state changes in your network. Configure notifications for different server states and customize who receives them:
+
+```yaml
+server-state-filter:
+  - server-state: STARTING
+    permission: "notify.receive.state-changed.starting"
+    message: |-
+      <color:#38bdf8><bold>⚡</bold></color> <hover:show_text:'Server Information:
+         Group: <server_group>
+         State: <server_state>
+         Players: <online_players>/<max_players>'>Server <server_group> <server_id></hover> is starting up.
+
+  - server-state: AVAILABLE
+    permission: "notify.receive.state-changed.available"
+    message: |-
+      <color:#38bdf8><bold>⚡</bold></color> Server <server_group> <server_id> is now available.
+
+  - server-state: STOPPING
+    permission: ""  # Empty for no permission requirement
+    message: |-
+      <color:#38bdf8><bold>⚡</bold></color> Server <server_group> <server_id> is shutting down.
+```
+
+## Notification Customization
+
+### Time Format Settings
+
+Customize timestamp displays in your notifications:
+
+```yaml
+# Uses Java's SimpleDateFormat pattern
+date-format: dd.MM.yyyy HH:mm:ss
+```
+
+### Interactive Messages
+
+Create engaging notifications using MiniMessage's rich text features:
+
+- Hover tooltips with server details
+- Click-to-connect actions
+- Custom color gradients
+- Dynamic server information
+
+## Configuration Examples
+
+### Basic Network Setup
+Essential notifications for small networks:
+
+```yaml
+date-format: dd.MM.yyyy HH:mm:ss
+
+server-state-filter:
+  - server-state: STARTING
+    permission: ""
+    message: "<color:#38bdf8>Server <server_group> <server_id> is starting up."
+
+  - server-state: STOPPING
+    permission: ""
+    message: "<color:#38bdf8>Server <server_group> <server_id> is shutting down."
+```
+
+### Advanced Staff System
+Detailed notifications for network administrators:
+
+```yaml
+server-state-filter:
+  - server-state: STARTING
+    permission: "notify.staff"
+    message: |-
+      <color:#38bdf8><bold>⚡</bold></color> <hover:show_text:'Detailed Information:
+         Group: <server_group>
+         ID: <server_id>
+         IP: <server_ip>
+         Port: <server_port>
+         Created: <server_create_date>'>Server <server_group> <server_id></hover> is starting up.
+
+  - server-state: AVAILABLE
+    permission: "notify.staff"
+    message: |-
+      <color:#38bdf8><bold>⚡</bold></color> Server <server_group> <server_id> is now available.
+      Players can connect on port <server_port>
+```
+
+## Advanced Configuration
+
+### Permission System
+Implement granular notification control:
+
+- Staff-only notifications for sensitive states
+- Public notifications for general server status
+- Custom permission groups for specific notifications
+
+### Message Enhancement
+Leverage MiniMessage's formatting capabilities:
+
+- Interactive hover tooltips
+- Click actions for server interaction
+- Custom color schemes
+- Dynamic content integration
+
+### State Monitoring
+Configure notifications for various server states:
+
+- Server startup notifications
+- Availability announcements
+- Shutdown alerts
+- Custom state messages
+
+## Available Placeholders
+
+| Placeholder | Description |
+|------------|-------------|
+| `<server_group>` | The group name the server belongs to |
+| `<server_id>` | The numerical id of the server |
+| `<server_uuid>` | The UUID of the server |
+| `<server_state>` | The state of the server after the update |
+| `<server_ip>` | The IP that the server is running on |
+| `<server_port>` | The port that the server is bound to |
+| `<online_players>` | The amount of players currently online |
+| `<max_players>` | The maximum amount of players allowed |
+| `<server_update_date>` | The date of the last server update |
+| `<server_create_date>` | The date of the initial server creation |
+
+## Permission Reference
+
+| Permission | Description |
+|------------|-------------|
+| `notify.receive.state-changed.starting` | Receive notifications when servers are starting |
+| `notify.receive.state-changed.available` | Receive notifications when servers become available |
+| `notify.receive.state-changed.stopping` | Receive notifications when servers are stopping |
+
+<Note>
+    Leave the permission field empty in the configuration to allow all players to receive specific notifications.
+</Note>
+
+## What's Next?
+
+- [Proxy Configuration](/proxy)
+- [Group Management](/groups)
+- [Plugin Development](/plugins)
