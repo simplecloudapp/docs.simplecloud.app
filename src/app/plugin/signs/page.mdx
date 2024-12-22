@@ -24,95 +24,103 @@ The following table shows all currently supported proxy implementations:
 
 ## Quick Setup
 
-1. Download the plugin for your server software
-2. Place it in your server template's plugins folder
-
-## Features
+1. Download the plugin for your server software.
+2. Place it in your server template's plugins folder.
 
 ### Configuration of the Signs Plugin
-The Sign Plugin is highly configurable, allowing you to create dynamic and engaging displays for your server signs. Each configuration entry defines how signs behave based on the server's state.
 
-1. **Name**
-A unique identifier for the configuration, such as `"empty"` or `"online"`.
-
-2. **Rule**
-Specifies the server state this configuration applies to, e.g., `"ONLINE"`, `"OFFLINE"`, or `"MAINTENANCE"`.
-
-3. **Display Name**
-The template for the server name shown on the sign, using placeholders like `%group%` or `%numerical-id%` to dynamically generate content.
-
-4. **Priority**
-Determines which configuration takes precedence if multiple rules apply. Higher priority values override lower ones.
-
-5. **Frame Update Interval**
-Specifies the interval (in milliseconds) at which the sign’s content updates.
-
-6. **Frames**
-Defines the animated text content for the sign. Each frame contains lines that will rotate in sequence.
-
-## Available Sign Rules
-
-Each rule corresponds to a specific server state or condition and determines how the sign behaves:
-
-1. **STARTING**
-- **Description**: Applies to servers in the `STARTING` state.
-- **Condition**: The server state is `STARTING`.
-
-2. **OFFLINE**
-- **Description**: Indicates servers that are not currently active.
-- **Condition**: The server is `null` (does not exist in the network).
-
-3. **MAINTENANCE**
-- **Description**: For servers under maintenance mode.
-- **Condition**: The server is in the `AVAILABLE` state and has a property `"maintenance"` set to `true`.
-
-4. **FULL**
-- **Description**: Displays when a server has reached its maximum player capacity.
-- **Condition**: The server is in the `AVAILABLE` state, and `playerCount == maxPlayers`.
-
-5. **EMPTY**
-- **Description**: For servers with no players currently connected.
-- **Condition**: The server is in the `AVAILABLE` state, and `playerCount == 0`.
-
-6. **ONLINE**
-- **Description**: For servers that are available and actively running.
-- **Condition**: The server is in the `AVAILABLE` state.
-
-## Example Configuration
+The Signs Plugin is highly configurable, allowing you to create dynamic and engaging displays for your server signs. Each configuration entry defines how signs behave based on the server's state.
 
 Here’s an example that demonstrates how to configure signs for various server states:
-```yml {{title: "starting.yml"}}
-name: "starting"
-rule: "STARTING"
-display-name: "%group%-%numerical-id%"
-priority: 0
-frame-update-interval: 500
+
+```yaml {{title: "starting.yml"}}
+name: "starting"  # A unique identifier for the configuration, such as `"empty"` or `"online"`.
+rule: "STARTING"  # Specifies the server state this configuration applies to, e.g., `"ONLINE"`, `"OFFLINE"`, or `"MAINTENANCE"`.
+display-name: "%group%-%numerical-id%"  # The template for the server name shown on the sign, using placeholders like `%group%` or `%numerical-id%` to dynamically generate content.
+priority: 0  # Determines which configuration takes precedence if multiple rules apply. Higher priority values override lower ones.
+frame-update-interval: 500  # Specifies the interval (in milliseconds) at which the sign’s content updates.
 frames:
   - lines:
-      - "starting."
-      - "<group>-<numerical-id>"
+      - "starting."  # Defines the text content for the first frame.
+      - "<group>-<numerical-id>"  # Placeholder values that can be replaced dynamically.
   - lines:
       - "starting.."
       - "<group>-<numerical-id>"
   - lines:
       - "starting..."
-      - "<group>-<numerical-id>"
+      - "<group>-<numerical-id>"  # Defines additional frames to animate the text.
+```
+
+## Available Sign Rules
+
+Each rule corresponds to a specific server state or condition and determines how the sign behaves:
+
+| **Rule**        | **Description**                                                 | **Condition**                                                                            |
+|-----------------|-----------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| **STARTING**    | Applies to servers in the `STARTING` state.                     | The server state is `STARTING`.                                                          |
+| **OFFLINE**     | Indicates servers that are not currently active.                | The server is `null` (does not exist in the network).                                    |
+| **MAINTENANCE** | For servers under maintenance mode.                             | The server is in the `AVAILABLE` state and has a property `"maintenance"` set to `true`. |
+| **FULL**        | Displays when a server has reached its maximum player capacity. | The server is in the `AVAILABLE` state, and `playerCount == maxPlayers`.                 |
+| **EMPTY**       | For servers with no players currently connected.                | The server is in the `AVAILABLE` state, and `playerCount == 0`.                          |
+| **ONLINE**      | For servers that are available and actively running.            | The server is in the `AVAILABLE` state.                                                  |
+
+## Placeholders
+
+When configuring your signs, you can use placeholders to dynamically display information about the server. The following placeholders can be used in the sign configuration files:
+
+### Available Placeholders
+
+| **Placeholder**  | **Description**                                                                                                   |
+|------------------|-------------------------------------------------------------------------------------------------------------------|
+| `%group%`        | The group of the server. If not available, defaults to `"unknown"`.                                               |
+| `%numerical-id%` | The numerical ID of the server. If not available, defaults to `"0"`.                                              |
+| `%type%`         | The type of the server. If not available, defaults to `"unknown"`.                                                |
+| `%host%`         | The host of the server. If not available, defaults to `"unknown"`.                                                |
+| `%ip%`           | The IP address of the server. If not available, defaults to `"unknown"`.                                          |
+| `%port%`         | The port of the server. If not available, defaults to `"0"`.                                                      |
+| `%min-memory%`   | The minimum memory allocated to the server. If not available, defaults to `"0"`.                                  |
+| `%max-memory%`   | The maximum memory allocated to the server. If not available, defaults to `"0"`.                                  |
+| `%max-players%`  | The maximum number of players the server can hold. If not available, defaults to `"0"`.                           |
+| `%player-count%` | The current number of players on the server. If not available, defaults to `"0"`.                                 |
+| `%state%`        | The current state of the server (e.g., `STARTING`, `AVAILABLE`, etc.). If not available, defaults to `"unknown"`. |
+
+### Example Usage
+
+Here is an example configuration that makes use of these placeholders:
+
+```yaml
+name: "online"
+rule: "ONLINE"
+display-name: "%group%-%numerical-id%"
+priority: 50
+frame-update-interval: 500
+frames:
+  - lines:
+      - "Server: %group%"
+      - "ID: %numerical-id%"
+      - "Players: %player-count%/%max-players%"
+      - "State: %state%"
 ```
 
 ## Commands
 
-The Signs Plugin provides a set of commands for managing server signs. Required arguments are enclosed in `< >`, and optional arguments are enclosed in `[ ]`. Additionally, these commands require specific permissions to execute:
-- `signs.command.add`
-- `signs.command.remove`
-- `signs.command.remove.group`
+The Signs Plugin provides a set of commands for managing server signs:
 
-| **Command**            | **Description**                                                                           |
+| **Command**            | **Description**                                                                           | 
 |------------------------|-------------------------------------------------------------------------------------------|
 | `/sign add <group>`    | Registers a new sign for the specified server group.                                      |
 | `/sign remove [group]` | Unregisters a sign. You can either look at a sign to remove it or specify the group name. |
 
-    ## What's Next?
+## Permissions
+| **Permission**               | **Description**                                                                                    |
+|------------------------------|----------------------------------------------------------------------------------------------------|
+| `signs.command.*`            | Grants access to all sign-related commands. This is a wildcard permission for all sign actions.    |
+| `signs.command.add`          | Allows the user to register a new sign for a specific group.                                       |
+| `signs.command.remove`       | Allows the user to unregister a sign by looking at the sign or specifying the group name.          |
+| `signs.command.remove.group` | Allows the user to remove a sign using the group name directly (used with `/sign remove <group>`). |
 
-    - [Proxy Configuration](/proxy)
-    - [Group Management](/groups)
-    - [Plugin Development](/plugins)
+## What's Next?
+
+- [Proxy Configuration](/proxy)
+- [Group Management](/groups)
+- [Plugin Development](/plugins)
