@@ -41,11 +41,11 @@ It's very useful because this makes it possible for the droplet to know if a ser
 Additionally, the online server checker ensures that we don't need a plugin running on the Minecraft server, so you can basically use any kind of server; it just needs to respond to the ping request.
 
 <Note>
-    You have to make sure that the proxies send the correct player count, if you're not using our [proxy info plugin](/plugin/proxy), otherwise the player count will be wrong.
+    You have to make sure that the proxies send the correct player count, if you're not using our [Proxy Essentials plugin](/plugin/proxy), otherwise the player count will be wrong.
 </Note>
 
 ## Needed Group Properties
-The server host droplet needs some [dynamic properties](/server-group#dynamic-properties) to work. For a group to start,
+The server host droplet needs some [dynamic properties](/resources/server-group#dynamic-properties) to work. For a group to start,
 the user has to provide every property that do not have a default value.
 
 | ID                    | Description                                           | User provided | Default value                                      |
@@ -60,21 +60,21 @@ the user has to provide every property that do not have a default value.
 ## Server versions
 Server versions in the classic v2 sense don't exist anymore.
 Servers are now just started using the server URL and a server configurator. Both server URL and server configurator are required,
-if the needed [dynamic group properties](/server-group#dynamic-properties) are not set in the group configuration, a server of this
+if the needed [dynamic group properties](/resources/server-group#dynamic-properties) are not set in the group configuration, a server of this
 group will not start.
 
 ### Server URL
 The server URL is nothing more than a simple download link to the wanted minecraft server jar.
 In fact, it can be any link you want. The server host droplet will try to download and execute it using
-user specified [options](#server-options). You can set the server URL through the `server-url` [dynamic group property](/server-group#dynamic-properties).
+user specified [options](#server-options). You can set the server URL through the `server-url` [dynamic group property](/resources/server-group#dynamic-properties).
 
 ### Configurator
 A server Configurator is a YML-file that provides information needed for a minecraft server to work with the cloud.
 In most cases, it is responsible for setting the maximum players, port, online and forwarding mode of the server.
 It is executed after the server template was copied to a new server. After it finishes executing, the server is started.
-When defining a Configurator, you can use placeholders for any [controller](/server-group#controller-properties) or [dynamic](/server-group#dynamic-properties) property using this syntax: `%property-name%`.
+When defining a Configurator, you can use placeholders for any [controller](/resources/server-group#controller-properties) or [dynamic](/resources/server-group#dynamic-properties) property using this syntax: `%property-name%`.
 Configurators are located in the `options/configurators` directory. If you want, you can create your own or modify existing ones.
-To assign a configurator to a server, you need to set the [dynamic group property](/server-group#dynamic-properties) `configurator` to the configurator id.
+To assign a configurator to a server, you need to set the [dynamic group property](/resources/server-group#dynamic-properties) `configurator` to the configurator id.
 The configurator id is equivalent to the configurator file name without the file extension (e.g. `velocity.yml` -> `velocity`)
 
 ### Configurator Examples
@@ -172,7 +172,7 @@ You can configure this file freely. The `jvm` configuration section is then pars
 </CodeGroup>
 
 This also means that you can change the executable, arguments and options freely for each server group.
-You can also use any [group property](/server-group#controller-properties). Property placeholders follow this syntax:
+You can also use any [group property](/resources/server-group#controller-properties). Property placeholders follow this syntax:
 `%PROPERTY_NAME%`
 
 ## Crash Handling
