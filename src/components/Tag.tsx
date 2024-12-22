@@ -26,6 +26,11 @@ const colorStyles = {
     medium:
       'ring-rose-200 bg-rose-50 text-red-500 dark:ring-rose-500/20 dark:bg-rose-400/10 dark:text-rose-400',
   },
+  purple: {
+    small: 'text-purple-300 dark:text-purple-400',
+    medium:
+      'ring-purple-200 bg-purple-50 text-purple-500 dark:ring-purple-500/20 dark:bg-purple-400/10 dark:text-purple-400',
+  },
   zinc: {
     small: 'text-zinc-400 dark:text-zinc-500',
     medium:
