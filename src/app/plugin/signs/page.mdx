@@ -27,8 +27,6 @@ The following table shows all currently supported proxy implementations:
 1. Download the plugin for your server software.
 2. Place it in your server template's plugins folder.
 
-## Features
-
 ### Configuration of the Signs Plugin
 
 The Signs Plugin is highly configurable, allowing you to create dynamic and engaging displays for your server signs. Each configuration entry defines how signs behave based on the server's state.
@@ -37,44 +35,23 @@ The Signs Plugin is highly configurable, allowing you to create dynamic and enga
 
 Here’s an example that demonstrates how to configure signs for various server states:
 
-```yaml
-{{title: "starting.yml"}}
-name: "starting"
-rule: "STARTING"
-display-name: "%group%-%numerical-id%"
-priority: 0
-frame-update-interval: 500
+```yaml {{title: "starting.yml"}}
+name: "starting"  # A unique identifier for the configuration, such as `"empty"` or `"online"`.
+rule: "STARTING"  # Specifies the server state this configuration applies to, e.g., `"ONLINE"`, `"OFFLINE"`, or `"MAINTENANCE"`.
+display-name: "%group%-%numerical-id%"  # The template for the server name shown on the sign, using placeholders like `%group%` or `%numerical-id%` to dynamically generate content.
+priority: 0  # Determines which configuration takes precedence if multiple rules apply. Higher priority values override lower ones.
+frame-update-interval: 500  # Specifies the interval (in milliseconds) at which the sign’s content updates.
 frames:
   - lines:
-      - "starting."
-      - "<group>-<numerical-id>"
+      - "starting."  # Defines the text content for the first frame.
+      - "<group>-<numerical-id>"  # Placeholder values that can be replaced dynamically.
   - lines:
       - "starting.."
       - "<group>-<numerical-id>"
   - lines:
       - "starting..."
-      - "<group>-<numerical-id>"
+      - "<group>-<numerical-id>"  # Defines additional frames to animate the text.
 ```
-
-## Configuration Breakdown
-
-1. **Name**
-A unique identifier for the configuration, such as `"empty"` or `"online"`.
-
-2. **Rule**
-Specifies the server state this configuration applies to, e.g., `"ONLINE"`, `"OFFLINE"`, or `"MAINTENANCE"`.
-
-3. **Display Name**
-The template for the server name shown on the sign, using placeholders like `%group%` or `%numerical-id%` to dynamically generate content.
-
-4. **Priority**
-Determines which configuration takes precedence if multiple rules apply. Higher priority values override lower ones.
-
-5. **Frame Update Interval**
-Specifies the interval (in milliseconds) at which the sign’s content updates.
-
-6. **Frames**
-Defines the animated text content for the sign. Each frame contains lines that will rotate in sequence.
 
 ## Available Sign Rules
 
@@ -137,35 +114,12 @@ The Signs Plugin provides a set of commands for managing server signs:
 | `/sign remove [group]` | Unregisters a sign. You can either look at a sign to remove it or specify the group name. | `signs.command.remove` `signs.command.remove.group` |
 
 ## Permissions
-
-The Signs Plugin uses permissions to control access to various commands and actions. You can configure these permissions through your permissions plugin (e.g., PermissionsEx, LuckPerms, etc.).
-
-### Available Permissions
-
 | **Permission**               | **Description**                                                                                    |
 |------------------------------|----------------------------------------------------------------------------------------------------|
 | `signs.command.*`            | Grants access to all sign-related commands. This is a wildcard permission for all sign actions.    |
 | `signs.command.add`          | Allows the user to register a new sign for a specific group.                                       |
 | `signs.command.remove`       | Allows the user to unregister a sign by looking at the sign or specifying the group name.          |
 | `signs.command.remove.group` | Allows the user to remove a sign using the group name directly (used with `/sign remove <group>`). |
-
-### Example Permissions Setup
-
-To give a player full access to sign commands, you can assign the `signs.command.*` permission:
-
-```yaml
-permissions:
-  - signs.command.*
-```
-
-To allow a player to only remove signs but not add them, you can assign:
-
-```yaml
-permissions:
-  - signs.command.remove
-```
-
-This will grant users the ability to remove signs without allowing them to add new ones.
 
 ## What's Next?
 
