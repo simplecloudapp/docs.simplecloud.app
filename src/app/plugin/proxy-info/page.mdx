@@ -2,7 +2,7 @@ import {Button} from "../../../components/Button";
 import {CodeGroup} from "../../../components/Code";
 
 export const metadata = {
-    title: 'Proxy Plugin',
+    title: 'Proxy Info Plugin',
     description: 'Enhance your server network with customizable MOTD and Tablist features'
 }
 
@@ -30,7 +30,6 @@ If you would like to add support for a missing server software, feel free to sub
 1. Download the plugin for your proxy software
 2. Place it in your proxy template's plugins folder
 3. Start your proxy server
-4. Configure using `messages.yml`, `tablist.yml` the layouts in `layout/your-layout.yml`
 
 ## Features
 
@@ -39,14 +38,11 @@ Our MOTD system supports multiple layouts that you can create in the `layout/` f
 
 ```yaml
 first-lines:
-- <gradient:#00fcff:#0da1a3><bold>SimpleCloud</bold></gradient> <dark_gray>»<gray>
-    Simplify your network <dark_gray>|<bold><#4595ff> 1.12<#545454> - <#4595ff>1.20</bold>
+- <color:#0ea5e9>A simplecloud.app network
 second-lines:
-- '<dark_gray>× <#178fff>Status<dark_gray>: <bold><#22cc22>Online</bold> <dark_gray>-
-    <#ffffff>%PROXY%'
+- ' '
 player-info: []
 version-name: ''
-server-icon: server-icon.png
 max-player-display-type: REAL #or DYNAMIC
 dynamic-player-range: 1 #Only enabled if max-player-display-type is DYNAMIC
 ```
@@ -58,70 +54,102 @@ dynamic-player-range: 1 #Only enabled if max-player-display-type is DYNAMIC
 
 Create engaging tablist headers and footers that update automatically. The plugin supports both static and animated content, with configurable update intervals. You can display real-time information like player counts, server status, or custom messages. All text supports MiniMessage formatting for advanced styling.
 
+#### Configuration for static tablist
 ```yaml
 groups:
-
 -   group-or-service: '*'
     tab-lists:
     -   header:
-        - <dark_gray>                                                                        <dark_gray>
-        - <aqua>SimpleCloud <dark_gray>» <gray>Simplify <white><italic>your</italic>
-            <gray>network
-        - <dark_aqua>Online <dark_gray>» <gray><online_players><dark_gray>/<gray><max_players>
-            <dark_gray>┃ <dark_aqua>Server <dark_gray>» <gray><server_name>
-        - <dark_gray>
+        - ''
+        - <color:#0ea5e9>SimpleCloud v3
+        - ''
         footer:
-        - <dark_gray>
-        - <dark_aqua>Twitter <dark_gray>» <gray>@theSimpleCloud
-        - <dark_aqua>Discord <dark_gray>» <gray>discord.simplecloud.app
-        - <dark_gray>
--   group-or-service: 'lobby'
+        - ''
+        - ' <color:#ffffff><online_players> players <color:#cbd5e1>are playing on
+            your network '
+        - <color:#64748b>  sɪᴍᴘʟᴇᴄʟᴏᴜᴅ.ᴀᴘᴘ
+        - ''
+tab-list-update-time: 0 #If set to 0, the tablist will not update, otherwise it will update every x milliseconds
+```
+
+#### Configuration for dynamic tablist
+```yaml
+groups:
+-   group-or-service: '*'
     tab-lists:
     -   header:
-        - <white>Welcome back on %SERVER_NAME%
+        - ''
+        - <color:#0ea5e9>SimpleCloud v3
+        - 'Frame 1'
         footer:
-        - <gray>%ONLINE_PLAYERS%<dark_gray>/<gray>%MAX_PLAYERS%
-tab-list-update-time: 3000 #When 0, the tablist will no longer be updated afterward.
+        - ''
+        - ' <color:#ffffff><online_players> players <color:#cbd5e1>are playing on
+            your network '
+        - <color:#64748b>  sɪᴍᴘʟᴇᴄʟᴏᴜᴅ.ᴀᴘᴘ
+        - ''
+    -   header:
+        - ''
+        - <color:#0ea5e9>SimpleCloud v3
+        - 'Frame 2'
+        footer:
+        - ''
+        - ' <color:#ffffff><online_players> players <color:#cbd5e1>are playing on
+            your network '
+        - <color:#64748b>  sɪᴍᴘʟᴇᴄʟᴏᴜᴅ.ᴀᴘᴘ
+        - ''
+tab-list-update-time: 1000 #The 1000 is the update interval in milliseconds
 ```
 
 ### Joinstates
 
-<DangerNote>
-    Documentation will be available in the coming days.
-</DangerNote>
+You can use joinstates to define which user groups are allowed to join the network. You can create or adjust the joinstates in the `joinstate.yml` file.
+Depending on which joinstate is currently active for a group, the corresponding authorizations that you have defined in the configuration are applied.
+You can define different joinstates for each server or group. The plugin supports MiniMessage formatting for the display of rich text content.
+
+```yaml
+default-state: public
+join-states:
+-   name: public
+    join-permission: ''
+    full-join-permission: simplecloud.join.full.public
+    motd-layout-by-proxy: public
+-   name: closedBeta
+    join-permission: simplecloud.join.closedbeta
+    full-join-permission: simplecloud.join.full.closedbeta
+    motd-layout-by-proxy: closed_beta
+-   name: maintenance
+    join-permission: simplecloud.join.maintenance
+    full-join-permission: simplecloud.join.full.maintenance
+    motd-layout-by-proxy: maintenance
+```
 
 ## Placeholders
 
 | Placeholder        | MOTD | Tablist | Description                    |
 |-------------------|------|----------|--------------------------------|
-| %ONLINE_PLAYERS%  | Yes  | Yes      | Current online players         |
-| %MAX_PLAYERS%     | Yes  | Yes      | Maximum network players        |
-| %SERVER_NAME%     | No   | Yes      | Player's current server        |
-| %CURRENT_TIME%    | No   | Yes      | Current time                   |
-| %CURRENT_DATE%    | No   | Yes      | Current date                   |
-| %PING%            | No   | Yes      | Player's ping                  |
+| \<online_players\>  | Yes  | Yes      | Current online players         |
+| \<max_players\>     | Yes  | Yes      | Maximum network players        |
+| \<date\>            | Yes  | Yes      | Current date                   |
+| \<env:NAME\>        | Yes  | Yes      | Show the value                 |
+| \<server_name\>     | No   | Yes      | Player's current server        |
+| \<ping\>            | No   | Yes      | Player's ping                  |
 
 ## API Integration
 
 The plugin provides events for custom modifications:
 
-<CodeGroup>
-```java {{title: 'Tablist Event Example'}}
-@Subscribe
-public void onTablistConfiguration(TablistConfigurationEvent event) {
-    TablistConfiguration config = event.getTablistConfiguration();
+<DangerNote>
+    The documentation will be available as soon as the API is ready and public
+</DangerNote>
 
-    // Modify header
-    Component header = config.getHeader()
-        .replaceText(TextReplacementConfig.builder()
-        .match("%CUSTOM_PLACEHOLDER%")
-        .replacement("<red>Custom Text</red>")
-        .build());
 
-    config.setHeader(header);
-}
-```
-</CodeGroup>
+## Permissions
+| **Permission**               | **Description**                                                                                    |
+|------------------------------|----------------------------------------------------------------------------------------------------|
+| `simplecloud.command.joinstate.*`            | Allows the user to use all joinstate commands. |
+| `simplecloud.command.joinstate.help`          | Allows the user to see the joinstate command help. |
+| `simplecloud.command.joinstate.server`       | Allows the user to set the joinstate for a server. |
+| `simplecloud.command.joinstate.group.` | Allows the user to set the joinstate for a group and all servers in the group. |
 
 ## What's Next?
 
