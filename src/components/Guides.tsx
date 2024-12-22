@@ -8,7 +8,7 @@ const guides = [
     description: 'Learn how the new controller works.',
   },
   {
-    href: '/server-group',
+    href: '/resources/server-group',
     name: 'Server Groups',
     description: 'Understand how to manage server server-group.',
   },
@@ -18,7 +18,7 @@ const guides = [
     description: 'Learn how a template is structured and how you can use it.',
   },
   {
-    href: '/permissions',
+    href: '/resources/permissions',
     name: 'Permissions',
     description: 'See how you can integrate a permissions system with SimpleCloud.',
   }

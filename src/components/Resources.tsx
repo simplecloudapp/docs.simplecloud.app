@@ -70,7 +70,7 @@ const resources: Array<Resource> = [
     },
   },
   {
-    href: '/server-group',
+    href: '/resources/server-group',
     name: 'Groups',
     description:
       'Learn about the group model and how to create, retrieve, update, delete, and list server-group.',

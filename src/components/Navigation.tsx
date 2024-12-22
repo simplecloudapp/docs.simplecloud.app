@@ -248,10 +248,10 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Resources',
     links: [
-      { title: 'Server Groups', href: "/server-group" },
-      { title: 'Servers', href: "/server" },
-      { title: 'Templates', href: "/template" },
-      { title: 'Permissions', href: "/permissions" },
+      { title: 'Server Groups', href: "/resources/server-group" },
+      { title: 'Servers', href: "/resources/server" },
+      { title: 'Templates', href: "/resources/template" },
+      { title: 'Permissions', href: "/resources/permissions" },
     ],
   },
   {
@@ -270,7 +270,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Server Registration Plugin', href: '/plugin/server-registration', tag: "Proxy" },
       { title: 'Server Connection Plugin', href: '/plugin/server-connection', tag: "Proxy" },
       { title: 'Cloud Command Plugin', href: '/plugin/cloud-command', tag: "Proxy" },
-      { title: 'Proxy Info Plugin', href: '/plugin/proxy-info', tag: "Proxy"  },
+      { title: 'Proxy Essentials Plugin', href: '/plugin/proxy-essentials', tag: "Proxy"  },
       { title: 'Notify Plugin', href: '/plugin/notify', tag: "Proxy" },
       { title: 'Prefixes Plugin', href: '/plugin/prefixes', tag: "Server", tagColor: "purple" },
       { title: 'Signs Plugin', href: '/plugin/signs', tag: "Server", tagColor: "purple"  },
