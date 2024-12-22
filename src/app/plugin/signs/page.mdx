@@ -31,8 +31,6 @@ The following table shows all currently supported proxy implementations:
 
 The Signs Plugin is highly configurable, allowing you to create dynamic and engaging displays for your server signs. Each configuration entry defines how signs behave based on the server's state.
 
-## Example Configuration
-
 Here’s an example that demonstrates how to configure signs for various server states:
 
 ```yaml {{title: "starting.yml"}}
@@ -108,10 +106,10 @@ frames:
 
 The Signs Plugin provides a set of commands for managing server signs:
 
-| **Command**            | **Description**                                                                           | **Permission**                                      |
-|------------------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------|
-| `/sign add <group>`    | Registers a new sign for the specified server group.                                      | `signs.command.add`                                 |
-| `/sign remove [group]` | Unregisters a sign. You can either look at a sign to remove it or specify the group name. | `signs.command.remove` `signs.command.remove.group` |
+| **Command**            | **Description**                                                                           | 
+|------------------------|-------------------------------------------------------------------------------------------|
+| `/sign add <group>`    | Registers a new sign for the specified server group.                                      |
+| `/sign remove [group]` | Unregisters a sign. You can either look at a sign to remove it or specify the group name. |
 
 ## Permissions
 | **Permission**               | **Description**                                                                                    |
