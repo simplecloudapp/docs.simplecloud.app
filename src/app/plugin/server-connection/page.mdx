@@ -36,21 +36,37 @@ The following table shows all currently supported proxy implementations:
 
 ## Connection Targets
 
-Connection targets are matchers for servers in your network. Based on their server-name-matcher, they can match single servers or one / multiple server groups. Each target can have specific permissions and matching rules:
+Connection targets are matchers for servers in your network. Based on their server-name-matcher, they can match single servers or one / multiple server groups. Each target can have specific rules for server name matching as well as for availability for players:
+
+The following example demonstrates, how a connections configuration could look like using different server-name-matchers and rules
 
 ```yaml
 connections:
+  # This connection matches servers which's name starts with "lobby" and has no rules for access restriction.
   - name: "lobby"
-    permission: ""  # Empty for no permission requirement
     server-name-matcher:
       operation: "STARTS_WITH"
       value: "lobby"
 
+  # This connection targets a server which's name is "sb-spawn" and includes two access rules.
   - name: "skyblock-spawn"
-    permission: ""
     server-name-matcher:
       operation: "EQUALS"
       value: "sb-spawn"
+    rules:
+     # This rule requires players to have the permission "network.join.skyblock" to access this connection
+     - type: "PERMISSION"
+       name: "network.join.skyblock"
+       value: "true" # "true", because the permission check is expected to be positive.
+     
+     # This rule requires the environment variable "SKYBLOCK_JOIN_STATE" to not be set to "maintenance" for players to
+     # access the connection, while allowing players with the permission "rank.admin" to bypass this check.
+     - type: "ENV"
+       name: "SKYBLOCK_JOIN_STATE"
+       value: "maintenance"
+       operation: "EQUALS"
+       negate: true # Negates the EQUALS operation, so the environment variable shall not be equal "maintenance".
+       bypassPermission: "rank.admin" # Adds a permission that lets users bypass this check.
 ```
 
 ### Matcher Operations
