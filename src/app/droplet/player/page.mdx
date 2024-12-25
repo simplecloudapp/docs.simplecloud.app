@@ -1,0 +1,65 @@
+import {CodeGroup, Note} from "../../../components/mdx";
+export const metadata = {
+    title: 'Player Droplet',
+    description:
+        "The player droplet provides advanced player management and interaction capabilities across your SimpleCloud network",
+}
+
+# Player Droplet
+
+The player droplet is an optional but powerful component that provides comprehensive player management, cross-server communication, and advanced interaction features using the [Adventure API](https://docs.advntr.dev/). {{ className: 'lead' }}
+
+## Understanding the Player Droplet
+
+The player droplet replaces and enhances the CloudPlayer API from SimpleCloud v2. It enables server-independent player interactions and maintains detailed player statistics. While it's not required for basic SimpleCloud operation, it provides the optimal way to manage players across your network.
+
+## Features
+
+### Cross-Server Management
+
+The player droplet operates independently of Minecraft servers, allowing you to manage players across your entire network. You can transfer players between servers, send messages, or play sounds without needing to know which server they're currently on.
+
+### Adventure API Integration
+
+Full support for [Kyori's Adventure API](https://docs.advntr.dev/) enables rich content delivery across your network:
+- Rich text messages with colors and formatting
+- Interactive components (clickable text, hover effects)
+- Book creation and display
+- Title and subtitle messages
+- Sound effects and music
+- Boss bars and action bars
+
+### Network-Wide Player Data
+
+The droplet automatically tracks and stores essential player information:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| uniqueId | `String` | Player's Minecraft UUID |
+| name | `String` | Player's username |
+| displayName | `String?` | Player's custom display name (if set) |
+| firstLogin | `Long` | Timestamp of first network join |
+| lastLogin | `Long` | Timestamp of most recent join |
+| onlineTime | `Long` | Total time spent on network (in milliseconds) |
+| clientLanguage | `String` | Player's client language setting |
+| numericalClientVersion | `Int` | Minecraft protocol version number |
+| onlineMode | `Boolean` | Whether the player is authenticated with Mojang |
+| lastServer | `String` | Name of the last connected server |
+| online | `Boolean` | Current online status |
+| lastPlayerConnection | `PlayerConnection` | Details about the player's last connection |
+
+## Optional Integration
+
+While the player droplet provides powerful player management capabilities, it's completely optional within the SimpleCloud ecosystem. You can:
+- Use it alongside other SimpleCloud components for full integration
+- Implement it independently with your own server management solution
+- Skip it entirely if you don't need advanced player management
+
+<Note>
+The player droplet is designed to be modular. While it offers optimal player management when used with SimpleCloud, it can function independently of other SimpleCloud components.
+</Note>
+
+## API Documentation
+
+For detailed information about using the Player Droplet API, including code examples and implementation details, see our [Player API documentation](/api/droplet/player).
+

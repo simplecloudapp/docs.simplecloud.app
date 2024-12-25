@@ -30,7 +30,7 @@ export const sections = [
 
 # Controller API
 
-The Controller API is the central interface for managing your SimpleCloud infrastructure. It provides comprehensive control over server groups, individual servers, and real-time event handling through our Protocol Buffer based API. {{ className: 'lead' }}
+The Controller API is the central interface for managing your SimpleCloud infrastructure. It provides comprehensive control over server groups, individual servers, and real-time event handling through our Protocol Buffer based controllerApi. {{ className: 'lead' }}
 
 ## Installation
 
@@ -91,12 +91,12 @@ You can find the master token in `/components/.secrets/auth.secret` in your Simp
 
     ```kotlin {{ title: 'Environment Auth' }}
     // Uses CONTROLLER_SECRET from environment
-    val api = ControllerApi.createCoroutineApi()
+    val controllerApi = ControllercontrollerApi.createCoroutineApi()
     ```
 
     ```kotlin {{ title: 'Direct Auth' }}
     // Provide token directly
-    val api = ControllerApi.createCoroutineApi("your-auth-token")
+    val controllerApi = ControllercontrollerApi.createCoroutineApi("your-auth-token")
     ```
 
 </CodeGroup>
@@ -133,7 +133,7 @@ Creates a new server group template.
         properties = mapOf("gamemode" to "LOBBY")
     )
 
-    val createdGroup = api.getGroups().createGroup(group)
+    val createdGroup = controllerApi.getGroups().createGroup(group)
     ```
 
     ```java {{ title: 'Java' }}
@@ -150,7 +150,7 @@ Creates a new server group template.
         Map.of("gamemode", "LOBBY")
     );
 
-    api.getGroups().createGroup(group).thenAccept(createdGroup -> {
+    controllerApi.getGroups().createGroup(group).thenAccept(createdGroup -> {
         // Group created
     });
     ```
@@ -164,11 +164,11 @@ Retrieves a specific group by its name.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val lobbyGroup = api.getGroups().getGroupByName("lobby")
+    val lobbyGroup = controllerApi.getGroups().getGroupByName("lobby")
     ```
 
     ```java {{ title: 'Java' }}
-    api.getGroups().getGroupByName("lobby").thenAccept(group -> {
+    controllerApi.getGroups().getGroupByName("lobby").thenAccept(group -> {
         // Handle group
     });
     ```
@@ -182,11 +182,11 @@ Retrieves all configured groups.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val allGroups = api.getGroups().getAllGroups()
+    val allGroups = controllerApi.getGroups().getAllGroups()
     ```
 
     ```java {{ title: 'Java' }}
-    api.getGroups().getAllGroups().thenAccept(groups -> {
+    controllerApi.getGroups().getAllGroups().thenAccept(groups -> {
         // Handle groups
     });
     ```
@@ -200,11 +200,11 @@ Retrieves all groups of a specific type.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val serverGroups = api.getGroups().getGroupsByType(ServerType.SERVER)
+    val serverGroups = controllerApi.getGroups().getGroupsByType(ServerType.SERVER)
     ```
 
     ```java {{ title: 'Java' }}
-    api.getGroups().getGroupsByType(ServerType.SERVER).thenAccept(groups -> {
+    controllerApi.getGroups().getGroupsByType(ServerType.SERVER).thenAccept(groups -> {
         // Handle server groups
     });
     ```
@@ -222,7 +222,7 @@ Updates an existing group's configuration.
         maxPlayers = 200,
         maxMemory = 2048
     )
-    api.getGroups().updateGroup(updatedGroup)
+    controllerApi.getGroups().updateGroup(updatedGroup)
     ```
 
     ```java {{ title: 'Java' }}
@@ -231,7 +231,7 @@ Updates an existing group's configuration.
         .setMaxMemory(2048)
         .build();
 
-    api.getGroups().updateGroup(updatedGroup).thenAccept(group -> {
+    controllerApi.getGroups().updateGroup(updatedGroup).thenAccept(group -> {
         // Group updated
     });
     ```
@@ -245,11 +245,11 @@ Removes a server group.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    api.getGroups().deleteGroup("lobby")
+    controllerApi.getGroups().deleteGroup("lobby")
     ```
 
     ```java {{ title: 'Java' }}
-    api.getGroups().deleteGroup("lobby").thenAccept(deletedGroup -> {
+    controllerApi.getGroups().deleteGroup("lobby").thenAccept(deletedGroup -> {
         // Group deleted
     });
     ```
@@ -263,14 +263,14 @@ Starts a new server instance from a group template.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val server = api.getServers().startServer(
+    val server = controllerApi.getServers().startServer(
         groupName = "lobby",
         startCause = ServerStartCause.API_START
     )
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().startServer("lobby", ServerStartCause.API_START).thenAccept(server -> {
+    controllerApi.getServers().startServer("lobby", ServerStartCause.API_START).thenAccept(server -> {
         // Server started
     });
     ```
@@ -284,11 +284,11 @@ Retrieves all running servers.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val allServers = api.getServers().getAllServers()
+    val allServers = controllerApi.getServers().getAllServers()
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().getAllServers().thenAccept(servers -> {
+    controllerApi.getServers().getAllServers().thenAccept(servers -> {
         // Handle servers
     });
     ```
@@ -302,11 +302,11 @@ Retrieves a specific server by its unique ID.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val server = api.getServers().getServerById("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8")
+    val server = controllerApi.getServers().getServerById("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8")
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().getServerById("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8").thenAccept(server -> {
+    controllerApi.getServers().getServerById("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8").thenAccept(server -> {
         // Handle server
     });
     ```
@@ -320,11 +320,11 @@ Retrieves all servers belonging to a specific group.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val lobbyServers = api.getServers().getServersByGroup("lobby")
+    val lobbyServers = controllerApi.getServers().getServersByGroup("lobby")
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().getServersByGroup("lobby").thenAccept(servers -> {
+    controllerApi.getServers().getServersByGroup("lobby").thenAccept(servers -> {
         // Handle servers
     });
     ```
@@ -338,11 +338,11 @@ Retrieves a specific server by its group name and numerical ID.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val specificServer = api.getServers().getServerByNumerical("lobby", 1)
+    val specificServer = controllerApi.getServers().getServerByNumerical("lobby", 1)
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().getServerByNumerical("lobby", 1).thenAccept(server -> {
+    controllerApi.getServers().getServerByNumerical("lobby", 1).thenAccept(server -> {
         // Handle server
     });
     ```
@@ -356,11 +356,11 @@ Retrieves all servers of a specific type.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    val serverServers = api.getServers().getServersByType(ServerType.SERVER)
+    val serverServers = controllerApi.getServers().getServersByType(ServerType.SERVER)
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().getServersByType(ServerType.SERVER).thenAccept(servers -> {
+    controllerApi.getServers().getServersByType(ServerType.SERVER).thenAccept(servers -> {
         // Handle servers
     });
     ```
@@ -374,14 +374,14 @@ Updates the state of a server.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    api.getServers().updateServerState(
+    controllerApi.getServers().updateServerState(
         id = "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
         state = ServerState.AVAILABLE
     )
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().updateServerState("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8", ServerState.AVAILABLE).thenAccept(server -> {
+    controllerApi.getServers().updateServerState("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8", ServerState.AVAILABLE).thenAccept(server -> {
         // State updated
     });
     ```
@@ -395,7 +395,7 @@ Updates a custom property of a server.
 <CodeGroup>
 
     ```kotlin {{ title: 'Kotlin' }}
-    api.getServers().updateServerProperty(
+    controllerApi.getServers().updateServerProperty(
         id = "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
         key = "gameMode",
         value = "CAPTURE_THE_FLAG"
@@ -403,7 +403,7 @@ Updates a custom property of a server.
     ```
 
     ```java {{ title: 'Java' }}
-    api.getServers().updateServerProperty(
+    controllerApi.getServers().updateServerProperty(
         "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
         "gameMode",
         "CAPTURE_THE_FLAG"
@@ -422,13 +422,13 @@ Stops a running server instance.
 
     ```kotlin {{ title: 'Kotlin' }}
     // Stop by ID
-    api.getServers().stopServer(
+    controllerApi.getServers().stopServer(
         id = "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
         stopCause = ServerStopCause.API_STOP
     )
 
     // Stop by group and numerical ID
-    api.getServers().stopServer(
+    controllerApi.getServers().stopServer(
         groupName = "lobby",
         numericalId = 1,
         stopCause = ServerStopCause.API_STOP
@@ -437,12 +437,12 @@ Stops a running server instance.
 
     ```java {{ title: 'Java' }}
     // Stop by ID
-    api.getServers().stopServer("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8", ServerStopCause.API_STOP).thenAccept(server -> {
+    controllerApi.getServers().stopServer("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8", ServerStopCause.API_STOP).thenAccept(server -> {
         // Server stopped
     });
 
     // Stop by group and numerical ID
-    api.getServers().stopServer("lobby", 1L, ServerStopCause.API_STOP).thenAccept(server -> {
+    controllerApi.getServers().stopServer("lobby", 1L, ServerStopCause.API_STOP).thenAccept(server -> {
         // Server stopped
     });
     ```
