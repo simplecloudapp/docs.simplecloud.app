@@ -38,9 +38,9 @@ The following table shows all currently supported proxy implementations:
 
 ## Connection Targets
 
-Connection targets are matchers for servers in your network. Based on their server-name-matcher, they can match single servers or one / multiple server groups. Allowed server-name-matcher operations are listed under the next heading. Each target can have specific rules for server name matching as well as for availability for players:
+Connection targets are matchers for servers in your network. Based on their server name matcher, they can match single servers or one / multiple server groups. Each target can have specific rules for server name matching as well as for availability for players:
 
-The following example demonstrates, how a connections configuration could look like using different server-name-matchers and rules
+The following example demonstrates, how a connections configuration could look like using different server-name-matchers and rules:
 
 ```yaml
 connections:
@@ -71,17 +71,17 @@ connections:
        bypassPermission: "rank.admin" # Adds a permission that lets users bypass this check.
 ```
 
-### Matcher Operations
+### Server Name Matchers
 
-Matcher operations are used to either match server names for connections (see above) or perform environment variable rule checks (see below)
+Every connection requires a server name matcher, which matches servers in the network to it by name using various matching operations. A list of available operations is listed down below. Example:
 
-| Operation     | Description                   |
-| ------------- | ----------------------------- |
-| `EQUALS`      | Exact value match             |
-| `STARTS_WITH` | Value begins with given value |
-| `ENDS_WITH`   | Value ends with given value   |
-| `CONTAINS`    | Value contains given value    |
-| `REGEX`       | Value matches given RegEx     |
+```yaml
+# This server name matcher targets all servers that do not contain "exclusive" in their name.
+server-name-matcher:
+   operation: "CONTAINS" # The matcher operation to use - optional (default: STARTS_WITH).
+   value: "exclusive" # The value to compare to - required.
+   negate: true # Negates the outcome of the operation - optional (default: false).
+```
 
 ### Access Rules
 
@@ -95,23 +95,35 @@ A permission rule performs a permission check on the user and compares the outco
 ```yaml
  - type: "PERMISSION"
    name: "network.join.skyblock" # The permission to check for - required.
-   value: "true" # The expected outcome (true or false) - required.
-                 # true will expect the permission to be present, false does the opposite.
+   value: "true" # The expected outcome ("true" or "false") - required.
+                 # "true" will expect the permission to be present, "false" does the opposite.
    bypassPermission: "rank.admin" # A bypass permission for this check - optional.
 ```
 
 **`ENV` Type Rules**
 
-An environment variable rule compares an environment variable to a given value with a specified [matcher operation](#matcher-operations) (just not in the context of server names, but environment variable values of course).
+An environment variable rule compares an environment variable to a given value with a specified matcher operation:
 
 ```yaml
  - type: "ENV"
    name: "SKYBLOCK_JOIN_STATE" # The environment variable to compare - required.
    value: "maintenance" # The value to compare to - required.
    operation: "EQUALS" # The matcher operation to use - optional (default: STARTS_WITH).
-   negate: "true" # Negates the outcome of the operation - optional (default: false).
+   negate: true # Negates the outcome of the operation - optional (default: false).
    bypassPermission: "rank.admin" # A bypass permission for this check - optional.
 ```
+
+### Matcher Operations
+
+Matcher operations are used for server name matchers and environment variable rule checks.
+
+| Operation     | Description                   |
+| ------------- | ----------------------------- |
+| `EQUALS`      | Exact value match             |
+| `STARTS_WITH` | Value begins with given value |
+| `ENDS_WITH`   | Value ends with given value   |
+| `CONTAINS`    | Value contains given value    |
+| `REGEX`       | Value matches given RegEx     |
 
 ## Features
 
