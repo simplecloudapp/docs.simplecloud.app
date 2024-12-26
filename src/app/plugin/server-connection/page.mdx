@@ -207,10 +207,13 @@ connections:
       operation: "STARTS_WITH"
       value: "lobby"
  - name: "bedwars"
-   permission: "minigame.bedwars"
    server-name-matcher:
       operation: "STARTS_WITH"
       value: "bw"
+   rules:
+    - type: "PERMISSION"
+      name: "minigame.bedwars"
+      value: "true"
 
 network-join-target:
    enabled: true
@@ -253,10 +256,13 @@ connections:
       operation: "EQUALS"
       value: "lobby-main"
  - name: "premium-lobby"
-   permission: "vip.lobby"
    server-name-matcher:
       operation: "EQUALS"
       value: "lobby-premium"
+   rules:
+    - type: "PERMISSION"
+      name: "vip.lobby"
+      value: "true"
 
 network-join-target:
    enabled: true
