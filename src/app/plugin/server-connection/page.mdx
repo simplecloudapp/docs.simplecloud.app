@@ -127,6 +127,17 @@ Matcher operations are used for server name matchers and environment variable ru
 
 ## Features
 
+Every feature requires to have a list of target connections configured (`target-connections`). They have priorities to specify which connection is tried first. On top of the rules of the connection themselves, a list of server name matchers as from-criteria can be added in this context. They allow to only consider the connection if the previous server of the player matches the server name matchers. Here is an example of a target connection specification:
+
+```yaml
+ - name: "lobby" # The name of the connection to utilize - required.
+   priority: 0 # The priority of this connection - optional (default: 0).
+   from: # A list of server name matchers as from criteria -  optional.
+    - operation: "EQUALS" # The matcher operation to use - optional (default: STARTS_WITH).
+      value: "build-server" # The value to compare to - required.
+      negate: false # Negates the outcome of the operation - optional (default: false).
+```
+
 ### Network Join Handling
 
 Manages initial servers for player connections to your network. Configure which servers players will be connected to and handling of unavailable targets:
