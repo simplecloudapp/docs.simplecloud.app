@@ -38,7 +38,7 @@ The following table shows all currently supported proxy implementations:
 
 ## Connection Targets
 
-Connection targets are matchers for servers in your network. Based on their server-name-matcher, they can match single servers or one / multiple server groups. Each target can have specific rules for server name matching as well as for availability for players:
+Connection targets are matchers for servers in your network. Based on their server-name-matcher, they can match single servers or one / multiple server groups. Allowed server-name-matcher operations are listed under the next heading. Each target can have specific rules for server name matching as well as for availability for players:
 
 The following example demonstrates, how a connections configuration could look like using different server-name-matchers and rules
 
@@ -73,12 +73,15 @@ connections:
 
 ### Matcher Operations
 
+Matcher operations are used to either match server names for connections (see above) or perform environment variable rule checks (see below)
+
 | Operation     | Description                   |
 | ------------- | ----------------------------- |
-| `EQUALS`      | Exact server name match       |
-| `STARTS_WITH` | Server name begins with value |
-| `ENDS_WITH`   | Server name ends with value   |
-| `CONTAINS`    | Server name contains value    |
+| `EQUALS`      | Exact value match             |
+| `STARTS_WITH` | Value begins with given value |
+| `ENDS_WITH`   | Value ends with given value   |
+| `CONTAINS`    | Value contains given value    |
+| `REGEX`       | Value matches given RegEx     |
 
 ## Features
 
