@@ -172,18 +172,17 @@ Create custom commands for server navigation:
 
 ```yaml
 commands:
-  - name: "lobby"
-    aliases:
-      - "l"
-      - "hub"
-      - "quit"
-      - "leave"
-    target-connections:
-      - name: "lobby"
-        priority: 0
-    already-connected-message: "<red>You are already connected to the lobby!"
-    no-target-connections-found-message: "There are no lobby servers available at the moment."
-    permission: ""
+ - name: "lobby" # Name of the command - required.
+   aliases: # List of command aliases - optional. 
+    - "hub"
+   target-connections: # List of target connections (explained above) - required.
+    - name: "lobby"
+      priority: 0
+   # Message for when the player is already connected to a matching server of the target-connections - required.
+   already-connected-message: "<red>You are already connected to the lobby!"
+   # Kick message for when all target connections are full or access rules don't match for the player - required.
+   no-target-connections-found-message: "There are no lobby servers available at the moment."
+   permission: "command.lobby" # Permission of this command - optional.
 ```
 
 ## Priority System and Target Selection
