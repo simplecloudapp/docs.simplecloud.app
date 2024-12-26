@@ -144,28 +144,24 @@ Manages initial servers for player connections to your network. Configure which 
 
 ```yaml
 network-join-targets:
-  enabled: true # Wether this feature shall be enabled - optional (default: false).
-  # Kick message for when all target connections are full or access rules don't match for the player - required.
-  no-target-connections-found-message: "<color:red>Couldn't connect you to the network because no target servers are available."
-  target-connections: # List of target connections (explained above) - required.
+   enabled: true # Wether this feature shall be enabled - optional (default: false).
+   # Kick message for when all target connections are full or access rules don't match for the player - required.
+   no-target-connections-found-message: "<color:red>Couldn't connect you to the network because no target servers are available."
+   target-connections: # List of target connections (explained above) - required.
     - name: "lobby"
       priority: 0
 ```
 
-### Fallback System
+### Fallback Connections
 
 Handles player redirection when kicked from servers or during server shutdowns:
 
 ```yaml
 fallback-connections:
-  enabled: true
-  no-target-connections-found-message: "You have been disconnected from the network since you have been kicked and no fallback server are available."
-  target-connections:
-    - name: "skyblock-spawn"
-      priority: 1
-      from:
-        - operation: "STARTS_WITH"
-          value: "skyblock-island-"
+   enabled: true # Wether this feature shall be enabled - optional (default: false).
+   # Kick message for when all target connections are full or access rules don't match for the player - required.
+   no-target-connections-found-message: "You have been disconnected from the network since you have been kicked and no fallback server are available."
+   target-connections: # List of target connections (explained above) - required.
     - name: "lobby"
       priority: 0
 ```
