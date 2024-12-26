@@ -138,15 +138,16 @@ Every feature requires to have a list of target connections configured (`target-
       negate: false # Negates the outcome of the operation - optional (default: false).
 ```
 
-### Network Join Handling
+### Network Join Targets
 
-Manages initial servers for player connections to your network. Configure which servers players will be connected to and handling of unavailable targets:
+Manages initial servers for player connections to your network. Configure which servers players will be connected to upon join and handling of unavailable targets:
 
 ```yaml
-network-join-target:
-  enabled: true
-  no-target-connections-found-message: "Couldn't connect you to the network because no target servers are available."
-  target-connections:
+network-join-targets:
+  enabled: true # Wether this feature shall be enabled - optional (default: false).
+  # Kick message for when all target connections are full or access rules don't match for the player - required.
+  no-target-connections-found-message: "<color:red>Couldn't connect you to the network because no target servers are available."
+  target-connections: # List of target connections (explained above) - required.
     - name: "lobby"
       priority: 0
 ```
