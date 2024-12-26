@@ -83,6 +83,36 @@ Matcher operations are used to either match server names for connections (see ab
 | `CONTAINS`    | Value contains given value    |
 | `REGEX`       | Value matches given RegEx     |
 
+### Access Rules
+
+Each connection can have a set of rules which can restrict the access of players to it. An example of how rules can be used in practice is shown [above](#connection-targets).
+Every rule has one of two total types. The default type is `ENV`.
+
+**`PERMISSION` Type Rules**
+
+A permission rule performs a permission check on the user and compares the outcome to a given value using an `EQUALS` operation:
+
+```yaml
+ - type: "PERMISSION"
+   name: "network.join.skyblock" # The permission to check for - required.
+   value: "true" # The expected outcome (true or false) - required.
+                 # true will expect the permission to be present, false does the opposite.
+   bypassPermission: "rank.admin" # A bypass permission for this check - optional.
+```
+
+**`ENV` Type Rules**
+
+An environment variable rule compares an environment variable to a given value with a specified [matcher operation](#matcher-operations) (just not in the context of server names, but environment variable values of course).
+
+```yaml
+ - type: "ENV"
+   name: "SKYBLOCK_JOIN_STATE" # The environment variable to compare - required.
+   value: "maintenance" # The value to compare to - required.
+   operation: "EQUALS" # The matcher operation to use - optional (default: STARTS_WITH).
+   negate: "true" # Negates the outcome of the operation - optional (default: false).
+   bypassPermission: "rank.admin" # A bypass permission for this check - optional.
+```
+
 ## Features
 
 ### Network Join Handling
