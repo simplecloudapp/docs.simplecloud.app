@@ -40,7 +40,7 @@ Contributions to SimpleCloud are welcome and highly appreciated. However, before
 This repository is licensed under [Apache 2.0][license].
 
 <!-- LINK GROUP -->
-[banner]: https://github.com/simplecloudapp/branding/readme/banner/docs.png
+[banner]: https://raw.githubusercontent.com/simplecloudapp/branding/refs/heads/main/readme/banner/docs.png
 [docs]: https://docs.simplecloud.app
 [issue-bug-report]: https://github.com/theSimpleCloud/docs/issues/new?labels=bug&projects=template=01_BUG-REPORT.yml&title=%5BBUG%5D+%3Ctitle%3E
 [issue-docs-request]: https://github.com/theSimpleCloud/docs/discussions/new?category=documentation
