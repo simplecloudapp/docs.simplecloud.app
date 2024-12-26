@@ -198,49 +198,49 @@ commands:
 ## Common Configurations
 
 ### Game Server Setup
-Here's an example configuration for a minigame network:
+Here's an example configuration for a mini game network:
 
 ```yaml
 connections:
-  - name: "lobby"
-    server-name-matcher:
+ - name: "lobby"
+   server-name-matcher:
       operation: "STARTS_WITH"
       value: "lobby"
-  - name: "bedwars"
-    permission: "minigame.bedwars"
-    server-name-matcher:
+ - name: "bedwars"
+   permission: "minigame.bedwars"
+   server-name-matcher:
       operation: "STARTS_WITH"
       value: "bw"
 
 network-join-target:
-  enabled: true
-  target-connections:
+   enabled: true
+   target-connections:
     - name: "lobby"
       priority: 0
 
 fallback-connections:
-  enabled: true
-  target-connections:
+   enabled: true
+   target-connections:
     - name: "lobby"
       priority: 0
     - name: "bedwars" # Will fall back to another bedwars server if the player is kicked from a bedwars server and no lobby is available 
       priority: 1
       from:
-        - operation: "STARTS_WITH"
-          value: "bw"
+       - operation: "STARTS_WITH"
+         value: "bw"
 
 commands:
-  - name: "lobby"
-    aliases: ["hub", "l"]
-    target-connections:
-      - name: "lobby"
-        priority: 0
-  - name: "bedwars"
-    aliases: ["bw"]
-    permission: "minigame.bedwars"
-    target-connections:
-      - name: "bedwars"
-        priority: 0
+ - name: "lobby"
+   aliases: ["hub", "l"]
+   target-connections:
+    - name: "lobby"
+      priority: 0
+ - name: "bedwars"
+   aliases: ["bw"]
+   permission: "minigame.bedwars"
+   target-connections:
+    - name: "bedwars"
+      priority: 0
 ```
 
 ### Multi-Lobby System
@@ -248,32 +248,32 @@ Example for managing multiple lobby types:
 
 ```yaml
 connections:
-  - name: "main-lobby"
-    server-name-matcher:
+ - name: "main-lobby"
+   server-name-matcher:
       operation: "EQUALS"
       value: "lobby-main"
-  - name: "premium-lobby"
-    permission: "vip.lobby"
-    server-name-matcher:
+ - name: "premium-lobby"
+   permission: "vip.lobby"
+   server-name-matcher:
       operation: "EQUALS"
       value: "lobby-premium"
 
 network-join-target:
-  enabled: true
-  target-connections:
+   enabled: true
+   target-connections:
     - name: "premium-lobby"
       priority: 0
     - name: "main-lobby"
       priority: 1
 
 commands:
-  - name: "lobby"
-    aliases: ["hub"]
-    target-connections:
-      - name: "premium-lobby"
-        priority: 0
-      - name: "main-lobby"
-        priority: 1
+ - name: "lobby"
+   aliases: ["hub"]
+   target-connections:
+    - name: "premium-lobby"
+      priority: 0
+    - name: "main-lobby"
+      priority: 1
 ```
 
 ## Advanced Usage
