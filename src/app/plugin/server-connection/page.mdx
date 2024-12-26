@@ -144,6 +144,10 @@ Here is an example of a target connection specification:
       negate: false # Negates the outcome of the operation - optional (default: false).
 ```
 
+<Note>
+   All message variables of the below features support [**MiniMessage format**](https://docs.advntr.dev/minimessage/format#standard-tags) for styling.
+</Note>
+
 ### Network Join Targets
 
 Manages initial servers for player connections to your network. Configure which servers players will be connected to upon join and handling of unavailable targets:
@@ -189,43 +193,6 @@ commands:
    # Kick message for when all target connections are full or access rules don't match for the player - required.
    no-target-connections-found-message: "There are no lobby servers available at the moment."
    permission: "command.lobby" # Permission of this command - optional.
-```
-
-## Priority System and Target Selection
-
-All above features support priority levels for their target-connections:
-- Lower numbers indicate higher priority
-- The system tries the highest priority (0) first
-- Falls back to lower priorities if needed (e.g.: insufficient permissions or no available target servers)
-
-Target-connections can also specify a from-criteria which works exactly like the server-name-matcher of connections. It allows to only consider a target if the name of the server the player was previously on matches specified criteria.
-```yaml
-target-connections:
-  - name: "lobby"
-    priority: 0
-    from:
-      - operation: "STARTS_WITH"
-        value: "bw"
-```
-
-## Message Customization
-
-Each feature supports custom messages for various scenarios. [**MiniMessage**](https://docs.advntr.dev/minimessage/format#standard-tags) format is supported for styling.:
-
-```yaml
-# Network join messages
-network-join-target:
-  no-target-connections-found-message: "<green>Custom message"
-
-# Fallback messages
-fallback-connections:
-  no-target-connections-found-message: "<bold>Custom message"
-
-# Command messages
-commands:
-  - name: "lobby"
-    already-connected-message: "Custom message"
-    no-target-connections-found-message: "Custom message"
 ```
 
 ## Common Configurations
