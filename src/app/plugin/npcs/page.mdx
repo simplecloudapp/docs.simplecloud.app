@@ -105,15 +105,15 @@ holograms:
     start-height: 2.073
     lores:
       - text: <group_name> - <property:server-software>
-        billboard: "CENTER"
-        alignment: "CENTER"
+        billboard: CENTER
+        alignment: CENTER
       - text: waiting for <player_count:available> players
-        billboard: "CENTER"
-        alignment: "CENTER"
+        billboard: CENTER
+        alignment: CENTER
       - text: "<server_count:ingame> Servers ingame"
 actions:
-  - player-interaction: "LEFT_CLICK"
-    action: "OPEN_INVENTORY"
+  - player-interaction: LEFT_CLICK
+    action: OPEN_INVENTORY
     options:
       - key: inventory.name
         value: quickjoin.bedwars
@@ -123,8 +123,8 @@ actions:
         value: "3"
       - key: sound.volume
         value: "2"
-  - player-interaction: "RIGHT_CLICK"
-    action: "TRANSFER_TO_SERVER"
+  - player-interaction: RIGHT_CLICK
+    action: TRANSFER_TO_SERVER
     options:
       - key: server.ip
         value: demo-server.com
