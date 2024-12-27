@@ -11,14 +11,14 @@ export const metadata = {
 SimpleCloud v3 has a new and more customizable structure. We have encapsulated all the core components to make it easier to extend your setup. This means you can easily replace all our [droplets](/droplet) and [plugins](/plugin) with your own implementations. {{ className: 'lead' }}
 
 <img
-    src={"https://github.com/theSimpleCloud/branding/blob/main/docs/images/structure.png?raw=true"}
+    src={"https://github.com/simplecloudapp/branding/blob/main/docs/images/structure.png?raw=true"}
     alt=""
     className="w-full aspect-video object-cover"
 />
 
 ## Key Components
 - **Controller**: The heart of v3, managing server groups, online servers, and communicating with Server Hosts.
-- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the CLI, you can send commands to the controller or install and manage droplets.
+- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the [CLI](/cli), you can send commands to the controller or install and manage droplets.
 - **Server Host Droplet**: Handles server startup/shutdown with templates, running on Screens or Docker containers.
 - **Droplets & Plugins**:
   - **Droplets**: Microservices for non-Minecraft tasks like player data (Player Droplet) or stats (Metrics Droplet).
@@ -34,7 +34,9 @@ SimpleCloud has its core components that are needed, but they can be installed a
 │   ├── .secrets
 │   ├── auto-updater
 │   │   ├── auto-updater.jar
-│   │   └── versions.yml
+│   │   ├── application.yml
+│   │   ├── versions.yml
+│   │   └── current_version.txt
 │   ├── controller
 │   │   ├── application.yml
 │   │   ├── controller.properties
@@ -50,12 +52,14 @@ SimpleCloud has its core components that are needed, but they can be installed a
 │   │   └── ...
 │   └── scripts
 │       ├── components
-│       │   ├── controller.sh
-│       │   └── serverhost.sh
-│       ├── all.sh
-│       ├── run.bat
-│       ├── shutdown.bat
-│       └── utils.sh
+│       │   ├── controller.lua
+│       │   ├── envoy.lua
+│       │   └── serverhost.lua
+│       ├── lib
+│       │   ├── component.lua
+│       │   ├── process.lua
+│       │   └── auto_updater.lua
+│       └── common.lua
 ├── groups
 │   ├── proxy.yml
 │   └── lobby.yml
@@ -65,76 +69,118 @@ SimpleCloud has its core components that are needed, but they can be installed a
 │   └── lobby
 │       └── ...
 └── running
-    ├── proxy
-    │   └── proxy-1
-    │       └── ...
-    └── lobby
-        └── lobby-1
-            └── ...
+├── proxy
+│   └── proxy-1
+│       └── ...
+└── lobby
+└── lobby-1
+└── ...
 ```
 
 <Note>
     Keep in mind that if you change your file structure, there might be some things that will not work with our [CLI](/cli).
 </Note>
 
+## Understanding Components
+
+SimpleCloud v3 is structured into components - a broad category that includes both core system elements and [dropelts](/droplet). These components serve as the building blocks of the system, encompassing essential elements like the [Controller](/controller), [Envoy](https://www.envoyproxy.io/) (necessary for the Dashboard), the Auto-updater, and the [CLI](/cli), alongside [droplets](/droplet).
+
+We chose to use the term "components" to reflect this inclusive scope. This generic terminology allows us to consistently refer to all parts of the system, whether they are core elements or [droplets](/droplet).
+
 ## Auto-Updater
 
-The auto-updater is a crucial part of SimpleCloud, ensuring that all components stay up-to-date with the latest features and security patches. It resides in the `components/auto-updater` directory and manages version control through `versions.yml`. It is executed through the scripts in the `components/scripts` directory.
+The auto-updater is a crucial part of SimpleCloud, ensuring that all components stay up-to-date with the latest features and security patches. It resides in the `components/auto-updater` directory and manages version control through `versions.yml`. The auto-updater is configured through its own `application.yml` file and updates itself before updating other components.
 
 ## Scripts
 
-We decided to use a handful of scripts to make it easier to interact with SimpleCloud, and also to ensure you don't depend on our [CLI](/cli). You can find all scripts in the `components/scripts` directory. Each component has its own script for starting and stopping, and a `.properties` file to configure it. This setup allows you to easily configure your system.
+SimpleCloud uses Lua scripts as a dynamic component management system that enables seamless integration between the [CLI](/cli) and various components. When you execute a [CLI](/cli) command, these scripts act as bridges between the components and the [CLI](/cli), providing standardized methods for component control.
 
-### Script Commands
+### How Scripts Work
 
-Every script in `components/scripts/components` requires a sub-command: `start`, `stop`, or `status`. These commands allow you to manage the lifecycle of each component.
+When a [CLI](/cli) command is executed, it runs all scripts in the `components/scripts` directory. Each script must return three essential methods that the [CLI](/cli) can call:
+- **start**: Launches the component
+- **stop**: Terminates the component
+- **status**: Checks the component's current state
 
-### all.sh Script
+This design makes the [CLI](/cli) dynamically extendable - you can integrate any standalone program (component or [droplet](/droplet)) into SimpleCloud by creating a corresponding Lua script that implements these methods.
 
-The `all.sh` script is used to manage all components at once. It supports the same sub-commands (`start`, `stop`, `status`) to handle batch operations.
+### Script Structure
 
-If any component fails to start, or is already running, the script skips it and continues with the next component. The scripts return a json object with the status of each component.
+The scripts are organized into two main directories:
+- **components/scripts/components/**: Contains individual component scripts
+- **components/scripts/lib/**: Contains shared libraries and utilities
 
 ### Example Script
 
-Here is an example of how the [controller](/controller) script and `.properties` file look:
+Here's an example of how a component script looks using our component factory:
 
-```bash {{title: "components/scripts/components/controller.sh"}}
-#!/bin/bash
+```lua {{title: "components/scripts/components/controller.lua"}}
+local component = require("component")
 
-SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-ROOT_DIR=$(dirname "$(dirname "$SCRIPT_DIR")")
-source "$ROOT_DIR/scripts/utils.sh"
-
-controller_session="simplecloud-controller"
-controller_dir="$ROOT_DIR/controller"
-controller_launcher="$controller_dir/controller-runtime.jar"
-
-application_config="$controller_dir/application.yml"
-versions_config="$ROOT_DIR/auto-updater/versions.yml"
-current_version_file="$controller_dir/current_version.txt"
-auto_updater_jar="$ROOT_DIR/auto-updater/auto-updater.jar"
-
-controller_cmd="java -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:CompileThreshold=100 -XX:+UnlockExperimentalVMOptions -XX:+UseCompressedOops -Xmx512m -Xms256m -jar $controller_launcher"
-
-case "$1" in
-    start)
-        run_auto_updater "$auto_updater_jar" "$application_config" "$versions_config" "$current_version_file" "dev" "true"
-        start_screen_if_not_running "$controller_session" "$controller_dir" "$controller_cmd"
-        ;;
-    stop)
-        stop_java_process "controller-runtime.jar"
-        ;;
-    status)
-        get_component_status "controller-runtime.jar" "$controller_session" "$application_config" "$current_version_file"
-        ;;
-    *)
-        echo "Usage: $0 {start|stop|status}"
-        exit 1
-        ;;
-esac
+return component.create({
+    name = "controller",
+    session = "simplecloud-controller",
+    jar = "controller-runtime.jar"
+})
 ```
 
+`component.create` returns the `start`, `stop`, and `status` methods that the [CLI](/cli) can call to manage the component.
+
+### Creating Custom Components
+
+You can easily create new components by adding a new Lua script in the `components/scripts/components` directory:
+
+```lua {{title: "components/scripts/components/custom.lua"}}
+local component = require("component")
+
+return component.create({
+    name = "custom",
+    session = "simplecloud-custom",
+    jar = "custom-runtime.jar",
+    -- Optional: Custom Java options
+    java_opts = {
+        "-Xmx1g",
+        "-Xms512m",
+        "-XX:+UseG1GC",
+        -- Add more options as needed
+    }
+})
+```
+
+### Creating Components that are not based on Java
+
+We also support creating components that are not based on Java. It's basically the same as above, but you need to specify the `command` field instead of `jar`. Here's an example on how to do so:
+
+```lua {{title: "components/scripts/components/custom_no_jvm.lua"}}
+local component = require("component")
+
+return component.create({
+    name = "envoy",
+    session = "simplecloud-envoy",
+    command = "envoy -c envoy-bootstrap.yaml"
+})
+```
+
+### Auto-Updater Configuration
+
+The auto-updater has its own configuration:
+
+```yaml {{title: "components/controller/controller.yml"}}
+github-repository: theSimpleCloud/v3-releases
+files:
+  - release-file: controller-runtime.jar
+    output-file: ../controller/controller-runtime.jar
+  - release-file: controller-api.jar
+    output-file: ../libs/controller-api.jar
+```
+
+### Component Properties
+
+Every component is built and configured to use properties files for configuration. The properties file is located in the `components` folder and named `{component}.properties`.
+
+If you want to create an own component, feel free to structure it as you like. We like to use a `.properties` file for configuration and a `.yml` file for the configuration of the auto-updater.
+
+Here's an example of a properties file:
 ```properties {{title: "components/controller/controller.properties"}}
 DATABASE_URL=jdbc:sqlite:database.db
 GROUPS_PATH=../../groups
@@ -145,3 +191,13 @@ GRPC_HOST=0.0.0.0
 # PUBSUB_GRPC_PORT=5817
 AUTH_SECRET_PATH=../.secrets/auth.secret
 ```
+
+### Cross-Platform Support
+
+The scripts automatically handle platform-specific differences:
+- **Unix**: Uses screen sessions for process management
+- **Windows**: Uses background processes and batch files
+
+<Note>
+    The scripts are designed to work seamlessly across platforms. Make sure you have Java installed on your system. On Unix systems, the `screen` utility is required for process management.
+</Note>
