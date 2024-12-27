@@ -260,6 +260,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Overview', href: '/droplet' },
       { title: 'Server Host Droplet', href: '/droplet/serverhost' },
       { title: 'Player Droplet', href: '/droplet/player' },
+      { title: 'Metrics Droplet', href: '/droplet/metrics', tag: "Soon", tagColor: "rose" },
       { title: 'Resource Pack Droplet', href: '/droplet/resourcepack', tag: "Soon", tagColor: "rose" },
     ],
   },

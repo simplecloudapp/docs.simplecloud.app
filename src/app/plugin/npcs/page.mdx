@@ -1,4 +1,4 @@
-import {Button, DangerNote, Note} from "../../../components/mdx";
+import {Button, CodeGroup, Note} from "../../../components/mdx";
 
 export const metadata = {
     title: 'NPCs Plugin',
@@ -64,22 +64,6 @@ Here you will find all available actions and their options:
 | `transfer_to_server`  | server.ip, server.port | Send a player to an external server with the transfer method |
 
 
-## Commands
-| Command                                                  | Description                                               |
-|----------------------------------------------------------|-----------------------------------------------------------|
-| `/scnpc create <name>`                                   | Create a NPC with our own NPC implementation              |
-| `/scnpc <id> interact <type> setAction <action>`         | Set Actions, type can be `right_click` or `left_click`    |
-| `/scnpc <id> interact <type> setOption <key> <value>`    | Set options, type can be `right_click` or `left_click`    |
-| `/scnpc <id> interact <type> removeOption <key> <value>` | Remove options, type can be `right_click` or `left_click` |
-| `/scnpc <id> setOption <key> <value>`                    | Set global options                                        |
-| `/scnpc <id> removeOption <key> <value>`                 | Remove global options                                     |
-| `/scnpc <id> setHologramGroup <groupName>`               | Set the Group for the Hologram Placeholders               |
-
-## Permissions
-| Permission                | Description          |
-| ------------------------- | -------------------- |
-| `simplecloud.command.npc` | For `/scnps` Command |
-
 ## Creating a NPC
 
 First, make sure that the NPC plugin is installed on your server, and if you want to use a supported NPC system, ensure that it is also installed on the server.
@@ -99,10 +83,10 @@ If you want to use our NPC plugin as a standalone, create an NPC with the follow
 When you create an NPC using our plugin or another plugin, a separate configuration for each new NPC will be generated in the plugin folder.
 
 ```yaml
+version: '1.0'
 id: bedwars
 holograms:
-  default:
-    start-height: 2.073
+  - start-height: 2.073
     lores:
       - text: <group_name> - <property:server-software>
         billboard: CENTER
@@ -115,32 +99,21 @@ actions:
   - player-interaction: LEFT_CLICK
     action: OPEN_INVENTORY
     options:
-      - key: inventory.name
-        value: quickjoin.bedwars
-      - key: play.sound
-        value: block.chest.open
-      - key: sound.pitch
-        value: "3"
-      - key: sound.volume
-        value: "2"
+      inventory.name: bedwars
+      play.sound: block.chest.open
+      sound.pitch: 3
+      sound.volume: 2
   - player-interaction: RIGHT_CLICK
     action: TRANSFER_TO_SERVER
     options:
-      - key: server.ip
-        value: demo-server.com
-      - key: server.port
-        value: "25565"
-      - key: send.actionbar
-        value: abda
+      server.ip: demo-server.com
+      server.port: 25565
+      send.actionbar: abda
 options:
-  - key: hologram.placeholder.group
-    value: lobby
-  - key: send.message
-    value: <rainbow>Some cool text here
-  - key: send.title
-    value: title text
-  - key: send.subtitle
-    value: subtitle text
+  hologram.placeholder.group: lobby
+  send.message: <rainbow>Some cool text here
+  send.title: title
+  send.subtitle: some cool subtitle
 ```
 Configure the NPC either in the NPC configuration file or through commands. 
 The configuration will be automatically reloaded if any changes are made to the file.
@@ -156,20 +129,124 @@ Options are sent as feedback when an action is performed. You can set the follow
 | `send.subtitle`  | Sends a subtitle                |
 | `play.sound`     | Plays a sound                   |
 
-// Gif 
+<img
+    src={"https://github.com/simplecloudapp/branding/blob/main/media/plugin/npcs/npc.png?raw=true"}
+    alt=""
+    className="w-full"
+    style={{
+      borderRadius: '1rem',
+      border: '1px solid rgba(255, 255, 255, 0.1)', 
+    }}
+/>
 
 ### Configure Inventories
 If you specify the action `OPEN_INVENTORY`, you need to reference an inventory from the plugin folder under `inventories/`. Configure inventories in the configuration file as follows:
 ```yaml
-// Inventory Config
+version: '1.0'
+id: quickjoin.bedwars
+title: <#ffffff>Bedwars
+rows: 6
+pagination:
+  listed-group-name: bedwars
+  server-name-pattern: <group_name>-<numerical_id>
+  state-items:
+    PREPARING: starting_pagination_item
+    STARTING: starting_pagination_item
+    AVAILABLE: available_pagination_item
+    INGAME: ingame_pagination_item
+  from-slot:
+    row: 1
+    column: 1
+  to-slot:
+    row: 3
+    column: 7
+  excluded-slots:
+    - row: 1
+      column: 8
+    - row: 2
+      column: 0
+    - row: 2
+      column: 8
+    - row: 3
+      column: 0
+  next-page-item:
+    item: next_pagination_item
+    slot:
+      row: 4
+      column: 0
+    increments:
+      LEFT: 1
+  previous-page-item:
+    item: previous_pagination_item
+    slot:
+      row: 4
+      column: 0
+    increments:
+      LEFT: -1
+static-slots:
+  - item: red_previous_pagination_item
+    slots:
+      - row: 5
+        column: 0
+  - item: red_next_pagination_item
+    slots:
+      - row: 5
+        column: 8
+items:
+  - id: next_pagination_item
+    material: LIME_STAINED_GLASS_PANE
+    display-name: <green>Next Page
+  - id: previous_pagination_item
+    material: LIME_STAINED_GLASS_PANE
+    display-name: <green>Previous Page
+  - id: red_next_pagination_item
+    material: RED_STAINED_GLASS_PANE
+    display-name: <red>Next Page
+  - id: red_previous_pagination_item
+    material: RED_STAINED_GLASS_PANE
+    display-name: <red>Previous Page
+  - id: starting_pagination_item
+    material: ORANGE_BANNER
+    display-name: <group_name> <numerical_id>
+  - id: available_pagination_item
+    material: LIME_BANNER
+    display-name: <group_name> <numerical_id>
+    lores:
+      - "<gray>Players: <#38bdf8><player_count><dark_gray><dark_gray>/<#38bdf8><max_players>"
+      - ""
+      - "<gray>Version: <#a3a3a3><property:server-software> <property:minecraft-version>"
+      - "<gray>Template: <#a3a3a3><property:template-id>"
+  - id: ingame_pagination_item
+    material: BROWN_BANNER
+    display-name: <group_name> <numerical_id>
 ```
 
-// Image Inventory
+<img
+    src={"https://github.com/simplecloudapp/branding/blob/main/media/plugin/npcs/inventory.png?raw=true"}
+    alt=""
+    className="w-full"
+    style={{
+      borderRadius: '1rem',
+      border: '1px solid rgba(255, 255, 255, 0.1)', 
+    }}
+/>
 
-### Configure Holograms
-If you want to create a hologram above the NPC, use our [Placeholders plugin](/plugin/placeholder).
+## Commands
+| Command                                                  | Description                                               |
+|----------------------------------------------------------|-----------------------------------------------------------|
+| `/scnpc create <name>`                                   | Create a NPC with our own NPC implementation              |
+| `/scnpc <id> interact <type> setAction <action>`         | Set Actions, type can be `right_click` or `left_click`    |
+| `/scnpc <id> interact <type> setOption <key> <value>`    | Set options, type can be `right_click` or `left_click`    |
+| `/scnpc <id> interact <type> removeOption <key> <value>` | Remove options, type can be `right_click` or `left_click` |
+| `/scnpc <id> setOption <key> <value>`                    | Set global options                                        |
+| `/scnpc <id> removeOption <key> <value>`                 | Remove global options                                     |
+| `/scnpc <id> setHologramGroup <groupName>`               | Set the Group for the Hologram Placeholders               |
+| `/scnpc createInventory <name>`                          | Create a new Inventory Configuration                      |
 
-// Gif Preview
+## Permissions
+| Permission                | Description          |
+| ------------------------- | -------------------- |
+| `simplecloud.command.npc` | For `/scnps` Command |
 
 ## What's Next?
 

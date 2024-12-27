@@ -51,12 +51,14 @@ frames:
       - "<group>-<numerical-id>"  # Defines additional frames to animate the text.
 ```
 
+// TODO: Loading Sign Gif
+
 ## Available Sign Rules
 
 Each rule corresponds to a specific server state or condition and determines how the sign behaves:
 
-| **Rule**        | **Description**                                                 | **Condition**                                                                            |
-|-----------------|-----------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| **Rule**        | **Description**                                                 | **State**                                                                                |
+| --------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | **STARTING**    | Applies to servers in the `STARTING` state.                     | The server state is `STARTING`.                                                          |
 | **OFFLINE**     | Indicates servers that are not currently active.                | The server is `null` (does not exist in the network).                                    |
 | **MAINTENANCE** | For servers under maintenance mode.                             | The server is in the `AVAILABLE` state and has a property `"maintenance"` set to `true`. |
@@ -101,6 +103,8 @@ frames:
       - "Players: %player-count%/%max-players%"
       - "State: %state%"
 ```
+
+// TODO: Sign Layout Image
 
 ## Commands
 
