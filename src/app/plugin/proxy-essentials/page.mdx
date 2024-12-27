@@ -6,7 +6,7 @@ export const metadata = {
     description: 'Enhance your server network with customizable MOTD and Tablist features'
 }
 
-# Proxy Plugin
+# Proxy Essentials Plugin
 
 The Proxy Plugin enhances your server network with customizable MOTD (Server Info) and Tablist features, offering extensive customization options through simple configuration files. All settings are synchronized across all proxies. {{ className: 'lead' }}
 
@@ -30,6 +30,17 @@ If you would like to add support for a missing server software, feel free to sub
 1. Download the plugin for your proxy software
 2. Place it in your proxy template's plugins folder
 3. Start your proxy server
+4. Set a joinstate for your group (e.g. `maintenance`)
+
+## Commands
+
+| **Command**               | **Description**                                                                                    |
+|------------------------------|----------------------------------------------------------------------------------------------------|
+| `joinstate group <group> <join-state>`            | Set the joinstate for a group. |
+| `joinstate server <group> <numericalId> <join-state>`          | Set the joinstate for a server. |
+| `joinstate help`          | Show the joinstate command help. |
+| `joinstate groups`          | Show all groups with their joinstates. |
+| `joinstate states`          | Show all joinstates. |
 
 ## Features
 
@@ -148,6 +159,8 @@ The plugin provides events for custom modifications:
 |------------------------------|----------------------------------------------------------------------------------------------------|
 | `simplecloud.command.joinstate.*`            | Allows the user to use all joinstate commands. |
 | `simplecloud.command.joinstate.help`          | Allows the user to see the joinstate command help. |
+| `simplecloud.command.joinstate.groups`          | Allows the user to see all groups with their joinstates. |
+| `simplecloud.command.joinstate.states`          | Allows the user to see all joinstates. |
 | `simplecloud.command.joinstate.server`       | Allows the user to set the joinstate for a server. |
 | `simplecloud.command.joinstate.group.` | Allows the user to set the joinstate for a group and all servers in the group. |
 
