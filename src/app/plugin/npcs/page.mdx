@@ -1,4 +1,4 @@
-import {Button, DangerNote, Note} from "../../../components/mdx";
+import {Button, CodeGroup, Note} from "../../../components/mdx";
 
 export const metadata = {
     title: 'NPCs Plugin',
@@ -74,6 +74,7 @@ Here you will find all available actions and their options:
 | `/scnpc <id> setOption <key> <value>`                    | Set global options                                        |
 | `/scnpc <id> removeOption <key> <value>`                 | Remove global options                                     |
 | `/scnpc <id> setHologramGroup <groupName>`               | Set the Group for the Hologram Placeholders               |
+| `/scnpc createInventory <name>`                          | Create a new Inventory Configuration                      |
 
 ## Permissions
 | Permission                | Description          |
@@ -161,7 +162,82 @@ Options are sent as feedback when an action is performed. You can set the follow
 ### Configure Inventories
 If you specify the action `OPEN_INVENTORY`, you need to reference an inventory from the plugin folder under `inventories/`. Configure inventories in the configuration file as follows:
 ```yaml
-// Inventory Config
+id: quickjoin.bedwars
+title: <#ffffff>Bedwars
+rows: 6
+pagination:
+  listed-group-name: bedwars
+  server-name-pattern: <group_name>-<numerical_id>
+  state-items:
+    PREPARING: starting_pagination_item
+    STARTING: starting_pagination_item
+    AVAILABLE: available_pagination_item
+    INGAME: ingame_pagination_item
+  from-slot:
+    row: 1
+    column: 1
+  to-slot:
+    row: 3
+    column: 7
+  excluded-slots:
+    - row: 1
+      column: 8
+    - row: 2
+      column: 0
+    - row: 2
+      column: 8
+    - row: 3
+      column: 0
+  next-page-item:
+    item: next_pagination_item
+    slot:
+      row: 4
+      column: 0
+    increments:
+      LEFT: 1
+  previous-page-item:
+    item: previous_pagination_item
+    slot:
+      row: 4
+      column: 0
+    increments:
+      LEFT: -1
+static-slots:
+  - item: red_previous_pagination_item
+    slots:
+      - row: 5
+        column: 0
+  - item: red_next_pagination_item
+    slots:
+      - row: 5
+        column: 8
+items:
+  - id: next_pagination_item
+    material: LIME_STAINED_GLASS_PANE
+    display-name: <green>Next Page
+  - id: previous_pagination_item
+    material: LIME_STAINED_GLASS_PANE
+    display-name: <green>Previous Page
+  - id: red_next_pagination_item
+    material: RED_STAINED_GLASS_PANE
+    display-name: <red>Next Page
+  - id: red_previous_pagination_item
+    material: RED_STAINED_GLASS_PANE
+    display-name: <red>Previous Page
+  - id: starting_pagination_item
+    material: ORANGE_BANNER
+    display-name: <group_name> <numerical_id>
+  - id: available_pagination_item
+    material: LIME_BANNER
+    display-name: <group_name> <numerical_id>
+    lores:
+      - "<gray>Players: <#38bdf8><player_count><dark_gray><dark_gray>/<#38bdf8><max_players>"
+      - ""
+      - "<gray>Version: <#a3a3a3><property:server-software> <property:minecraft-version>"
+      - "<gray>Template: <#a3a3a3><property:template-id>"
+  - id: ingame_pagination_item
+    material: BROWN_BANNER
+    display-name: <group_name> <numerical_id>
 ```
 
 // Image Inventory
