@@ -18,6 +18,21 @@ The registration plugin updates registered proxy child servers according to the 
     <>Download</>
 </Button>
 
+## Supported Server Softwares
+
+The following table shows all currently supported proxy implementations:
+
+| Software   | This Plugin | Server API |
+| ---------- | ----------- | ---------- |
+| Velocity   | Yes         | Yes        |
+| Bungeecord | Yes         | Yes        |
+| Gate       | Planned     | Yes        |
+| Other*     | Varies      | No         |
+
+<Note>
+    *Support for other proxies is possible through custom implementation if the [server API](/api#server) is available in your preferred [programming language](/api).
+</Note>
+
 ## Quick Setup
 
 1. Download the plugin for your proxy software
@@ -32,7 +47,7 @@ The configuration file is located at `config.yml` in the plugin's data folder:
 ```yml
 # Server naming pattern
 serverNamePattern: "%GROUP_NAME%-%NUMERICAL_ID%"
-# Available placeholders:
+# Available placeholder:
 #   %GROUP_NAME% - Group name
 #   %ID% - Unique server ID
 #   %NUMERICAL_ID% - Numerical server ID
@@ -48,21 +63,6 @@ additionalServers:
     address: "127.0.0.1"
     port: 225555
 ```
-
-## Supported Proxies
-
-The following table shows all currently supported proxy implementations:
-
-| Proxy type | Server API | Plugin | Out of the box support |
-|------------|------------|--------|----------------------|
-| Velocity   | Yes        | Yes    | Yes                  |
-| Bungeecord | Yes        | Yes    | Yes                  |
-| Gate       | Yes        | Planned| Planned              |
-| Other*     | Varies     | No     | No                   |
-
-<Note>
-    *Support for other proxies is possible through custom implementation if the [server API](/api#server) is available in your preferred [programming language](/api).
-</Note>
 
 ## Custom Implementation
 

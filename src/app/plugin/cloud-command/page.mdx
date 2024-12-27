@@ -12,39 +12,38 @@ The Cloud Command Plugin empowers your network with in-game proxy commands, enab
     <>Download</>
 </Button>
 
+## Supported Server Softwares
+
+The following table shows all currently supported proxy implementations:
+
+| Software   | This Plugin |
+| ---------- | ----------- |
+| Velocity   | Yes         |      
+| Bungeecord | Yes         | 
+
+If you would like to add support for a missing server software, feel free to submit a pull request on [GitHub](https://github.com/theSimpleCloud/command-plugin).
+
 ## Quick Setup
 
 1. Download the plugin for your proxy software
 2. Place it in your proxy template's plugin folder
 3. Start your proxy server
 
-## Start Command
-Starts a server from a specified group
+## Commands
 
-```
-cloud start <group>
-```
+{/* Use <> needed args and [] for optional args */}
+| Command                           | Description                                              |
+| --------------------------------- | -------------------------------------------------------- |
+| `/cloud start <group>`            | Starts a server from a specified group                   |
+| `/cloud stop <group> <id>`        | Stops a specific server from a specified group           |
+| `/cloud get servers [group] [id]` | Retrieves one or multiple servers from a specified group |
+| `/cloud get groups [group]`        | Retrieves one or all groups                              |
 
-## Stop Command
-Stops a specific server from a specified group.
-
-```
-cloud stop <group> <id>
-```
-
-## Get Servers Command
-Retrieves one or multiple servers from a specified group
-
-```
-cloud get servers [group] [id]
-```
-
-## Get Groups Command
-Retrieves one or all groups
-
-```
-cloud get groups [group]
-```
+<img
+    src={"https://github.com/simplecloudapp/branding/blob/main/docs/images/cloud-command.png?raw=true"}
+    alt=""
+    className="w-full"
+/>
 
 ## What's Next?
 

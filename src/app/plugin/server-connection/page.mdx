@@ -1,17 +1,34 @@
-import {Button} from "../../../components/mdx";
+import { Button } from "../../../components/mdx";
 
 export const metadata = {
-    title: 'Server Connection Plugin',
-    description: 'Manage player connections and server navigation in your network'
+   title: 'Server Connection Plugin',
+   description: 'Manage player connections and server navigation in your network'
 }
 
 # Server Connection Plugin
 
 The Server Connection Plugin provides comprehensive player connection management for your network, including network join handling, fallback servers, and navigation commands. {{ className: 'lead' }}
 
-<Button href="https://github.com/theSimpleCloud/server-connection-plugin/releases" arrow="right">
-    <>Download</>
-</Button>
+<div className="not-prose">
+   <Button href="https://github.com/theSimpleCloud/server-connection-plugin/releases" arrow="right">
+      <>Download</>
+   </Button>
+</div>
+
+## Supported Server Softwares
+
+The following table shows all currently supported proxy implementations:
+
+| Software   | This Plugin | Server API |
+| ---------- | ----------- | ---------- |
+| Velocity   | Yes         | Yes        |
+| BungeeCord | Yes         | Yes        |
+| Gate       | Planned     | Yes        |
+| Other*     | Varies      | No         |
+
+<Note>
+    *Support for other proxies is possible through custom implementation if the [server API](/api#server) is available in your preferred [programming language](/api).
+</Note>
 
 ## Quick Setup
 
@@ -21,61 +38,140 @@ The Server Connection Plugin provides comprehensive player connection management
 
 ## Connection Targets
 
-Connection targets define server groups that players can connect to. Each target can have specific permissions and matching rules:
+Connection targets are matchers for servers in your network. Based on their server name matcher, they can match single servers or one / multiple server groups. Each target can have specific rules for server name matching as well as for availability for players:
+
+The following example demonstrates, how a connections configuration could look like using different server-name-matchers and rules:
 
 ```yaml
 connections:
-  - name: "lobby"
-    permission: ""  # Empty for no permission requirement
-    server-name-matcher:
+  # This connection matches servers which's name starts with "lobby" and has no rules for access restriction.
+ - name: "lobby"
+   server-name-matcher:
       operation: "STARTS_WITH"
       value: "lobby"
 
-  - name: "skyblock-spawn"
-    permission: ""
-    server-name-matcher:
+  # This connection targets a server which's name is "sb-spawn" and includes two access rules.
+ - name: "skyblock-spawn"
+   server-name-matcher:
       operation: "EQUALS"
       value: "sb-spawn"
+   rules:
+     # This rule requires players to have the permission "network.join.skyblock" to access this connection
+    - type: "PERMISSION"
+      name: "network.join.skyblock"
+      value: "true" # "true", because the permission check is expected to be positive.
+     
+     # This rule requires the environment variable "SKYBLOCK_JOIN_STATE" to not be set to "maintenance" for players to
+     # access the connection, while allowing players with the permission "rank.admin" to bypass this check.
+    - type: "ENV"
+      name: "SKYBLOCK_JOIN_STATE"
+      value: "maintenance"
+      operation: "EQUALS"
+      negate: true # Negates the EQUALS operation, so the environment variable shall not be equal "maintenance".
+      bypassPermission: "rank.admin" # Adds a permission that lets users bypass this check.
+```
+
+### Server Name Matchers
+
+Every connection requires a server name matcher, which matches servers in the network to it by name using various matching operations. A list of available operations is listed down below. Example:
+
+```yaml
+# This server name matcher targets all servers that do not contain "exclusive" in their name.
+server-name-matcher:
+   operation: "CONTAINS" # The matcher operation to use - optional (default: STARTS_WITH).
+   value: "exclusive" # The value to compare to - required.
+   negate: true # Negates the outcome of the operation - optional (default: false).
+```
+
+### Access Rules
+
+Each connection can have a set of rules which can restrict the access of players to it. An example of how rules can be used in practice is shown [above](#connection-targets).
+Every rule has one of two total types. The default type is `ENV`.
+
+**`PERMISSION` Type Rules**
+
+A permission rule performs a permission check on the user and compares the outcome to a given value using an `EQUALS` operation:
+
+```yaml
+ - type: "PERMISSION"
+   name: "network.join.skyblock" # The permission to check for - required.
+   value: "true" # The expected outcome ("true" or "false") - required.
+                 # "true" will expect the permission to be present, "false" does the opposite.
+   bypassPermission: "rank.admin" # A bypass permission for this check - optional.
+```
+
+**`ENV` Type Rules**
+
+An environment variable rule compares an environment variable to a given value with a specified matcher operation:
+
+```yaml
+ - type: "ENV"
+   name: "SKYBLOCK_JOIN_STATE" # The environment variable to compare - required.
+   value: "maintenance" # The value to compare to - required.
+   operation: "EQUALS" # The matcher operation to use - optional (default: STARTS_WITH).
+   negate: true # Negates the outcome of the operation - optional (default: false).
+   bypassPermission: "rank.admin" # A bypass permission for this check - optional.
 ```
 
 ### Matcher Operations
 
-| Operation | Description |
-|-----------|-------------|
-| EQUALS | Exact server name match |
-| STARTS_WITH | Server name begins with value |
-| ENDS_WITH | Server name ends with value |
-| CONTAINS | Server name contains value |
+Matcher operations are used for server name matchers and environment variable rule checks.
+
+| Operation     | Description                   |
+| ------------- | ----------------------------- |
+| `EQUALS`      | Exact value match             |
+| `STARTS_WITH` | Value begins with given value |
+| `ENDS_WITH`   | Value ends with given value   |
+| `CONTAINS`    | Value contains given value    |
+| `REGEX`       | Value matches given RegEx     |
 
 ## Features
 
-### Network Join Handling
+Every feature requires to have a list of target connections configured (`target-connections`).
 
-Manages initial player connections to your network. Configure default lobby servers and handling of unavailable targets:
+Target connections have **priorities** to specify which connection is tried first. If the connection cannot be accessed by the player (e.g.: insufficient permissions or no available target servers), the system falls back to lower priorities. Lower values are of higher priority.
+
+On top of the rules of the connection themselves, a list of server name matchers as **from**-criteria can be added in this context. They allow to only consider the connection if the previous server of the player matches the server name matchers.
+
+Here is an example of a target connection specification:
 
 ```yaml
-network-join-target:
-  enabled: true
-  no-target-connections-found-message: "Couldn't connect you to the network because no target servers are available."
-  target-connections:
+ - name: "lobby" # The name of the connection to utilize - required.
+   priority: 0 # The priority of this connection - optional (default: 0).
+   from: # A list of server name matchers as from criteria -  optional.
+    - operation: "EQUALS" # The matcher operation to use - optional (default: STARTS_WITH).
+      value: "build-server" # The value to compare to - required.
+      negate: false # Negates the outcome of the operation - optional (default: false).
+```
+
+<Note>
+   All message variables of the below features support [**MiniMessage format**](https://docs.advntr.dev/minimessage/format#standard-tags) for styling.
+</Note>
+
+### Network Join Targets
+
+Manages initial servers for player connections to your network. Configure which servers players will be connected to upon join and handling of unavailable targets:
+
+```yaml
+network-join-targets:
+   enabled: true # Wether this feature shall be enabled - optional (default: false).
+   # Kick message for when all target connections are full or access rules don't match for the player - required.
+   no-target-connections-found-message: "<color:red>Couldn't connect you to the network because no target servers are available."
+   target-connections: # List of target connections (explained above) - required.
     - name: "lobby"
       priority: 0
 ```
 
-### Fallback System
+### Fallback Connections
 
 Handles player redirection when kicked from servers or during server shutdowns:
 
 ```yaml
 fallback-connections:
-  enabled: true
-  no-target-connections-found-message: "You have been disconnected from the network since you have been kicked and no fallback server are available."
-  target-connections:
-    - name: "skyblock-spawn"
-      priority: 1
-      from:
-        - operation: "STARTS_WITH"
-          value: "skyblock-island-"
+   enabled: true # Wether this feature shall be enabled - optional (default: false).
+   # Kick message for when all target connections are full or access rules don't match for the player - required.
+   no-target-connections-found-message: "You have been disconnected from the network since you have been kicked and no fallback server are available."
+   target-connections: # List of target connections (explained above) - required.
     - name: "lobby"
       priority: 0
 ```
@@ -86,93 +182,68 @@ Create custom commands for server navigation:
 
 ```yaml
 commands:
-  - name: "lobby"
-    aliases:
-      - "l"
-      - "hub"
-      - "quit"
-      - "leave"
-    target-connections:
-      - name: "lobby"
-        priority: 0
-    already-connected-message: "<red>You are already connected to the lobby!"
-    no-target-connections-found-message: "There are no lobby servers available at the moment."
-    permission: ""
-```
-
-## Priority System
-
-Both fallback and command targets support priority levels:
-- Lower numbers indicate higher priority
-- System tries highest priority (0) first
-- Falls back to lower priorities if needed
-
-## Message Customization
-
-Each feature supports custom messages for various scenarios:
-
-```yaml
-# Network join messages
-network-join-target:
-  no-target-connections-found-message: "Custom message"
-
-# Fallback messages
-fallback-connections:
-  no-target-connections-found-message: "Custom message"
-
-# Command messages
-commands:
-  - name: "lobby"
-    already-connected-message: "Custom message"
-    no-target-connections-found-message: "Custom message"
+ - name: "lobby" # Name of the command - required.
+   aliases: # List of command aliases - optional. 
+    - "hub"
+   target-connections: # List of target connections (explained above) - required.
+    - name: "lobby"
+      priority: 0
+   # Message for when the player is already connected to a matching server of the target-connections - required.
+   already-connected-message: "<red>You are already connected to the lobby!"
+   # Kick message for when all target connections are full or access rules don't match for the player - required.
+   no-target-connections-found-message: "There are no lobby servers available at the moment."
+   permission: "command.lobby" # Permission of this command - optional.
 ```
 
 ## Common Configurations
 
 ### Game Server Setup
-Here's an example configuration for a minigame network:
+Here's an example configuration for a mini game network:
 
 ```yaml
 connections:
-  - name: "lobby"
-    server-name-matcher:
+ - name: "lobby"
+   server-name-matcher:
       operation: "STARTS_WITH"
       value: "lobby"
-  - name: "bedwars"
-    permission: "minigame.bedwars"
-    server-name-matcher:
+ - name: "bedwars"
+   server-name-matcher:
       operation: "STARTS_WITH"
-      value: "bw-"
+      value: "bw"
+   rules:
+    - type: "PERMISSION"
+      name: "minigame.bedwars"
+      value: "true"
 
 network-join-target:
-  enabled: true
-  target-connections:
+   enabled: true
+   target-connections:
     - name: "lobby"
       priority: 0
 
 fallback-connections:
-  enabled: true
-  target-connections:
+   enabled: true
+   target-connections:
     - name: "lobby"
       priority: 0
-    - name: "bedwars"
+    - name: "bedwars" # Will fall back to another bedwars server if the player is kicked from a bedwars server and no lobby is available 
       priority: 1
       from:
-        - operation: "STARTS_WITH"
-          value: "bw-"
+       - operation: "STARTS_WITH"
+         value: "bw"
 
 commands:
-  - name: "lobby"
-    aliases: ["hub", "l"]
-    target-connections:
-      - name: "lobby"
-        priority: 0
-  - name: "bedwars"
-    aliases: ["bw"]
-    permission: "minigame.bedwars"
-    target-connections:
-      - name: "bedwars"
-        priority: 0
+ - name: "lobby"
+   aliases: ["hub", "l"]
+   target-connections:
+    - name: "lobby"
+      priority: 0
+ - name: "bedwars"
+   aliases: ["bw"]
+   permission: "minigame.bedwars"
+   target-connections:
+    - name: "bedwars"
+      priority: 0
 ```
 
 ### Multi-Lobby System
@@ -180,33 +251,35 @@ Example for managing multiple lobby types:
 
 ```yaml
 connections:
-  - name: "main-lobby"
-    server-name-matcher:
+ - name: "main-lobby"
+   server-name-matcher:
       operation: "EQUALS"
       value: "lobby-main"
-  - name: "premium-lobby"
-    permission: "vip.lobby"
-    server-name-matcher:
+ - name: "premium-lobby"
+   server-name-matcher:
       operation: "EQUALS"
       value: "lobby-premium"
+   rules:
+    - type: "PERMISSION"
+      name: "vip.lobby"
+      value: "true"
 
 network-join-target:
-  enabled: true
-  target-connections:
+   enabled: true
+   target-connections:
     - name: "premium-lobby"
       priority: 0
     - name: "main-lobby"
       priority: 1
 
 commands:
-  - name: "lobby"
-    aliases: ["hub"]
-    target-connections:
-      - name: "premium-lobby"
-        priority: 0
-        permission: "vip.lobby"
-      - name: "main-lobby"
-        priority: 1
+ - name: "lobby"
+   aliases: ["hub"]
+   target-connections:
+    - name: "premium-lobby"
+      priority: 0
+    - name: "main-lobby"
+      priority: 1
 ```
 
 ## Advanced Usage

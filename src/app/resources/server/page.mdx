@@ -55,7 +55,7 @@ Servers are gracefully stopped when:
 
 ### Runtime Configuration
 
-Servers support various runtime configurations:
+Servers support various runtime configurations in `/components/serverhost/options/` with the follwing properties:
 
 ```yaml
 # Server-specific properties
@@ -115,7 +115,7 @@ running/
 
 ## Server Templates
 
-Servers use templates from their parent group for initialization. The template system is implemented through the (Server Host Droplet)[/droplet/serverhost], which handles file management and server preparation. Without the (Server Host Droplet)[/droplet/serverhost], you'll need to implement your own file management system. For detailed information about template configuration and usage with the (Server Host Droplet)[/droplet/serverhost], see the [Templates](/template) documentation.
+Servers use templates from their parent group for initialization. The template system is implemented through the (Server Host Droplet)[/droplet/serverhost], which handles file management and server preparation. Without the (Server Host Droplet)[/droplet/serverhost], you'll need to implement your own file management system. For detailed information about template configuration and usage with the (Server Host Droplet)[/droplet/serverhost], see the [Templates](/resources/template) documentation.
 
 ## Best Practices
 
@@ -132,5 +132,5 @@ Servers use templates from their parent group for initialization. The template s
 ## What's Next?
 
 - [Group Configuration](/groups)
-- [Template Management](/template)
+- [Template Management](/resources/template)
 - [Server Host Configuration](/droplet/serverhost)

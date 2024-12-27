@@ -1,4 +1,4 @@
-import { Note, CodeGroup } from "../../components/mdx";
+import { Note, CodeGroup } from "../../../components/mdx";
 
 export const metadata = {
     title: 'ServerGroups',
@@ -28,6 +28,10 @@ The fastest way to create a new group is through our CLI:
     sc create group --name survival --type SERVER --min-memory 2048 --max-memory 4096 --start-port 50000
     ```
 </CodeGroup>
+
+<Note>
+    To skip the entire interactive group setup, you have to use all existing flags (except `--server-url`)! You can find a more detailed explanation [here](/cli#create-group)
+</Note>
 
 ## Configuration Structure
 

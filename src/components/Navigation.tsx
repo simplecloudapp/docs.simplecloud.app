@@ -238,13 +238,20 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Introduction', href: '/' },
       { title: 'Quickstart', href: '/quickstart' },
+      { title: 'Structure', href: "/structure" },
       { title: 'Controller', href: "/controller" },
       { title: 'CLI', href: "/cli" },
-      { title: 'Server Groups', href: "/server-group" },
-      { title: 'Servers', href: "/server" },
-      { title: 'Templates', href: "/template" },
-      { title: 'Structure', href: "/structure" },
-      { title: 'Permissions', href: "/permissions" }
+      { title: 'Dashboard', href: '/dashboard' },
+      { title: 'Comparison', href: '/comparison', tag: "Soon", tagColor: "rose" }
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { title: 'Server Groups', href: "/resources/server-group" },
+      { title: 'Servers', href: "/resources/server" },
+      { title: 'Templates', href: "/resources/template" },
+      { title: 'Permissions', href: "/resources/permissions" },
     ],
   },
   {
@@ -252,8 +259,7 @@ export const navigation: Array<NavGroup> = [
     links: [
       { title: 'Overview', href: '/droplet' },
       { title: 'Server Host Droplet', href: '/droplet/serverhost' },
-      { title: 'Server Host Docker Droplet', href: '/droplet/serverhost-docker', tag: "Soon", tagColor: "rose" },
-      { title: 'Player Droplet', href: '/droplet/player', tag: "Soon", tagColor: "rose"},
+      { title: 'Player Droplet', href: '/droplet/player' },
       { title: 'Resource Pack Droplet', href: '/droplet/resourcepack', tag: "Soon", tagColor: "rose" },
     ],
   },
@@ -264,17 +270,21 @@ export const navigation: Array<NavGroup> = [
       { title: 'Server Registration Plugin', href: '/plugin/server-registration', tag: "Proxy" },
       { title: 'Server Connection Plugin', href: '/plugin/server-connection', tag: "Proxy" },
       { title: 'Cloud Command Plugin', href: '/plugin/cloud-command', tag: "Proxy" },
-      { title: 'Proxy Plugin', href: '/plugin/proxy', tag: "Proxy"  },
-      { title: 'Notify Plugin', href: '/plugin/notify', tag: "Soon", tagColor: "rose"  },
-      { title: 'Prefixes Plugin', href: '/plugin/prefixes', tag: "Server" },
-      { title: 'Signs Plugin', href: '/plugin/signs', tag: "Soon", tagColor: "rose"  },
-      { title: 'NPCs Plugin', href: '/plugin/npcs', tag: "Soon", tagColor: "rose"  },
+      { title: 'Proxy Essentials Plugin', href: '/plugin/proxy-essentials', tag: "Proxy"  },
+      { title: 'Notify Plugin', href: '/plugin/notify', tag: "Proxy" },
+      { title: 'Prefixes Plugin', href: '/plugin/prefixes', tag: "Server", tagColor: "purple" },
+      { title: 'Signs Plugin', href: '/plugin/signs', tag: "Server", tagColor: "purple"  },
+      { title: 'NPCs Plugin', href: '/plugin/npcs', tag: "Server", tagColor: "purple"  },
+      { title: 'Placeholders Plugin', href: '/plugin/placeholder', tag: "Server", tagColor: "purple" },
     ],
   },
   {
     title: 'API',
     links: [
-      { title: 'Overview', href: '/api', tag: "Soon", tagColor: "rose" },
+      { title: 'Getting Started', href: '/api' },
+      { title: 'Controller API', href: '/api/controller' },
+      { title: 'Server Host Droplet API', href: '/api/droplet/server-host', tag: "Soon", tagColor: "rose" },
+      { title: 'Player Droplet API', href: '/api/droplet/player' },
     ],
   },
 ]
@@ -283,9 +293,10 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
   return (
     <nav {...props}>
       <ul role="list">
-        <TopLevelNavItem href="/">API</TopLevelNavItem>
-        <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
-        <TopLevelNavItem href="#">Support</TopLevelNavItem>
+        <TopLevelNavItem href="/changelog">Changelog</TopLevelNavItem>
+        <TopLevelNavItem href="/">Documentation</TopLevelNavItem>
+        <TopLevelNavItem href="https://github.com/theSimpleCloud">Github</TopLevelNavItem>
+        <TopLevelNavItem href="https://discord.simplecloud.app">Discord</TopLevelNavItem>
         {navigation.map((group, groupIndex) => (
           <NavigationGroup
             key={group.title}

@@ -1,44 +1,65 @@
-# SimpleCloud Docs
+# docs.simplecloud.app
 
-## Getting started
+![Banner][banner]
 
-To get started with this docs, first install the npm dependencies:
+<div align="center">
+  
+  [![Documentation Status][badge-docs]][docs]
+  [![License][badge-license]][license]
+  <br>
 
-```bash
-npm install
-```
+  [![Discord][badge-discord]][social-discord]
+  [![Follow @simplecloudapp][badge-x]][social-x]
+  [![Follow @simplecloudapp][badge-bluesky]][social-bluesky]
+  [![Follow @simplecloudapp][badge-youtube]][social-youtube]
+  <br>
 
-Next, run the development server:
+  [Report a Bug][issue-bug-report]
+  ·
+  [Request Documentation][issue-docs-request]
+  <br>
 
-```bash
-npm run dev
-```
+🌟 Give us a star — your support means the world to us!
+</div>
+<br>
 
-Finally, open [http://localhost:3000](http://localhost:3000) in your browser to view the website.
+Official documentation for SimpleCloud, providing comprehensive guides, tutorials, and API references for managing and creating Minecraft server networks.
 
-## Customizing
+## Purpose
 
-You can start editing this template by modifying the files in the `/src` folder. The site will auto-update as you edit these files.
+- [x] **Comprehensive Guides**: Detailed documentation for all SimpleCloud components
+- [x] **API References**: Complete API documentation for developers
+- [x] **Integration Tutorials**: Step-by-step guides for plugins and droplets
+- [x] **Best Practices**: Recommended patterns and configurations
+- [x] **Troubleshooting**: Common issues and their solutions
 
-## Global search
-
-This template includes a global search that's powered by the [FlexSearch](https://github.com/nextapps-de/flexsearch) library. It's available by clicking the search input or by using the `⌘K` shortcut.
-
-This feature requires no configuration, and works out of the box by automatically scanning your documentation pages to build its index. You can adjust the search parameters by editing the `/src/mdx/search.mjs` file.
+## Contributing
+Contributions to SimpleCloud are welcome and highly appreciated. However, before you jump right into it, we would like you to read our [Contribution Guide][docs-contribute].
 
 ## License
+This repository is licensed under [Apache 2.0][license].
 
-This site template is a commercial product and is licensed under the [Tailwind UI license](https://tailwindui.com/license).
+<!-- LINK GROUP -->
+[banner]: https://raw.githubusercontent.com/simplecloudapp/branding/refs/heads/main/readme/banner/docs.png
+[docs]: https://docs.simplecloud.app
+[issue-bug-report]: https://github.com/theSimpleCloud/docs/issues/new?labels=bug&projects=template=01_BUG-REPORT.yml&title=%5BBUG%5D+%3Ctitle%3E
+[issue-docs-request]: https://github.com/theSimpleCloud/docs/discussions/new?category=documentation
+[docs-contribute]: https://docs.simplecloud.app/contribute
 
-## Learn more
+[modrinth]: https://modrinth.com/organization/simplecloud
 
-To learn more about the technologies used in this site template, see the following resources:
+<!-- ⛔ DON'T TOUCH -->
+[license]: https://opensource.org/licenses/Apache-2.0
+[snapshots]: https://repo.simplecloud.app/#/snapshots
 
-- [Tailwind CSS](https://tailwindcss.com/docs) - the official Tailwind CSS documentation
-- [Next.js](https://nextjs.org/docs) - the official Next.js documentation
-- [Headless UI](https://headlessui.dev) - the official Headless UI documentation
-- [Framer Motion](https://www.framer.com/docs/) - the official Framer Motion documentation
-- [MDX](https://mdxjs.com/) - the official MDX documentation
-- [Algolia Autocomplete](https://www.algolia.com/doc/ui-libraries/autocomplete/introduction/what-is-autocomplete/) - the official Algolia Autocomplete documentation
-- [FlexSearch](https://github.com/nextapps-de/flexsearch) - the official FlexSearch documentation
-- [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) - the official Zustand documentation
+[social-x]: https://x.com/simplecloudapp
+[social-bluesky]: https://bsky.app/profile/simplecloud.app
+[social-youtube]: https://www.youtube.com/@thesimplecloud9075
+[social-discord]: https://discord.simplecloud.app
+
+[badge-docs]: https://img.shields.io/website?url=https%3A%2F%2Fdocs.simplecloud.app&style=flat-square&label=Documentation&labelColor=18181b&color=0ea5e9
+[badge-license]: https://img.shields.io/badge/apache%202.0-blue.svg?style=flat-square&label=license&labelColor=18181b&style=flat-square&color=e11d48
+[badge-discord]: https://img.shields.io/badge/Community_Discord-d95652.svg?style=flat-square&logo=discord&color=27272a
+[badge-x]: https://img.shields.io/badge/Follow_@simplecloudapp-d95652.svg?style=flat-square&logo=x&color=27272a
+[badge-bluesky]: https://img.shields.io/badge/Follow_@simplecloud.app-d95652.svg?style=flat-square&logo=bluesky&color=27272a
+[badge-youtube]: https://img.shields.io/badge/youtube-d95652.svg?style=flat-square&logo=youtube&color=27272a
