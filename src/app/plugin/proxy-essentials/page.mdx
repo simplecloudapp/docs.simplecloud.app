@@ -8,7 +8,7 @@ export const metadata = {
 
 # Proxy Essentials Plugin
 
-The Proxy Plugin enhances your server network with customizable MOTD (Server Info) and Tablist features, offering extensive customization options through simple configuration files. All settings are synchronized across all proxies. {{ className: 'lead' }}
+This Plugin enhances your server network with customizable MOTD (Server Info) & Tablist and Joinstates, offering extensive customization options through simple configuration files. All settings are synchronized across all proxies. {{ className: 'lead' }}
 
 <Button href="https://github.com/theSimpleCloud/proxy-plugin/releases" arrow="right">
     <>Download</>
@@ -30,22 +30,15 @@ If you would like to add support for a missing server software, feel free to sub
 1. Download the plugin for your proxy software
 2. Place it in your proxy template's plugins folder
 3. Start your proxy server
-4. Set a joinstate for your group (e.g. `maintenance`)
-
-## Commands
-
-| **Command**               | **Description**                                                                                    |
-|------------------------------|----------------------------------------------------------------------------------------------------|
-| `joinstate group <group> <join-state>`            | Set the joinstate for a group. |
-| `joinstate server <group> <numericalId> <join-state>`          | Set the joinstate for a server. |
-| `joinstate help`          | Show the joinstate command help. |
-| `joinstate groups`          | Show all groups with their joinstates. |
-| `joinstate states`          | Show all joinstates. |
+4. Start by setting a joinstate for your group (e.g. `maintenance` for your proxy group)
 
 ## Features
 
-### MOTD
-Our MOTD system supports multiple layouts that you can create in the `layout/` folder. These layouts allow you to generate multiple messages that can be displayed either statically or rotated randomly. This feature is especially useful for announcements, maintenance notices, or highlighting different aspects of your server. With support for MiniMessage format, you can create visually rich text displays that include gradients, colors, and advanced formatting options.
+### Server Info
+You can use multiple layouts that you can create in the `layout/` folder. 
+These layouts allow you to generate multiple messages that can be displayed either statically or rotated randomly. 
+This feature is especially useful for announcements, maintenance notices, or highlighting different aspects of your server. 
+With support for MiniMessage format, you can create visually rich text displays that include gradients, colors, and advanced formatting options.
 
 ```yaml
 first-lines:
@@ -57,6 +50,9 @@ version-name: ''
 max-player-display-type: REAL #or DYNAMIC
 dynamic-player-range: 1 #Only enabled if max-player-display-type is DYNAMIC
 ```
+
+// TODO: Server List 
+
 <Note>
     If the proxy runs locally on your computer, the actual slots are displayed because the controller performs health checks and information requests by pinging the proxy. Players, however, see different information.
 </Note>
@@ -65,25 +61,6 @@ dynamic-player-range: 1 #Only enabled if max-player-display-type is DYNAMIC
 
 Create engaging tablist headers and footers that update automatically. The plugin supports both static and animated content, with configurable update intervals. You can display real-time information like player counts, server status, or custom messages. All text supports MiniMessage formatting for advanced styling.
 
-#### Configuration for static tablist
-```yaml
-groups:
--   group-or-service: '*'
-    tab-lists:
-    -   header:
-        - ''
-        - <color:#0ea5e9>SimpleCloud v3
-        - ''
-        footer:
-        - ''
-        - ' <color:#ffffff><online_players> players <color:#cbd5e1>are playing on
-            your network '
-        - <color:#64748b>  sɪᴍᴘʟᴇᴄʟᴏᴜᴅ.ᴀᴘᴘ
-        - ''
-tab-list-update-time: 0 #If set to 0, the tablist will not update, otherwise it will update every x milliseconds
-```
-
-#### Configuration for dynamic tablist
 ```yaml
 groups:
 -   group-or-service: '*'
@@ -98,6 +75,7 @@ groups:
             your network '
         - <color:#64748b>  sɪᴍᴘʟᴇᴄʟᴏᴜᴅ.ᴀᴘᴘ
         - ''
+    #Create another list entry to display multiple tablists in rotation
     -   header:
         - ''
         - <color:#0ea5e9>SimpleCloud v3
@@ -111,17 +89,20 @@ groups:
 tab-list-update-time: 1000 #The 1000 is the update interval in milliseconds
 ```
 
+// TODO: Tablist
+
 ### Joinstates
 
-You can use joinstates to define which user groups are allowed to join the network. You can create or adjust the joinstates in the `joinstate.yml` file.
-Depending on which joinstate is currently active for a group, the corresponding authorizations that you have defined in the configuration are applied.
-You can define different joinstates for each server or group. The plugin supports MiniMessage formatting for the display of rich text content.
-
+Joinstates replace the old maintenance feature and set an entire server group to a state where only players with a specific permission can join. If it’s a proxy, a specific server info layout can also be applied. In this example, we have defined three states:
+- `public`: All players can join the server group without requiring any permission.
+- `closedBeta`: Only players with the specified permission can join the server group.
+- `maintenance`: Only players with the specified permission can join the server group, making it ideal for team members.
 ```yaml
+#This state is assigned to newly created groups.
 default-state: public
 join-states:
 -   name: public
-    join-permission: ''
+    join-permission: '' #Keep it empty to allow everyone to join
     full-join-permission: simplecloud.join.full.public
     motd-layout-by-proxy: public
 -   name: closedBeta
@@ -134,6 +115,16 @@ join-states:
     motd-layout-by-proxy: maintenance
 ```
 
+## Commands
+
+| **Command**                                       | **Description**                        |
+| ------------------------------------------------- | -------------------------------------- |
+| `/joinstate group <group> <state>`                | Set the joinstate for a group.         |
+| `/joinstate server <group> <numericalId> <state>` | Set the joinstate for a server.        |
+| `/joinstate help`                                 | Show the joinstate command help.       |
+| `/joinstate groups`                               | Show all groups with their joinstates. |
+| `/joinstate states`                               | Show all joinstates.                   |
+
 ## Placeholders
 
 | Placeholder        | MOTD | Tablist | Description                    |
@@ -145,15 +136,6 @@ join-states:
 | \<server_name\>     | No   | Yes      | Player's current server        |
 | \<ping\>            | No   | Yes      | Player's ping                  |
 
-## API Integration
-
-The plugin provides events for custom modifications:
-
-<DangerNote>
-    The documentation will be available as soon as the API is ready and public
-</DangerNote>
-
-
 ## Permissions
 | **Permission**               | **Description**                                                                                    |
 |------------------------------|----------------------------------------------------------------------------------------------------|
@@ -163,6 +145,14 @@ The plugin provides events for custom modifications:
 | `simplecloud.command.joinstate.states`          | Allows the user to see all joinstates. |
 | `simplecloud.command.joinstate.server`       | Allows the user to set the joinstate for a server. |
 | `simplecloud.command.joinstate.group.` | Allows the user to set the joinstate for a group and all servers in the group. |
+
+## API Integration
+
+The plugin provides events for custom modifications:
+
+<DangerNote>
+    The documentation will be available as soon as the API is ready and public
+</DangerNote>
 
 ## What's Next?
 
