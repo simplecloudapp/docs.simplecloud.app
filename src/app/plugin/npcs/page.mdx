@@ -100,6 +100,7 @@ If you want to use our NPC plugin as a standalone, create an NPC with the follow
 When you create an NPC using our plugin or another plugin, a separate configuration for each new NPC will be generated in the plugin folder.
 
 ```yaml
+version: '1.0'
 id: bedwars
 holograms:
   - start-height: 2.073
@@ -115,32 +116,21 @@ actions:
   - player-interaction: LEFT_CLICK
     action: OPEN_INVENTORY
     options:
-      - key: inventory.name
-        value: quickjoin.bedwars
-      - key: play.sound
-        value: block.chest.open
-      - key: sound.pitch
-        value: "3"
-      - key: sound.volume
-        value: "2"
+      inventory.name: bedwars
+      play.sound: block.chest.open
+      sound.pitch: 3
+      sound.volume: 2
   - player-interaction: RIGHT_CLICK
     action: TRANSFER_TO_SERVER
     options:
-      - key: server.ip
-        value: demo-server.com
-      - key: server.port
-        value: "25565"
-      - key: send.actionbar
-        value: abda
+      server.ip: demo-server.com
+      server.port: 25565
+      send.actionbar: abda
 options:
-  - key: hologram.placeholder.group
-    value: lobby
-  - key: send.message
-    value: <rainbow>Some cool text here
-  - key: send.title
-    value: title text
-  - key: send.subtitle
-    value: subtitle text
+  hologram.placeholder.group: lobby
+  send.message: <rainbow>Some cool text here
+  send.title: title
+  send.subtitle: some cool subtitle
 ```
 Configure the NPC either in the NPC configuration file or through commands. 
 The configuration will be automatically reloaded if any changes are made to the file.
@@ -161,6 +151,7 @@ Options are sent as feedback when an action is performed. You can set the follow
 ### Configure Inventories
 If you specify the action `OPEN_INVENTORY`, you need to reference an inventory from the plugin folder under `inventories/`. Configure inventories in the configuration file as follows:
 ```yaml
+version: '1.0'
 id: quickjoin.bedwars
 title: <#ffffff>Bedwars
 rows: 6
