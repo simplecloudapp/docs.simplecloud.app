@@ -8,6 +8,16 @@ export const metadata = {
 # Dashboard
 The dashboard offers a user-friendly and efficient interface for managing all essential cloud functions, streamlining operations and enhancing productivity.
 
+<img
+    src={"https://github.com/simplecloudapp/branding/blob/main/media/dashboard/overview.png?raw=true"}
+    alt=""
+    className="w-full aspect-video object-cover"
+    style={{
+      borderRadius: '1rem',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+    }}
+/>
+
 ## Understanding the Dashboard
 The dashboard is a web application that, like the [CLI](/cli), allows you to manage your cloud instance. 
 It serves solely as an interface that sends commands to the controller or droplets and retrieves information. 
@@ -26,10 +36,22 @@ Upcoming Features:
 
 
 ## Login
-<Note>
-    Work in Progress
-</Note>
 
+For anyone who doesn't want to install the dashboard on their own machine, feel free to use the dashboard we host ourselves.
+
+<img
+    src={"https://github.com/simplecloudapp/branding/blob/main/media/dashboard/login.png?raw=true"}
+    alt=""
+    className="w-full aspect-video object-cover"
+    style={{
+      borderRadius: '1rem',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+    }}
+/>
+
+1. Go to [dashboard.simplecloud.app](http://dashboard.simplecloud.app)
+2. Enter your controller endpoint, including your IP and port 8080 (Example: `187.420.69:8080`)
+3. Enter your controller secret, which you can find under `/components/.secrets/auth.secret`
 
 ## Installing the Dashboard
 
