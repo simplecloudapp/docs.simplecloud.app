@@ -248,6 +248,47 @@ items:
 |---------------------------|----------------------|
 | `simplecloud.command.npc` | For `/scnps` Command |
 
+## Available Placeholders
+You can use the parameters of the current server and the group to which the server belongs as placeholders.
+
+### Hologram Placeholders
+
+| Placeholder            | Description                                         |
+|------------------------|-----------------------------------------------------|
+| `<group_name>`         | Name of the group                                   |
+| `<type>`               | Server type (UNKNOWN_SERVER, SERVER, PROXY)         |
+| `<start_port>`         | Start port of the Group                             |
+| `<min_memory>`         | Minimum RAM allocation in MB                        |
+| `<max_memory>`         | Maximum RAM allocation in MB                        |
+| `<max_players>`        | Maximum players per server                          |
+| `<online_count>`       | Current players count                               |
+| `<min_online_count>`   | Minimum online server count                         |
+| `<max_online_count>`   | Maximum online server count                         |
+| `<property:NAME>`      | Shows the property value                            |
+| `<player_count:STATE>` | Shows the amount of player count by an Server state |
+| `<server_count:STATE>` | Shows the amount of server count by an Server state |
+
+### Inventory Placeholders
+
+| Placeholder            | Description                                                                    |
+|------------------------|--------------------------------------------------------------------------------|
+| `<id>`                 | Unique identifier (e.g., "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8")               |
+| `<group_name>`         | Name of the group                                                              |
+| `<numerical_id>`       | Numerical ID within group                                                      |
+| `<type>`               | Server type (UNKNOWN_SERVER, SERVER, PROXY)                                    |
+| `<state>`              | Server state (UNKNOWN_STATE, PREPARING, STARTING, AVAILABLE, INGAME, STOPPING) |
+| `<min_memory>`         | Minimum RAM allocation in MB                                                   |
+| `<max_memory>`         | Maximum RAM allocation in MB                                                   |
+| `<ip>`                 | Server IP address                                                              |
+| `<port>`               | Server port                                                                    |
+| `<max_players>`        | Maximum players per server                                                     |
+| `<online_players>`     | Current players count                                                          |
+| `<min_online_count>`   | Minimum online server count                                                    |
+| `<max_online_count>`   | Maximum online server count                                                    |
+| `<property:NAME>`      | Shows the property value                                                       |
+| `<player_count:STATE>` | Shows the amount of player count by an Server state                            |
+| `<server_count:STATE>` | Shows the amount of server count by an Server state                            |
+
 ## What's Next?
 
 - [Placeholder Plugin](/plugin/placeholder)
