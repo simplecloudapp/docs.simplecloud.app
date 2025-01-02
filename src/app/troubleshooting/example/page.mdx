@@ -1,19 +1,67 @@
-import { Note } from "../../../components/mdx";
+import { Note, DangerNote } from "../../../components/mdx";
+import { TroubleShootingHeroPattern } from '../../../components/TroubleShootingHeroPattern'
 
 export const metadata = {
     title: "Troubleshooting",
     description: "Common Problems and Solutions"
 }
 
-# Issue
+<TroubleShootingHeroPattern />
 
-## Symptoms
+# Minecraft Server nutzt falsche Java Version
+In diesem Troubleshooting erfährst du, warum dein Minecraft Server nicht mit der richtigen Java Version startet und wie du das Problem beheben kannst.
 
-## Cause
+## Symptomes
+- Windspigot wirft mir diesen Fehler: https://pastes.dev/tJtcMoN73Y
+```bash
+java.lang.NoSuchMethodError: 'com.google.common.collect.MapMaker com.google.common.collect.MapMaker.softValues()'
+	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.<init>(CraftServer.java:190) ~[WINDSPIGOT-1.8.8.jar:]
+	at net.minecraft.server.v1_8_R3.PlayerList.<init>(PlayerList.java:177) ~[WINDSPIGOT-1.8.8.jar:]
+	at net.minecraft.server.v1_8_R3.DedicatedPlayerList.<init>(SourceFile:14) ~[WINDSPIGOT-1.8.8.jar:]
+	at net.minecraft.server.v1_8_R3.DedicatedServer.init(DedicatedServer.java:196) ~[WINDSPIGOT-1.8.8.jar:]
+	at net.minecraft.server.v1_8_R3.MinecraftServer.run(MinecraftServer.java:620) ~[WINDSPIGOT-1.8.8.jar:]
+	at java.lang.Thread.run(Thread.java:1583) ~[?:?]
+```
+- 1.8 Server startet nicht
+
+## Possible Causes
+- Du hast eine zu zu alte Java Version
+- Es wurde eine falsche Java Version in den enviroments/screen.yml angelegt
 
 ## Resolution
+1. Gehe zuerst zu diesen pfag `/components/serverhost/environments/`
+2. Kopiere die `screen.yml` Datei und benenne sie zu `java-version-screen.yml` um
+3. Öffne nun die java-version-screen.yml` Datei
+4. Ändere die Config zu:
+```yaml
+enabled: true
+is-screen: true
+use-screen-stop: true
+is-docker: false
+name: java-version-screen # Hier musst du es umbennenen wie du die datei genannt hast lol
+start:
+    command:
+    - screen
+    - -L
+    - -Logfile
+    - '%LOG_FILE%'
+    - -dmS
+    - '%SCREEN_NAME%'
+    - /opt/jdk-21.0.4+7/bin/java # Hier musst du dann den passenden installations-pfad von Java 18 angeben
+    - -Xms%MIN_MEMORY%M
+    - -Xmx%MAX_MEMORY%M
+    - -Dcom.mojang.eula.agree=true
+    - -cp
+    - /home/simplecloud/components/serverhost/../libs/*:%SERVER_FILE% # Hier deinen Pfad von der Cloud angeben :)
+    - '%MAIN_CLASS%'
+    - nogui
+version: '1'
+```
+5. Gehe unter `/components/serverhost/options/runtime/<serverGruppe>.yml` und öffne die Gruppen datei, bei der du die Java Version ändern möchtest
+6. Ändere die `environment` zu `java-version-screen.yml`
 
+<Note>
+    If this page doesn’t help, feel free to create an issue on [GitHub](https://github.com/thesimplecloud) or post in our [Community Discord](https://discord.simplecloud.app).
+</Note>
 
-## Feedback
-
-If this page doesn’t help, feel free to create an issue on [GitHub](https://github.com/thesimplecloud) or post in our [Community Discord](https://discord.simplecloud.app).
+Last Updated: 02.01.2025
