@@ -1,4 +1,4 @@
-import { Note, DangerNote } from "../../../components/mdx";
+import {Note, CodeGroup} from "../../../components/mdx";
 import { TroubleShootingHeroPattern } from '../../../components/TroubleShootingHeroPattern'
 
 export const metadata = {
@@ -14,6 +14,7 @@ In this troubleshooting you will find out why your Minecraft server is not start
 ## Symptoms
 - WindSpigot throws a `java.lang.NoSuchMethodError: 'com.google.common.collect.MapMaker com.google.common.collect.MapMaker.softValues()'` exception
 - My 1.8 server does not start
+- I changed Java from version 23 to 21, and now my server won't start anymore
 
 ## Possible Causes
 - The server software does not support the latest Java 21 version
@@ -21,39 +22,52 @@ In this troubleshooting you will find out why your Minecraft server is not start
 - You are using WindSpigot with a Java version above Java 18
 
 ## Resolution
-1. Gehe zuerst zu diesen pfag `/components/serverhost/environments/`
-2. Kopiere die `screen.yml` Datei und benenne sie zu `java-version-screen.yml` um
-3. Öffne nun die java-version-screen.yml` Datei
-4. Ändere die Config zu:
-```yaml
-enabled: true
-is-screen: true
-use-screen-stop: true
-is-docker: false
-name: java-version-screen # Hier musst du es umbennenen wie du die datei genannt hast lol
-start:
-    command:
-    - screen
-    - -L
-    - -Logfile
-    - '%LOG_FILE%'
-    - -dmS
-    - '%SCREEN_NAME%'
-    - /opt/jdk-21.0.4+7/bin/java # Hier musst du dann den passenden installations-pfad von Java 18 angeben
-    - -Xms%MIN_MEMORY%M
-    - -Xmx%MAX_MEMORY%M
-    - -Dcom.mojang.eula.agree=true
-    - -cp
-    - /home/simplecloud/components/serverhost/../libs/*:%SERVER_FILE% # Hier deinen Pfad von der Cloud angeben :)
-    - '%MAIN_CLASS%'
-    - nogui
-version: '1'
-```
-5. Gehe unter `/components/serverhost/options/runtime/<serverGruppe>.yml` und öffne die Gruppen datei, bei der du die Java Version ändern möchtest
-6. Ändere die `environment` zu `java-version-screen.yml`
+1. Open the folder in the `/components/serverhost/environments/` directory
+2. Copy the `screen.yml` file, paste it and rename it as you wish, e.g. to `java-version-screen.yml`
+3. Now open the previously copied file
+4. Change the value of `name` so that it matches the previously selected file name
+5. Adjust the value under `start.command` by replacing the argument `/opt/jdk-21.0.4+7/bin/java` with the installation path of the Java version you want to use
+6. Open the group file in which you want to change the Java version. You can find this file under the path `/components/serverhost/options/runtime/<serverGroup>.yml`
+7. Change the `environment` argument so that it matches the name of the previously copied file, e.g. to `java-version-screen`
+
+## Example of how the configs should look like
+If you have followed the **step-by-step** instructions correctly, the configurations should look like this:
+<CodeGroup>
+    ```yaml {{title: 'java-version-screen.yml'}}
+    enabled: true
+    is-screen: true
+    use-screen-stop: true
+    is-docker: false
+    name: java-version-screen
+    start:
+        command:
+        - screen
+        - -L
+        - -Logfile
+        - '%LOG_FILE%'
+        - -dmS
+        - '%SCREEN_NAME%'
+        - /opt/jdk-21.0.4+7/bin/java
+        - -Xms%MIN_MEMORY%M
+        - -Xmx%MAX_MEMORY%M
+        - -Dcom.mojang.eula.agree=true
+        - -cp
+        - /home/simplecloud/components/serverhost/../libs/*:%SERVER_FILE% # Your path from the cloud must be specified here
+        - '%MAIN_CLASS%'
+        - nogui
+    version: '1'
+    ```
+
+    ```yaml {{title: 'bedwars.yml'}}
+    environment: java-version-screen
+    version: '1'
+    ```
+</CodeGroup>
+
+##
+##
+##
 
 <Note>
     If this page doesn’t help, feel free to create an issue on [GitHub](https://github.com/thesimplecloud) or post in our [Community Discord](https://discord.simplecloud.app).
 </Note>
-
-Last Updated: 02.01.2025

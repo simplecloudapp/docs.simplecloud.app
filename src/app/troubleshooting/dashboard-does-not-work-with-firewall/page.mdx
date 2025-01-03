@@ -1,0 +1,32 @@
+import { Note, DangerNote } from "../../../components/mdx";
+import { TroubleShootingHeroPattern } from '../../../components/TroubleShootingHeroPattern'
+
+export const metadata = {
+    title: "Troubleshooting",
+    description: "Common Problems and Solutions"
+}
+
+<TroubleShootingHeroPattern />
+
+# Dashboard does not work with firewall
+In this troubleshooting you will find out why no statistics or data are displayed in your dashboard.
+
+## Symptoms
+- An error appears in the dashboard for the statistics: `Server Error: An unexpected error occurred`
+
+## Possible Causes
+- The Metrics Droplet is not started
+- The firewall is activated, but ports 8080 to 8085 have not been publicly released
+- One of the ports from 8080 to 8085 is already occupied
+
+## Resolution
+1. Open the file under `/components/controller/controller.properties`
+2. There you will find an `ENVOY_START_PORT`. You can then adjust the start port here
+
+##
+##
+##
+
+<Note>
+    If this page doesn’t help, feel free to create an issue on [GitHub](https://github.com/thesimplecloud) or post in our [Community Discord](https://discord.simplecloud.app).
+</Note>
