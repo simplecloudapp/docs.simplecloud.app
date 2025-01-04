@@ -8,35 +8,39 @@ export const metadata = {
 
 <TroubleShootingHeroPattern />
 
-# Minecraft Server uses wrong Java version
-In this troubleshooting you will find out why your Minecraft server is not starting with the correct Java version and how you can fix the problem.
+# Minecraft Server throws a NoSuchMethodError
+This troubleshooting you will find out how you can fix the NoSuchMethodError exception on your Minecraft server.
 
 ## Symptoms
-- I changed Java from version 23 to 21, and now my server won't start anymore
+- WindSpigot throws a `java.lang.NoSuchMethodError: 'com.google.common.collect.MapMaker com.google.common.collect.MapMaker.softValues()'`
+- My 1.8 server does not start
 
-## Possible Causes
+## Possible Cause
+- You are using a 1.8 Minecraft server with the controller dependencies
 - The server software does not support the latest Java 21 version
-- An incorrect Java version was configured in `/components/serverhost/environments/`
-- You are using WindSpigot with a Java version above Java 18
+- You are using a Minecraft server without having adjusted the screen arguments
 
 ## Resolution
 1. Open the folder in the `/components/serverhost/environments/` directory
-2. Copy the `screen.yml` file, paste it and rename it as you wish, e.g. to `java-version-screen.yml`
+2. Copy the `screen.yml` file, paste it and rename it as you wish, e.g. to `screen-without-dependency.yml`
 3. Now open the previously copied file
 4. Change the value of `name` so that it matches the previously selected file name
-5. Adjust the value under `start.command` by replacing the argument `/opt/jdk-21.0.4+7/bin/java` with the installation path of the Java version you want to use
-6. Open the group file in which you want to change the Java version. You can find this file under the path `/components/serverhost/options/runtime/<serverGroup>.yml`
-7. Change the `environment` argument so that it matches the name of the previously copied file, e.g. to `java-version-screen`
+5. Adjust the value under `start.command` by replacing the argument `/opt/jdk-21.0.4+7/bin/java` with the installation path of Java version you want to use
+6. Change the java argument `-cp` to `-jar`
+7. Remove the argument `components/serverhost/../libs/*:%SERVER_FILE%`
+8. Change the placeholder from `%MAIN_CLASS%` to `%SERVER_FILE%`
+9. Open the group file in which you want to change the Java version. You can find this file under the path `/components/serverhost/options/runtime/<serverGroup>.yml`
+10. Change the `environment` argument so that it matches the name of the previously copied file, e.g. to `screen-without-dependency`
 
 ## Example of how the configs should look like
 If you have followed the **step-by-step** instructions correctly, the configurations should look like this:
 <CodeGroup>
-    ```yaml {{title: 'java-version-screen.yml'}}
+    ```yaml {{title: 'screen-without-dependency.yml'}}
     enabled: true
     is-screen: true
     use-screen-stop: true
     is-docker: false
-    name: java-version-screen
+    name: screen-without-dependency
     start:
         command:
         - screen
@@ -49,15 +53,14 @@ If you have followed the **step-by-step** instructions correctly, the configurat
         - -Xms%MIN_MEMORY%M
         - -Xmx%MAX_MEMORY%M
         - -Dcom.mojang.eula.agree=true
-        - -cp
-        - /home/simplecloud/components/serverhost/../libs/*:%SERVER_FILE% # Your path from the cloud must be specified here
-        - '%MAIN_CLASS%'
+        - -jar
+        - '%SERVER_FILE%'
         - nogui
     version: '1'
     ```
 
     ```yaml {{title: 'bedwars.yml'}}
-    environment: java-version-screen
+    environment: screen-without-dependency
     version: '1'
     ```
 </CodeGroup>
