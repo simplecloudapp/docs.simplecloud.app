@@ -1,0 +1,54 @@
+import {Note, CodeGroup} from "../../../components/mdx";
+import { TroubleShootingHeroPattern } from '../../../components/TroubleShootingHeroPattern'
+
+export const metadata = {
+    title: "Troubleshooting",
+    description: "Common Problems and Solutions"
+}
+
+<TroubleShootingHeroPattern />
+
+# Start Minecraft server with local server file
+In this troubleshooting you will find out how to correctly configure your own server software jar in your server group.
+
+## Symptoms
+- I have my own server software but do not have a url for this software
+
+## Possible Causes
+- An incorrectly configured `server-url` was set under `/groups/<serverGroup>.yml`
+- The path of the server jar is incorrect or does not exist
+
+## Resolution
+1. Open the folder in the `/groups/` directory
+2. Now open the config of your server group
+3. Change the `server-url` so that it points to the path where your server jar file is located. For example, this could look like this: `file:/home/custom-paper.jar`. It is **important** that `file:/` is included at the beginning
+4. Now save the config and restart your group
+
+## Example of how the configs should look like
+If you have followed the **step-by-step** instructions correctly, the configurations should look like this:
+```yaml
+name: lobby
+type: SERVER
+min-memory: 3072
+max-memory: 4096
+start-port: 50000
+min-online-count: 2
+max-online-count: 5
+max-players: 50
+new-server-player-ratio: 0
+properties:
+  server-software: Paper
+  software-version: 1.21.4
+  minecraft-version: 1.21.4
+  server-url: 'file:/home/custom-paper.jar' # The path of your server jar must then be entered here
+  configurator: paper_velocity
+  template-id: dynamic
+```
+
+##
+##
+##
+
+<Note>
+    If this page doesn’t help, feel free to create an issue on [GitHub](https://github.com/thesimplecloud) or post in our [Community Discord](https://discord.simplecloud.app).
+</Note>
