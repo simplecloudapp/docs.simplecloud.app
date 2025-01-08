@@ -46,19 +46,19 @@ The configuration file is located at `config.yml` in the plugin's data folder:
 
 ```yml
 # Server naming pattern
-serverNamePattern: "%GROUP_NAME%-%NUMERICAL_ID%"
+server-name-pattern: "%GROUP%-%NUMERICAL_ID%"
 # Available placeholder:
-#   %GROUP_NAME% - Group name
+#   %GROUP% - Group name
 #   %ID% - Unique server ID
 #   %NUMERICAL_ID% - Numerical server ID
 
 # Ignored server groups
-ignoreServerGroups:
+ignore-server-groups:
   - "bedwars"
   - "skywars"
 
 # Additional non-cloud servers
-additionalServers:
+additional-servers:
   - name: "build"
     address: "127.0.0.1"
     port: 225555
