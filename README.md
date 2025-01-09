@@ -42,8 +42,8 @@ This repository is licensed under [Tailwind UI License][license].
 <!-- LINK GROUP -->
 [banner]: https://raw.githubusercontent.com/simplecloudapp/branding/refs/heads/main/readme/banner/docs.png
 [docs]: https://docs.simplecloud.app
-[issue-bug-report]: https://github.com/theSimpleCloud/docs/issues/new?labels=bug&projects=template=01_BUG-REPORT.yml&title=%5BBUG%5D+%3Ctitle%3E
-[issue-docs-request]: https://github.com/theSimpleCloud/docs/discussions/new?category=documentation
+[issue-bug-report]: https://github.com/simplecloudapp/docs/issues/new?labels=bug&projects=template=01_BUG-REPORT.yml&title=%5BBUG%5D+%3Ctitle%3E
+[issue-docs-request]: https://github.com/simplecloudapp/docs/discussions/new?category=documentation
 [docs-contribute]: https://docs.simplecloud.app/contribute
 
 [modrinth]: https://modrinth.com/organization/simplecloud
