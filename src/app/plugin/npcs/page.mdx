@@ -7,7 +7,7 @@ export const metadata = {
 
 # NPCs Plugin
 Create NPCs on your server that allow your players to access other subservers through the NPCs.
-Perform various [actions](#understanding-actions) such as sending messages, titles, action bars, or sounds, or customize inventories with your items. 
+Perform various [actions](#understanding-actions) such as sending messages, titles, action bars, or sounds, or customize inventories with your items.
 Use your [favourite NPC system](#usage-of-other-npc-plugins) or use the plugin as a standalone with its own NPC integration.
 The all new NPC plugin opens up limitless creative possibilities.
 
@@ -38,11 +38,12 @@ No problem! Thanks to the new structure, you can also use other NPC plugins such
 This allows you to use all the features of your NPC plugin together with the functions of SimpleCloud.
 The following NPC plugins are supported:
 
-| Plugin                                                                                | Supported Versions      | This Plugin |
-|---------------------------------------------------------------------------------------|-------------------------|-------------|
-| [Citizens](https://citizensnpcs.co)                                                   | 1.19 - latest version   | Yes         |
-| [FancyNpcs](https://fancyplugins.de/FancyNpcs)                                        | 1.19.4 - latest version | Yes         |
-| [PlayerNPC](https://www.spigotmc.org/resources/✅-api-player-npc-✅-1-17-1-20-1.93625/) | 1.17.1 - 1.20.1         | Yes         |
+| Plugin                                                                                                      | Supported Versions      | This Plugin |
+|-------------------------------------------------------------------------------------------------------------|-------------------------|-------------|
+| [FancyNpcs](https://fancyplugins.de/FancyNpcs)                                                              | 1.19.4 - latest version | Yes         |
+| [Citizens](https://citizensnpcs.co)                                                                         | 1.19 - latest version   | Yes         |
+| [MythicMobs](https://www.spigotmc.org/resources/⚔-mythicmobs-free-version-►the-1-custom-mob-creator◄.5702/) | 1.19 - latest version   | Yes         |
+| [PlayerNPC](https://www.spigotmc.org/resources/✅-api-player-npc-✅-1-17-1-20-1.93625/)                       | 1.17.1 - 1.20.1         | Yes         |
 
 If you would like to add support for a missing npc plugin, feel free to submit a issue on [GitHub](https://github.com/simplecloudapp/npc-plugin/pulls).
 
@@ -68,16 +69,13 @@ Here you will find all available actions and their options:
 
 First, make sure that the NPC plugin is installed on your server, and if you want to use a supported NPC system, ensure that it is also installed on the server.
 
-The first step is to create an NPC. If you're using a supported NPC system, refer to the documentation of the respective plugins. 
-- [Create a NPC using Citizens](https://wiki.citizensnpcs.co/Commands)
+The first step is to create an NPC. If you're using a supported NPC system, refer to the documentation of the respective plugins.
 - [Create a NPC using FancyNpcs](https://fancyplugins.de/docs/fn-getting-started.html#create-your-first-npc)
+- [Create a NPC using Citizens](https://wiki.citizensnpcs.co/Commands)
+- [Create a NPC using MythicMobs](https://git.mythiccraft.io/mythiccraft/MythicMobs#getting-started)
 - [Create a NPC using PlayerNPC](https://www.spigotmc.org/resources/%E2%9C%85-api-player-npc-%E2%9C%85-1-17-1-20-1.93625/)
 
-If you want to use our NPC plugin as a standalone, create an NPC with the following command:
-```bash
-/scnpc create <name>
-```
-
+If you have created an NPC with one of the supported plugins, you only need to execute the command `/scnpc apply <id>` to use the functions of SimpleCloud.
 
 ### NPC Configuration
 When you create an NPC using our plugin or another plugin, a separate configuration for each new NPC will be generated in the plugin folder.
@@ -115,7 +113,7 @@ options:
   send.title: title
   send.subtitle: some cool subtitle
 ```
-Configure the NPC either in the NPC configuration file or through commands. 
+Configure the NPC either in the NPC configuration file or through commands.
 The configuration will be automatically reloaded if any changes are made to the file.
 If you want to configure the NPC using commands, use either `/scnpc <id> interact <type> setAction <action>` or `/scnpc <id> interact <type> setOption <key> <value>`.
 
@@ -134,8 +132,8 @@ Options are sent as feedback when an action is performed. You can set the follow
     alt=""
     className="w-full"
     style={{
-      borderRadius: '1rem',
-      border: '1px solid rgba(255, 255, 255, 0.1)', 
+        borderRadius: '1rem',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
     }}
 />
 
@@ -226,15 +224,15 @@ items:
     alt=""
     className="w-full"
     style={{
-      borderRadius: '1rem',
-      border: '1px solid rgba(255, 255, 255, 0.1)', 
+        borderRadius: '1rem',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
     }}
 />
 
 ## Commands
 | Command                                                  | Description                                               |
 |----------------------------------------------------------|-----------------------------------------------------------|
-| `/scnpc apply <name>`                                    | Create a NPC with our own NPC implementation              |
+| `/scnpc apply <name>`                                    | Adds the support of simplecloud functions                 |
 | `/scnpc <id> interact <type> setAction <action>`         | Set Actions, type can be `right_click` or `left_click`    |
 | `/scnpc <id> interact <type> setOption <key> <value>`    | Set options, type can be `right_click` or `left_click`    |
 | `/scnpc <id> interact <type> removeOption <key> <value>` | Remove options, type can be `right_click` or `left_click` |
@@ -253,20 +251,20 @@ You can use the parameters of the current server and the group to which the serv
 
 ### Hologram Placeholders
 
-| Placeholder            | Description                                         |
-|------------------------|-----------------------------------------------------|
-| `<group_name>`         | Name of the group                                   |
-| `<type>`               | Server type (UNKNOWN_SERVER, SERVER, PROXY)         |
-| `<start_port>`         | Start port of the Group                             |
-| `<min_memory>`         | Minimum RAM allocation in MB                        |
-| `<max_memory>`         | Maximum RAM allocation in MB                        |
-| `<max_players>`        | Maximum players per server                          |
-| `<online_players>`     | Current players count                               |
-| `<min_online_count>`   | Minimum online server count                         |
-| `<max_online_count>`   | Maximum online server count                         |
-| `<property:NAME>`      | Shows the property value                            |
-| `<player_count:STATE>` | Shows the amount of player count by an Server state |
-| `<server_count:STATE>` | Shows the amount of server count by an Server state |
+| Placeholder                  | Description                                         |
+|------------------------------|-----------------------------------------------------|
+| `<group_name>`               | Name of the group                                   |
+| `<group_type>`               | Server type (UNKNOWN_SERVER, SERVER, PROXY)         |
+| `<group_start_port>`         | Start port of the Group                             |
+| `<group_min_memory>`         | Minimum RAM allocation in MB                        |
+| `<group_max_memory>`         | Maximum RAM allocation in MB                        |
+| `<group_max_players>`        | Maximum players per server                          |
+| `<group_online_count>`       | Current players count                               |
+| `<group_min_online_count>`   | Minimum online server count                         |
+| `<group_max_online_count>`   | Maximum online server count                         |
+| `<group_property:NAME>`      | Shows the property value                            |
+| `<group_player_count:STATE>` | Shows the amount of player count by an Server state |
+| `<group_server_count:STATE>` | Shows the amount of server count by an Server state |
 
 ### Inventory Placeholders
 

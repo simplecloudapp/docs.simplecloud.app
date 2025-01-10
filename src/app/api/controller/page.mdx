@@ -1,4 +1,5 @@
 import {CodeGroup, Note} from "../../../components/mdx";
+import {DependencySnippet} from "../../../components/DependencySnippet";
 
 export const metadata = {
     title: 'Controller API',
@@ -34,47 +35,11 @@ The Controller API is the central interface for managing your SimpleCloud infras
 
 ## Installation
 
-<CodeGroup>
-
-```kotlin {{ title: 'Kotlin' }}
-repositories {
-    maven("https://repo.simplecloud.app/snapshots/")
-}
-
-dependencies {
-    api("app.simplecloud.controller:controller-api:0.0.30-dev.e3e27fc")
-}
-```
-
-```groovy {{ title: 'Groovy' }}
-repositories {
-    maven {
-        url "https://repo.simplecloud.app/snapshots/"
-    }
-}
-
-dependencies {
-    api 'app.simplecloud.controller:controller-api:0.0.30-dev.e3e27fc'
-}
-```
-
-```xml {{ title: 'Maven' }}
-<repositories>
-    <repository>
-        <id>simplecloud-snapshots</id>
-        <url>https://repo.simplecloud.app/snapshots/</url>
-    </repository>
-</repositories>
-
-<dependency>
-    <groupId>app.simplecloud.controller</groupId>
-    <artifactId>controller-api</artifactId>
-    <version>0.0.30-dev.e3e27fc</version>
-    <scope>compile</scope>
-</dependency>
-```
-
-</CodeGroup>
+<DependencySnippet
+    groupId="app.simplecloud.controller"
+    artifactId="controller-api"
+    type="snapshot"
+/>
 
 <Note>
     As soon as we release our first stable version, we'll publish the Maven package to Maven Central. Until then, you can use the snapshots repository to access the latest features.

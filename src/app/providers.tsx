@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
-import { ThemeProvider, useTheme } from 'next-themes'
+import {useEffect} from 'react'
+import {ThemeProvider, useTheme} from 'next-themes'
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 function ThemeWatcher() {
   let { resolvedTheme, setTheme } = useTheme()
@@ -27,11 +28,15 @@ function ThemeWatcher() {
   return null
 }
 
+const queryClient = new QueryClient();
+
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" disableTransitionOnChange>
-      <ThemeWatcher />
-      {children}
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" disableTransitionOnChange>
+        <ThemeWatcher />
+        {children}
+      </ThemeProvider>
+    </QueryClientProvider>
   )
 }
