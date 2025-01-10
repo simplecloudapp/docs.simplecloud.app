@@ -211,6 +211,20 @@ simplecloud stop server <name>
 -    `-C, --confirm`: Don't ask for confirmation.
 -    `-h, --help`: Help for stop.
 
+### Stop Group
+
+Stop all server of a group.
+
+```bash
+simplecloud stop group <name>
+```
+
+**Flags**
+
+-    `--timeout`: Set a timeout that prevents new server from this group to start.
+-    `-C, --confirm`: Don't ask for confirmation.
+-    `-h, --help`: Help for stop.
+
 ## Upgrade Command
 
 The `upgrade` command upgrades components of the cloud.
