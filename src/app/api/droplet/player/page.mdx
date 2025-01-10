@@ -1,4 +1,5 @@
-import {CodeGroup, Note} from "../../../../components/mdx";
+import {CodeGroup} from "../../../../components/mdx";
+import {DependencySnippet} from "../../../../components/DependencySnippet";
 
 export const metadata = {
     title: 'Player Droplet API',
@@ -22,44 +23,11 @@ The Player Droplet API provides comprehensive player management and interaction 
 
 ## Installation
 
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    repositories {
-        maven("https://repo.simplecloud.app/snapshots/")
-    }
-
-    dependencies {
-        api("app.simplecloud.droplet:player-api:0.0.0")
-    }
-    ```
-
-    ```groovy {{ title: 'Groovy' }}
-    repositories {
-        maven {
-            url "https://repo.simplecloud.app/snapshots/"
-        }
-    }
-
-    dependencies {
-        api 'app.simplecloud.droplet:player-api:0.0.0'
-    }
-    ```
-
-    ```xml {{ title: 'Maven' }}
-    <repositories>
-        <repository>
-            <id>simplecloud-snapshots</id>
-            <url>https://repo.simplecloud.app/snapshots/</url>
-        </repository>
-    </repositories>
-
-    <dependency>
-        <groupId>app.simplecloud.droplet</groupId>
-        <artifactId>player-api</artifactId>
-        <version>0.0.0</version>
-    </dependency>
-    ```
-</CodeGroup>
+<DependencySnippet
+    groupId="app.simplecloud.droplet.player"
+    artifactId="player-api"
+    type="snapshot"
+/>
 
 Authentication
 If you're using our Player Droplet API in a Minecraft server, the token is automatically provided via environment variables. For external applications, you'll need to use the master authentication token.
