@@ -27,84 +27,159 @@ The following table shows all currently supported proxy implementations:
 1. Download the plugin for your server software.
 2. Place it in your server template's plugins folder.
 
-### Configuration of the Signs Plugin
+## Configuration of the Signs Plugin
 
-The Signs Plugin is highly configurable, allowing you to create dynamic and engaging displays for your server signs. Each configuration entry defines how signs behave based on the server's state.
+The Signs Plugin uses a flexible configuration system with separate files for layouts and rules. Each sign's behavior is determined by a combination of layout configurations and rule conditions.
 
-Here’s an example that demonstrates how to configure signs for various server states:
+### Configuration Files Location
 
-```yaml {{title: "starting.yml"}}
-name: "starting"  # A unique identifier for the configuration, such as `"empty"` or `"online"`.
-rule: "STARTING"  # Specifies the server state this configuration applies to, e.g., `"ONLINE"`, `"OFFLINE"`, or `"MAINTENANCE"`.
-display-name: "%group%-%numerical-id%"  # The template for the server name shown on the sign, using placeholders like `%group%` or `%numerical-id%` to dynamically generate content.
-priority: 0  # Determines which configuration takes precedence if multiple rules apply. Higher priority values override lower ones.
-frame-update-interval: 500  # Specifies the interval (in milliseconds) at which the sign’s content updates.
-frames:
-  - lines:
-      - "starting."  # Defines the text content for the first frame.
-      - "<group>-<numerical-id>"  # Placeholder values that can be replaced dynamically.
-  - lines:
-      - "starting.."
-      - "<group>-<numerical-id>"
-  - lines:
-      - "starting..."
-      - "<group>-<numerical-id>"  # Defines additional frames to animate the text.
+The plugin's configuration files are located in the server's directory:
+- Rules: `plugins/SimpleCloud-Signs/rules/`
+- Layouts: `plugins/SimpleCloud-Signs/layouts/`
+
+Each rule and layout is defined in its own YAML file, making it easy to manage and modify individual configurations.
+
+### Rule Configuration
+
+The plugin uses a flexible rule-based system to determine how signs behave based on conditions. Rules are defined in separate configuration files and can inherit from other rules.
+
+### Rule Configuration Example
+
+```yaml {{title: "state_available.yml"}}
+name: 'state_available' # Required: Unique identifier for the rule
+
+# Matcher configuration
+matcher:
+  # MATCH_ALL: All conditions in this section must be true
+  MATCH_ALL:
+    - key: '<server_state>'
+      value: 'AVAILABLE'
+      operation: EQUALS
 ```
 
+```yaml {{title: "maintenance_lobby.yml"}}
+name: 'maintenance_lobby' # Required: Unique identifier for the rule
+inherit: 'state_available' # Optional: Inherit conditions from another rule
+
+# Matcher configuration
+matcher:
+  # MATCH_ALL: All conditions in this section must be true
+  MATCH_ALL:
+    - key: '<server_property:joinstate>'
+      value: 'maintenance'
+      operation: EQUALS
+
+  # MATCH_ANY: At least one condition in this section must be true
+  MATCH_ANY:
+    - key: '<group_name>'
+      value: 'lobby'
+      operation: EQUALS
+
+    - key: '<group_name>'
+      value: 'hub'
+      operation: EQUALS
+```
+
+This rule applies to servers that are:
+
+1. In the AVAILABLE state (inherited from state_available)
+2. Have their joinstate set to 'maintenance'
+3. Belong to either the 'hub' or 'lobby' group
+
+### Layout Configuration
+
+After setting up your rules, you'll need to configure how your signs display information. Layout configurations define the visual appearance and behavior of signs, including text content, update intervals, and animation frames.
+
+Let's use our previously defined sign rules:
+
+```yaml {{title: "online.yml"}}
+name: 'online' # Required: Unique identifier for the layout
+rule: 'state_available' # Required: The rule that should apply to this layout
+priority: 1 # Optional: Determines the order in which layouts are checked (Defaults to '0')
+            # (higher numbers = higher priority)
+            # If multiple layouts match a server's state, the one with
+            # the highest priority is used
+
+frame-update-interval: 1000 # Optional: Determines how frequently the sign's frames should update (Defaults to '500')
+
+frames: # Required: List of frames that will be displayed in sequence
+  - lines: # Required: First frame configuration
+      - '<color:#22c55e>⚡</color>'
+      - '<group_name>-<server_numerical_id>'
+      - '<server_online_players>/<server_max_players>'
+      - '<color:#22c55e><b>ONLINE</b></color>'
+
+  - lines: # Optional: Second frame configuration
+      - '<color:#22c55e>⚡</color>'
+      - '<group_name>-<server_numerical_id>'
+      - '<server_online_players>/<server_max_players>'
+      - '<color:#22c55e><b>JOIN NOW!</b></color>'
+
+  # you can add as many lines configurations as you like
+```
+```yaml {{title: "maintenance_lobby.yml"}}
+name: 'online'
+rule: 'maintenance_lobby'
+priority: 1
+frame-update-interval: 1000
+
+frames:
+  - lines:
+      - '<color:#aa903a>🚧</color>'
+      - '<group_name>-<server_numerical_id>'
+      - '<color:#aa903a><b>LOBBY</b></color>'
+      - '<color:#aa903a>🚧</color>'
+
+  - lines:
+      - '<color:#aa903a>🚧</color>'
+      - '<group_name>-<server_numerical_id>'
+      - '<color:#aa903a><b>MAINTENANCE</b></color>'
+      - '<color:#aa903a>🚧</color>'
+```
 // TODO: Loading Sign Gif
 
-## Available Sign Rules
+### Predefined Rules
 
-Each rule corresponds to a specific server state or condition and determines how the sign behaves:
+The Plugin comes with some predefined Rules:
 
-| **Rule**        | **Description**                                                 | **State**                                                                                |
-| --------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| **STARTING**    | Applies to servers in the `STARTING` state.                     | The server state is `STARTING`.                                                          |
-| **OFFLINE**     | Indicates servers that are not currently active.                | The server is `null` (does not exist in the network).                                    |
-| **MAINTENANCE** | For servers under maintenance mode.                             | The server is in the `AVAILABLE` state and has a property `"maintenance"` set to `true`. |
-| **FULL**        | Displays when a server has reached its maximum player capacity. | The server is in the `AVAILABLE` state, and `playerCount == maxPlayers`.                 |
-| **EMPTY**       | For servers with no players currently connected.                | The server is in the `AVAILABLE` state, and `playerCount == 0`.                          |
-| **ONLINE**      | For servers that are available and actively running.            | The server is in the `AVAILABLE` state.                                                  |
+| **Name**            | **Description**                                                 | **Rule**                                                                                          |
+|---------------------|-----------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| **STATE_STARTING**  | Applies to servers in the `STARTING` state.                     | The server state is `STARTING`.                                                                   |
+| **STATE_OFFLINE**   | Applies to servers which state equals `NULL`.                   | The server is `null` (does not exist in the network).                                             |
+| **STATE_AVAILABLE** | For servers that are available and actively running.            | The server is in the `AVAILABLE` state.                                                           |
+| **MAINTENANCE**     | For servers under maintenance mode.                             | Inherits Rule `STATE_AVAILABLE` and has the property `"property:joinstate"` set to `maintenance`. |
+| **FULL**            | Displays when a server has reached its maximum player capacity. | Inherits Rule `STATE_AVAILABLE` and `playerCount == maxPlayers`.                                  |
+| **EMPTY**           | For servers with no players currently connected.                | Inherits Rule `STATE_AVAILABLE` and `playerCount == 0`.                                           |
 
 ## Placeholders
 
 When configuring your signs, you can use placeholders to dynamically display information about the server. The following placeholders can be used in the sign configuration files:
 
-### Available Placeholders
+### Server Placeholder
+| Placeholder             | Description                                                                    |
+|-------------------------|--------------------------------------------------------------------------------|
+| `<server_id>`           | Unique identifier (e.g., "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8")               |
+| `<server_type>`         | Server type (UNKNOWN_SERVER, SERVER, PROXY)                                    |
+| `<server_state>`        | Server state (UNKNOWN_STATE, PREPARING, STARTING, AVAILABLE, INGAME, STOPPING) |
+| `<server_host>`         | Host machine identifier                                                        |
+| `<server_numerical_id>` | Numerical ID within group                                                      |
+| `<server_ip>`           | Server IP address                                                              |
+| `<server_port>`         | Server port                                                                    |
+| `<server_max_players>`  | Maximum allowed players                                                        |
+| `<server_min_memory>`   | Minimum RAM allocation in MB                                                   |
+| `<server_max_memory>`   | Maximum RAM allocation in MB                                                   |
+| `<server_player_count>` | Current player count                                                           |
 
-| **Placeholder**  | **Description**                                                                                                   |
-|------------------|-------------------------------------------------------------------------------------------------------------------|
-| `%group%`        | The group of the server. If not available, defaults to `"unknown"`.                                               |
-| `%numerical-id%` | The numerical ID of the server. If not available, defaults to `"0"`.                                              |
-| `%type%`         | The type of the server. If not available, defaults to `"unknown"`.                                                |
-| `%host%`         | The host of the server. If not available, defaults to `"unknown"`.                                                |
-| `%ip%`           | The IP address of the server. If not available, defaults to `"unknown"`.                                          |
-| `%port%`         | The port of the server. If not available, defaults to `"0"`.                                                      |
-| `%min-memory%`   | The minimum memory allocated to the server. If not available, defaults to `"0"`.                                  |
-| `%max-memory%`   | The maximum memory allocated to the server. If not available, defaults to `"0"`.                                  |
-| `%max-players%`  | The maximum number of players the server can hold. If not available, defaults to `"0"`.                           |
-| `%player-count%` | The current number of players on the server. If not available, defaults to `"0"`.                                 |
-| `%state%`        | The current state of the server (e.g., `STARTING`, `AVAILABLE`, etc.). If not available, defaults to `"unknown"`. |
+### Group Placeholder
+| Placeholder            | Description                                 |
+|------------------------|---------------------------------------------|
+| `<group_name>`         | Unique identifier for the group             |
+| `<group_type>`         | Server type (UNKNOWN_SERVER, SERVER, PROXY) |
+| `<group_min_memory>`   | Minimum RAM allocation in MB                |
+| `<group_max_memory>`   | Maximum RAM allocation in MB                |
+| `<group_max_players>`  | Maximum players per server                  |
+| `<group_player_count>` | Current players count                       |
 
-### Example Usage
-
-Here is an example configuration that makes use of these placeholders:
-
-```yaml
-name: "online"
-rule: "ONLINE"
-display-name: "%group%-%numerical-id%"
-priority: 50
-frame-update-interval: 500
-frames:
-  - lines:
-      - "Server: %group%"
-      - "ID: %numerical-id%"
-      - "Players: %player-count%/%max-players%"
-      - "State: %state%"
-```
-
-// TODO: Sign Layout Image
 
 ## Commands
 
@@ -121,6 +196,7 @@ The Signs Plugin provides a set of commands for managing server signs:
 | `signs.command.*`            | Grants access to all sign-related commands. This is a wildcard permission for all sign actions.    |
 | `signs.command.add`          | Allows the user to register a new sign for a specific group.                                       |
 | `signs.command.remove`       | Allows the user to unregister a sign by looking at the sign or specifying the group name.          |
+| `signs.command.remove.group` | Allows the user to remove a sign using the group name directly (used with `/sign remove <group>`). |
 | `signs.command.remove.group` | Allows the user to remove a sign using the group name directly (used with `/sign remove <group>`). |
 
 ## What's Next?
