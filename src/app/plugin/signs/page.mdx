@@ -119,7 +119,8 @@ priority: 1 # Optional: Determines the order in which layouts are checked (Defau
 frame-update-interval: 1000 # Optional: Determines how frequently the sign's frames should update (Defaults to '500')
 
 frames: # Required: List of frames that will be displayed in sequence
-  - lines: # Required: First frame configuration
+  - sides: 'FRONT' # Optional: Determines on what side this frame should be displayed (Defaults to 'FRONT') ('FRONT', 'BACK', 'BACK')
+    lines: # Required: First frame configuration
       - '<color:#22c55e>⚡</color>'
       - '<group_name>-<server_numerical_id>'
       - '<server_online_players>/<server_max_players>'
@@ -140,13 +141,15 @@ priority: 1
 frame-update-interval: 1000
 
 frames:
-  - lines:
+  - sides: 'BOTH'
+    lines:
       - '<color:#aa903a>🚧</color>'
       - '<group_name>-<server_numerical_id>'
       - '<color:#aa903a><b>LOBBY</b></color>'
       - '<color:#aa903a>🚧</color>'
 
-  - lines:
+  - sides: 'BOTH'
+    lines:
       - '<color:#aa903a>🚧</color>'
       - '<group_name>-<server_numerical_id>'
       - '<color:#aa903a><b>MAINTENANCE</b></color>'
