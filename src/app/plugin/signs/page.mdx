@@ -86,6 +86,22 @@ This rule applies to servers that are:
 2. Have their joinstate set to 'maintenance'
 3. Belong to either the 'hub' or 'lobby' group
 
+### Rule Operations
+
+A list of all available Rule operations:
+
+| **Name**         | **Description**                                                                              |
+|------------------|----------------------------------------------------------------------------------------------|
+| **REGEX**        | Matches values using a regular expression. Flexible for complex patterns and validations.    |
+| **PATTERN**      | Matches values based on predefined patterns. Suitable for reusable and standardized formats. |
+| **EQUALS**       | Checks for exact equality between two values.                                                |
+| **CONTAINS**     | Verifies if a value contains a specific substring.                                           |
+| **STARTS_WITH**  | Ensures the value begins with the specified prefix.                                          |
+| **ENDS_WITH**    | Ensures the value ends with the specified suffix.                                            |
+| **GREATER_THAN** | Compares numerical values to check if one is greater than the other.                         |
+
+The matcher configuration includes a `negate` option, which is set to `false` by default. When set to `true`, any of the operations will perform the inverse of their standard behavior.
+
 ### Layout Configuration
 
 After setting up your rules, you'll need to configure how your signs display information. Layout configurations define the visual appearance and behavior of signs, including text content, update intervals, and animation frames.
