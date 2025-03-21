@@ -37,7 +37,7 @@ Official documentation for SimpleCloud, providing comprehensive guides, tutorial
 Contributions to SimpleCloud are welcome and highly appreciated. However, before you jump right into it, we would like you to read our [Contribution Guide][docs-contribute].
 
 ## License
-This repository is licensed under [Apache 2.0][license].
+This repository is licensed under [Tailwind UI License][license].
 
 <!-- LINK GROUP -->
 [banner]: https://raw.githubusercontent.com/simplecloudapp/branding/refs/heads/main/readme/banner/docs.png
@@ -49,7 +49,7 @@ This repository is licensed under [Apache 2.0][license].
 [modrinth]: https://modrinth.com/organization/simplecloud
 
 <!-- ⛔ DON'T TOUCH -->
-[license]: https://opensource.org/licenses/Apache-2.0
+[license]: https://github.com/simplecloudapp/docs.simplecloud.app/blob/main/LICENSE.md
 [snapshots]: https://repo.simplecloud.app/#/snapshots
 
 [social-x]: https://x.com/simplecloudapp

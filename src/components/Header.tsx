@@ -81,7 +81,7 @@ export const Header = forwardRef<
           <ul role="list" className="flex items-center gap-8">
             <TopLevelNavItem href="/changelog">Changelog</TopLevelNavItem>
             <TopLevelNavItem href="/">Documentation</TopLevelNavItem>
-            <TopLevelNavItem href="https://github.com/theSimpleCloud">Github</TopLevelNavItem>
+            <TopLevelNavItem href="https://github.com/simplecloudapp">Github</TopLevelNavItem>
             <TopLevelNavItem href="https://discord.simplecloud.app">Discord</TopLevelNavItem>
           </ul>
         </nav>

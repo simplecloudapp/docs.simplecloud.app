@@ -91,7 +91,7 @@ async function fetchLatestVersion(groupId: string, artifactId: string, type: 'sn
     }
 
     const response = await fetch(
-        `https://search.maven.org/solrsearch/select?q=g:"${groupId}"+AND+a:"${artifactId}"&rows=1&wt=json`
+        `https://search.maven.org/solrsearch/select?q=g:&quot;${groupId}&quot;+AND+a:&quot;${artifactId}&quot;&rows=1&wt=json`
     )
     if (!response.ok) throw new Error('Version not found')
 
@@ -102,7 +102,6 @@ async function fetchLatestVersion(groupId: string, artifactId: string, type: 'sn
     return version
 }
 
-// First, let's create a helper function to get the code string for each language
 function getCodeString(language: 'kotlin' | 'groovy' | 'maven', {
     repositories,
     groupId,
@@ -166,7 +165,7 @@ function KotlinSnippet({ repositories, groupId, artifactId, version }: {
                     {repositories.map(repo => (
                         <Fragment key={repo.id}>
                             {'    '}<span className="text-violet-300">maven</span>
-                            {'('}<span className="text-sky-300">"{repo.url}"</span>{')'}<br/>
+                            {'('}<span className="text-sky-300">&quot;{repo.url}&quot;</span>{')'}<br/>
                         </Fragment>
                     ))}
                     {'}'}
@@ -175,7 +174,7 @@ function KotlinSnippet({ repositories, groupId, artifactId, version }: {
                     <span className="text-sky-300">dependencies</span> {'{'}
                     <br/>
                     {'    '}<span className="text-violet-300">api</span>
-                    {'('}<span className="text-sky-300">"{groupId}:{artifactId}:{version}"</span>{')'}
+                    {'('}<span className="text-sky-300">&quot;{groupId}:{artifactId}:{version}&quot;</span>{')'}
                     <br/>
                     {'}'}
                 </code>
@@ -201,7 +200,7 @@ function GroovySnippet({ repositories, groupId, artifactId, version }: {
                     {repositories.map(repo => (
                         <Fragment key={repo.id}>
                             <br/>{'    '}maven {'{'}
-                            <br/>{'        '}url <span className="text-sky-300">"{repo.url}"</span>
+                            <br/>{'        '}url <span className="text-sky-300">&quot;{repo.url}&quot;</span>
                             <br/>{'    '}{'}'}<br/>
                         </Fragment>
                     ))}
@@ -209,7 +208,7 @@ function GroovySnippet({ repositories, groupId, artifactId, version }: {
                     <br/>
                     <br/>
                     <span className="text-sky-300">dependencies</span> {'{'}
-                    <br/>{'    '}api <span className="text-sky-300">'{groupId}:{artifactId}:{version}'</span>
+                    <br/>{'    '}api <span className="text-sky-300">&apos;{groupId}:{artifactId}:{version}&apos;</span>
                     <br/>{'}'}
                 </code>
             </pre>

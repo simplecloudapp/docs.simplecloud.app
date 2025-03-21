@@ -297,7 +297,7 @@ export function Navigation(props: React.ComponentPropsWithoutRef<'nav'>) {
       <ul role="list">
         <TopLevelNavItem href="/changelog">Changelog</TopLevelNavItem>
         <TopLevelNavItem href="/">Documentation</TopLevelNavItem>
-        <TopLevelNavItem href="https://github.com/theSimpleCloud">Github</TopLevelNavItem>
+        <TopLevelNavItem href="https://github.com/simplecloudapp">Github</TopLevelNavItem>
         <TopLevelNavItem href="https://discord.simplecloud.app">Discord</TopLevelNavItem>
         {navigation.map((group, groupIndex) => (
           <NavigationGroup
