@@ -8,32 +8,30 @@ export const metadata = {
 }
 
 export const sections = [
-  { title: 'Installation', id: 'installation' },
-  { title: 'Authentication', id: 'authentication' },
-  { title: 'Other Programming Languages', id: 'other-programming-languages' },
-  { title: 'createGroup', id: 'create-group' },
-  { title: 'getGroupByName', id: 'get-group-by-name' },
-  { title: 'getAllGroups', id: 'get-all-groups' },
-  { title: 'getGroupsByType', id: 'get-groups-by-type' },
-  { title: 'updateGroup', id: 'update-group' },
-  { title: 'deleteGroup', id: 'delete-group' },
-  { title: 'startServer', id: 'start-server' },
-  { title: 'getAllServers', id: 'get-all-servers' },
-  { title: 'getServerById', id: 'get-server-by-id' },
-  { title: 'getServersByGroup', id: 'get-servers-by-group' },
-  { title: 'getServerByNumerical', id: 'get-server-by-numerical' },
-  { title: 'getServersByType', id: 'get-servers-by-type' },
-  { title: 'updateServerState', id: 'update-server-state' },
-  { title: 'updateServerProperty', id: 'update-server-property' },
-  { title: 'stopServer', id: 'stop-server' },
+  { title: 'Overview', id: 'overview' },
+  { title: 'Getting Started', id: 'getting-started' },
+  { title: 'Group Management', id: 'group-management' },
+  { title: 'Server Management', id: 'server-management' },
   { title: 'Data Models', id: 'data-models' },
 ]
 
 # Controller API
 
-The Controller API is the central interface for managing your SimpleCloud infrastructure. It provides comprehensive control over server groups, individual servers, and real-time event handling through our Protocol Buffer based controllerApi. {{ className: 'lead' }}
+The Controller API is the central interface for managing your SimpleCloud infrastructure. It provides comprehensive control over server groups, individual servers, and real-time event handling. {{ className: 'lead' }}
 
-## Installation
+## Overview
+
+The Controller API allows you to:
+
+- Create and manage server groups
+- Start and stop servers
+- Monitor server states
+- Configure server properties
+- Handle real-time events
+
+## Getting Started
+
+### 1. Add the Dependency
 
 <DependencySnippet
   groupId="app.simplecloud.controller"
@@ -42,397 +40,319 @@ The Controller API is the central interface for managing your SimpleCloud infras
 />
 
 <Note>
-  As soon as we release our first stable version, we'll publish the Maven
-  package to Maven Central. Until then, you can use the snapshots repository to
-  access the latest features.
+  The API is currently available as a snapshot version. Once we release our
+  first stable version, it will be published to Maven Central.
 </Note>
 
-## Authentication
+### 2. Choose Your Language
 
-If you're using our Controller API in a Minecraft server, the token is automatically provided via environment variables. For external applications, you'll need to use the master authentication token.
+While our API is primarily written in Kotlin, we support multiple languages through our [Protocol Buffer specifications](https://buf.build/simplecloud/proto-specs):
 
-You can find the master token in `/components/.secrets/auth.secret` in your SimpleCloud directory.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Environment Auth' }}
-    // Uses CONTROLLER_SECRET from environment
-    val controllerApi = Controller.createCoroutineApi()
-    ```
-
-    ```kotlin {{ title: 'Direct Auth' }}
-    // Provide token directly
-    val controllerApi = Controller.createCoroutineApi("your-auth-token")
-    ```
-
-</CodeGroup>
-
-## Other Programming Languages
-
-Our Controller API is primarily written in Kotlin, but we also have [Proto Definitions](https://buf.build/simplecloud/proto-specs) available for other languages. You can find the definitions in the [buf.build/simplecloud/proto-specs](https://buf.build/simplecloud/proto-specs) repository.
-
-It provides support for all kinds of languages, including:
-
-- Java
+- Java (Native support)
+- Kotlin (Native support)
 - TypeScript
 - Go
 - Rust
-- Other languages supported by [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/reference/other)
+- Other languages supported by Protocol Buffers
 
-## API Initialization
+### 3. Initialize the API
 
 <CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val controllerApi = Controller.createCoroutineApi()
-    ```
+```kotlin {{ title: 'Kotlin' }}
+// For Minecraft servers (uses environment variables)
+val controllerApi = Controller.createCoroutineApi()
 
-    ```java {{ title: 'Java' }}
-    Controller.Future controllerApi = Controller.createFutureApi();
-    ```
+// For external applications (provide token directly)
+val controllerApi = Controller.createCoroutineApi("your-auth-token")
+
+````
+
+```java {{ title: 'Java' }}
+// For Minecraft servers (uses environment variables)
+Controller.Future controllerApi = Controller.createFutureApi();
+
+// For external applications (provide token directly)
+Controller.Future controllerApi = Controller.createFutureApi("your-auth-token");
+````
 
 </CodeGroup>
 
-## createGroup
+### 4. Authentication
 
-Creates a new server group template.
+The API uses token-based authentication:
+
+- **Minecraft Servers**: Token is automatically provided via `CONTROLLER_SECRET` environment variable
+- **External Applications**: Use the master token from `/components/.secrets/auth.secret`
+
+## Group Management
+
+Groups are templates for server instances. They define the configuration that new servers will use when started.
+
+### Create a Group
 
 <CodeGroup>
+```kotlin {{ title: 'Kotlin' }}
+val group = Group(
+    name = "lobby",
+    type = ServerType.SERVER,
+    minMemory = 512,
+    maxMemory = 1024,
+    startPort = 25565,
+    minOnlineCount = 1,
+    maxOnlineCount = 5,
+    maxPlayers = 100,
+    newServerPlayerRatio = 50,
+    properties = mapOf("gamemode" to "LOBBY")
+)
 
-    ```kotlin {{ title: 'Kotlin' }}
-    val group = Group(
-        name = "lobby",
-        type = ServerType.SERVER,
-        minMemory = 512,
-        maxMemory = 1024,
-        startPort = 25565,
-        minOnlineCount = 1,
-        maxOnlineCount = 5,
-        maxPlayers = 100,
-        newServerPlayerRatio = 50,
-        properties = mapOf("gamemode" to "LOBBY")
-    )
+val createdGroup = controllerApi.getGroups().createGroup(group)
 
-    val createdGroup = controllerApi.getGroups().createGroup(group)
-    ```
+````
 
-    ```java {{ title: 'Java' }}
-    Group group = new Group(
-        "lobby",
-        ServerType.SERVER,
-        512L,
-        1024L,
-        25565L,
-        1L,
-        5L,
-        100L,
-        50L,
-        Map.of("gamemode", "LOBBY")
-    );
+```java {{ title: 'Java' }}
+Group group = new Group(
+    "lobby",
+    ServerType.SERVER,
+    512L,
+    1024L,
+    25565L,
+    1L,
+    5L,
+    100L,
+    50L,
+    Map.of("gamemode", "LOBBY")
+);
 
-    controllerApi.getGroups().createGroup(group).thenAccept(createdGroup -> {
-        // Group created
-    });
-    ```
+controllerApi.getGroups().createGroup(group).thenAccept(createdGroup -> {
+    // Group created successfully
+});
+````
 
 </CodeGroup>
 
-## getGroupByName
-
-Retrieves a specific group by its name.
+### Get Groups
 
 <CodeGroup>
+```kotlin {{ title: 'Kotlin' }}
+// Get a specific group
+val lobbyGroup = controllerApi.getGroups().getGroupByName("lobby")
 
-    ```kotlin {{ title: 'Kotlin' }}
-    val lobbyGroup = controllerApi.getGroups().getGroupByName("lobby")
-    ```
+// Get all groups
+val allGroups = controllerApi.getGroups().getAllGroups()
 
-    ```java {{ title: 'Java' }}
-    controllerApi.getGroups().getGroupByName("lobby").thenAccept(group -> {
+// Get groups by type
+val serverGroups = controllerApi.getGroups().getGroupsByType(ServerType.SERVER)
+
+````
+
+```java {{ title: 'Java' }}
+// Get a specific group
+controllerApi.getGroups().getGroupByName("lobby")
+    .thenAccept(group -> {
         // Handle group
     });
-    ```
 
-</CodeGroup>
-
-## getAllGroups
-
-Retrieves all configured groups.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    val allGroups = controllerApi.getGroups().getAllGroups()
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getGroups().getAllGroups().thenAccept(groups -> {
+// Get all groups
+controllerApi.getGroups().getAllGroups()
+    .thenAccept(groups -> {
         // Handle groups
     });
-    ```
 
-</CodeGroup>
-
-## getGroupsByType
-
-Retrieves all groups of a specific type.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    val serverGroups = controllerApi.getGroups().getGroupsByType(ServerType.SERVER)
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getGroups().getGroupsByType(ServerType.SERVER).thenAccept(groups -> {
+// Get groups by type
+controllerApi.getGroups().getGroupsByType(ServerType.SERVER)
+    .thenAccept(groups -> {
         // Handle server groups
     });
-    ```
+````
 
 </CodeGroup>
 
-## updateGroup
-
-Updates an existing group's configuration.
+### Update & Delete Groups
 
 <CodeGroup>
+```kotlin {{ title: 'Kotlin' }}
+// Update a group
+val updatedGroup = existingGroup.copy(
+    maxPlayers = 200,
+    maxMemory = 2048
+)
+controllerApi.getGroups().updateGroup(updatedGroup)
 
-    ```kotlin {{ title: 'Kotlin' }}
-    val updatedGroup = existingGroup.copy(
-        maxPlayers = 200,
-        maxMemory = 2048
-    )
-    controllerApi.getGroups().updateGroup(updatedGroup)
-    ```
+// Delete a group
+controllerApi.getGroups().deleteGroup("lobby")
 
-    ```java {{ title: 'Java' }}
-    Group updatedGroup = existingGroup.toBuilder()
-        .setMaxPlayers(200)
-        .setMaxMemory(2048)
-        .build();
+````
 
-    controllerApi.getGroups().updateGroup(updatedGroup).thenAccept(group -> {
+```java {{ title: 'Java' }}
+// Update a group
+Group updatedGroup = existingGroup.toBuilder()
+    .setMaxPlayers(200)
+    .setMaxMemory(2048)
+    .build();
+
+controllerApi.getGroups().updateGroup(updatedGroup)
+    .thenAccept(group -> {
         // Group updated
     });
-    ```
 
-</CodeGroup>
-
-## deleteGroup
-
-Removes a server group.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    controllerApi.getGroups().deleteGroup("lobby")
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getGroups().deleteGroup("lobby").thenAccept(deletedGroup -> {
+// Delete a group
+controllerApi.getGroups().deleteGroup("lobby")
+    .thenAccept(success -> {
         // Group deleted
     });
-    ```
+````
 
 </CodeGroup>
 
-## startServer
+## Server Management
 
-Starts a new server instance from a group template.
+Servers are instances created from group templates. The API provides comprehensive control over server lifecycle and properties.
+
+### Start & Stop Servers
 
 <CodeGroup>
+```kotlin {{ title: 'Kotlin' }}
+// Start a server
+val server = controllerApi.getServers().startServer(
+    groupName = "lobby",
+    startCause = ServerStartCause.API_START
+)
 
-    ```kotlin {{ title: 'Kotlin' }}
-    val server = controllerApi.getServers().startServer(
-        groupName = "lobby",
-        startCause = ServerStartCause.API_START
-    )
-    ```
+// Stop a server by ID
+controllerApi.getServers().stopServer(
+id = "server-uuid",
+stopCause = ServerStopCause.API_STOP
+)
 
-    ```java {{ title: 'Java' }}
-    controllerApi.getServers().startServer("lobby", ServerStartCause.API_START).thenAccept(server -> {
+// Stop a server by group and numerical ID
+controllerApi.getServers().stopServer(
+groupName = "lobby",
+numericalId = 1,
+stopCause = ServerStopCause.API_STOP
+)
+
+````
+
+```java {{ title: 'Java' }}
+// Start a server
+controllerApi.getServers().startServer("lobby", ServerStartCause.API_START)
+    .thenAccept(server -> {
         // Server started
     });
-    ```
 
-</CodeGroup>
-
-## getAllServers
-
-Retrieves all running servers.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    val allServers = controllerApi.getServers().getAllServers()
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getServers().getAllServers().thenAccept(servers -> {
-        // Handle servers
-    });
-    ```
-
-</CodeGroup>
-
-## getServerById
-
-Retrieves a specific server by its unique ID.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    val server = controllerApi.getServers().getServerById("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8")
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getServers().getServerById("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8").thenAccept(server -> {
-        // Handle server
-    });
-    ```
-
-</CodeGroup>
-
-## getServersByGroup
-
-Retrieves all servers belonging to a specific group.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    val lobbyServers = controllerApi.getServers().getServersByGroup("lobby")
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getServers().getServersByGroup("lobby").thenAccept(servers -> {
-        // Handle servers
-    });
-    ```
-
-</CodeGroup>
-
-## getServerByNumerical
-
-Retrieves a specific server by its group name and numerical ID.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    val specificServer = controllerApi.getServers().getServerByNumerical("lobby", 1)
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getServers().getServerByNumerical("lobby", 1).thenAccept(server -> {
-        // Handle server
-    });
-    ```
-
-</CodeGroup>
-
-## getServersByType
-
-Retrieves all servers of a specific type.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    val serverServers = controllerApi.getServers().getServersByType(ServerType.SERVER)
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getServers().getServersByType(ServerType.SERVER).thenAccept(servers -> {
-        // Handle servers
-    });
-    ```
-
-</CodeGroup>
-
-## updateServerState
-
-Updates the state of a server.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    controllerApi.getServers().updateServerState(
-        id = "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
-        state = ServerState.AVAILABLE
-    )
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getServers().updateServerState("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8", ServerState.AVAILABLE).thenAccept(server -> {
-        // State updated
-    });
-    ```
-
-</CodeGroup>
-
-## updateServerProperty
-
-Updates a custom property of a server.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    controllerApi.getServers().updateServerProperty(
-        id = "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
-        key = "gameMode",
-        value = "CAPTURE_THE_FLAG"
-    )
-    ```
-
-    ```java {{ title: 'Java' }}
-    controllerApi.getServers().updateServerProperty(
-        "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
-        "gameMode",
-        "CAPTURE_THE_FLAG"
-    ).thenAccept(server -> {
-        // Property updated
-    });
-    ```
-
-</CodeGroup>
-
-## stopServer
-
-Stops a running server instance.
-
-<CodeGroup>
-
-    ```kotlin {{ title: 'Kotlin' }}
-    // Stop by ID
-    controllerApi.getServers().stopServer(
-        id = "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8",
-        stopCause = ServerStopCause.API_STOP
-    )
-
-    // Stop by group and numerical ID
-    controllerApi.getServers().stopServer(
-        groupName = "lobby",
-        numericalId = 1,
-        stopCause = ServerStopCause.API_STOP
-    )
-    ```
-
-    ```java {{ title: 'Java' }}
-    // Stop by ID
-    controllerApi.getServers().stopServer("0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8", ServerStopCause.API_STOP).thenAccept(server -> {
+// Stop a server by ID
+controllerApi.getServers().stopServer("server-uuid", ServerStopCause.API_STOP)
+    .thenAccept(success -> {
         // Server stopped
     });
 
-    // Stop by group and numerical ID
-    controllerApi.getServers().stopServer("lobby", 1L, ServerStopCause.API_STOP).thenAccept(server -> {
+// Stop a server by group and numerical ID
+controllerApi.getServers().stopServer("lobby", 1L, ServerStopCause.API_STOP)
+    .thenAccept(success -> {
         // Server stopped
     });
-    ```
+````
+
+</CodeGroup>
+
+### Query Servers
+
+<CodeGroup>
+```kotlin {{ title: 'Kotlin' }}
+// Get all servers
+val allServers = controllerApi.getServers().getAllServers()
+
+// Get a specific server by ID
+val server = controllerApi.getServers().getServerById("server-uuid")
+
+// Get servers by group
+val lobbyServers = controllerApi.getServers().getServersByGroup("lobby")
+
+// Get a server by numerical ID
+val specificServer = controllerApi.getServers().getServerByNumerical("lobby", 1)
+
+// Get servers by type
+val serverServers = controllerApi.getServers().getServersByType(ServerType.SERVER)
+
+````
+
+```java {{ title: 'Java' }}
+// Get all servers
+controllerApi.getServers().getAllServers()
+    .thenAccept(servers -> {
+        // Handle servers
+    });
+
+// Get a specific server by ID
+controllerApi.getServers().getServerById("server-uuid")
+    .thenAccept(server -> {
+        // Handle server
+    });
+
+// Get servers by group
+controllerApi.getServers().getServersByGroup("lobby")
+    .thenAccept(servers -> {
+        // Handle servers
+    });
+
+// Get a server by numerical ID
+controllerApi.getServers().getServerByNumerical("lobby", 1)
+    .thenAccept(server -> {
+        // Handle server
+    });
+
+// Get servers by type
+controllerApi.getServers().getServersByType(ServerType.SERVER)
+    .thenAccept(servers -> {
+        // Handle servers
+    });
+````
+
+</CodeGroup>
+
+### Update Server Properties
+
+<CodeGroup>
+```kotlin {{ title: 'Kotlin' }}
+// Update server state
+controllerApi.getServers().updateServerState(
+    id = "server-uuid",
+    state = ServerState.AVAILABLE
+)
+
+// Update custom property
+controllerApi.getServers().updateServerProperty(
+id = "server-uuid",
+key = "gameMode",
+value = "CAPTURE_THE_FLAG"
+)
+
+````
+
+```java {{ title: 'Java' }}
+// Update server state
+controllerApi.getServers().updateServerState(
+    "server-uuid",
+    ServerState.AVAILABLE
+).thenAccept(server -> {
+    // State updated
+});
+
+// Update custom property
+controllerApi.getServers().updateServerProperty(
+    "server-uuid",
+    "gameMode",
+    "CAPTURE_THE_FLAG"
+).thenAccept(server -> {
+    // Property updated
+});
+````
 
 </CodeGroup>
 
 ## Data Models
 
 ### Group Properties
-
-The `Group` class represents a server group template with the following properties:
 
 | Property             | Type                  | Description                                                     |
 | -------------------- | --------------------- | --------------------------------------------------------------- |
@@ -449,11 +369,9 @@ The `Group` class represents a server group template with the following properti
 
 ### Server Properties
 
-The `Server` class represents a running server instance with the following properties:
-
 | Property    | Type                  | Description                                                                    |
 | ----------- | --------------------- | ------------------------------------------------------------------------------ |
-| uniqueId    | `string`              | Unique identifier (e.g., "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8")               |
+| uniqueId    | `string`              | Unique identifier                                                              |
 | type        | `enum`                | Server type (UNKNOWN_SERVER, SERVER, PROXY)                                    |
 | group       | `string`              | Parent group name                                                              |
 | host        | `string`              | Host machine identifier                                                        |

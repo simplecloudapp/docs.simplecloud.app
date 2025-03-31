@@ -8,10 +8,8 @@ export const metadata = {
 }
 
 export const sections = [
-  { title: 'Installation', id: 'installation' },
-  { title: 'Authentication', id: 'authentication' },
-  { title: 'Other Programming Languages', id: 'other-programming-languages' },
-  { title: 'API Initialization', id: 'api-initialization' },
+  { title: 'Overview', id: 'overview' },
+  { title: 'Getting Started', id: 'getting-started' },
   { title: 'Player Management', id: 'player-management' },
   { title: 'Player Properties', id: 'player-properties' },
   { title: 'Adventure Integration', id: 'adventure-integration' },
@@ -21,7 +19,19 @@ export const sections = [
 
 The Player Droplet API provides comprehensive player management and interaction capabilities across your SimpleCloud network, featuring both Future and Coroutine-based implementations. {{ className: 'lead' }}
 
-## Installation
+## Overview
+
+The Player Droplet API allows you to:
+
+- Manage players across your entire network
+- Track player states and properties
+- Send rich text messages and effects
+- Handle player connections and transfers
+- Integrate with Adventure API for rich content
+
+## Getting Started
+
+### 1. Add the Dependency
 
 <DependencySnippet
   groupId="app.simplecloud.droplet.player"
@@ -29,472 +39,334 @@ The Player Droplet API provides comprehensive player management and interaction 
   type="snapshot"
 />
 
-Authentication
-If you're using our Player Droplet API in a Minecraft server, the token is automatically provided via environment variables. For external applications, you'll need to use the master authentication token.
-You can find the master token in /components/.secrets/auth.secret in your SimpleCloud directory.
+### 2. Choose Your Language
 
-<CodeGroup>
+While our API is primarily written in Kotlin, we support multiple languages through our [Protocol Buffer specifications](https://buf.build/simplecloud/proto-specs):
 
-    ```kotlin {{ title: 'Environment Auth' }}
-    // Uses CONTROLLER_SECRET from environment
-    val playerApi = PlayerApi.createCoroutineApi()
-    ```
-
-    ```kotlin {{ title: 'Direct Auth' }}
-    // Provide token directly
-    val playerApi = PlayerApi.createCoroutineApi("your-auth-token")
-    ```
-
-</CodeGroup>
-
-## Other Programming Languages
-
-Our Player Droplet API is primarily written in Kotlin, but we also have [Proto Definitions](https://buf.build/simplecloud/proto-specs) available for other languages. You can find the definitions in the [buf.build/simplecloud/proto-specs](https://buf.build/simplecloud/proto-specs) repository.
-
-It provides support for all kinds of languages, including:
-
-- Java
+- Java (Native support)
+- Kotlin (Native support)
 - TypeScript
 - Go
 - Rust
-- Other languages supported by [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/reference/other)
+- Other languages supported by Protocol Buffers
 
-## API Initialization
+### 3. Initialize the API
 
 <CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val playerApi = PlayerApi.createCoroutineApi()
-    ```
+```kotlin {{ title: 'Kotlin' }}
+// For Minecraft servers (uses environment variables)
+val playerApi = PlayerApi.createCoroutineApi()
 
-    ```java {{ title: 'Java' }}
-    PlayerApi.Future playerApi = PlayerApi.createFutureApi();
-    ```
+// For external applications (provide token directly)
+val playerApi = PlayerApi.createCoroutineApi("your-auth-token")
+````
+
+```java {{ title: 'Java' }}
+// For Minecraft servers (uses environment variables)
+PlayerApi.Future playerApi = PlayerApi.createFutureApi();
+
+// For external applications (provide token directly)
+PlayerApi.Future playerApi = PlayerApi.createFutureApi("your-auth-token");
+````
 
 </CodeGroup>
+
+### 4. Authentication
+
+The API uses token-based authentication:
+
+- **Minecraft Servers**: Token is automatically provided via `CONTROLLER_SECRET` environment variable
+- **External Applications**: Use the master token from `/components/.secrets/auth.secret`
 
 ## Player Management
 
-### getOfflinePlayer
+The API provides comprehensive methods to manage players across your network.
 
-Retrieves player data regardless of online status.
+### Query Players
 
 <CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val player = playerApi.getOfflinePlayer(name)
-    println("Player ${player.getName()} first joined at ${player.getFirstLogin()}")
-    ```
+```kotlin {{ title: 'Kotlin' }}
+// Get an offline player
+val player = playerApi.getOfflinePlayer(name)
+println("Player ${player.getName()} first joined at ${player.getFirstLogin()}")
 
-    ```java {{ title: 'Java' }}
-    playerApi.getOfflinePlayer("Steve")
-        .thenAccept(player -> {
-            System.out.println("Player " + player.getName() +
-                " first joined at " + player.getFirstLogin());
+// Get an online player
+val onlinePlayer = playerApi.getOnlinePlayer(name)
+println("Player ${onlinePlayer.getName()} is on server ${onlinePlayer.getConnectedServerName()}")
+
+// Get all online players
+val players = playerApi.getOnlinePlayers()
+players.forEach { player ->
+    println("${player.getName()} on ${player.getConnectedServerName()}")
+}
+
+// Get online player count
+val count = playerApi.getOnlinePlayerCount()
+println("Online players: $count")
+````
+
+```java {{ title: 'Java' }}
+// Get an offline player
+playerApi.getOfflinePlayer("Steve")
+    .thenAccept(player -> {
+        System.out.println("Player " + player.getName() +
+            " first joined at " + player.getFirstLogin());
+    });
+
+// Get an online player
+playerApi.getOnlinePlayer("Steve")
+    .thenAccept(player -> {
+        System.out.println("Player " + player.getName() +
+            " is on server " + player.getConnectedServerName());
+    });
+
+// Get all online players
+playerApi.getOnlinePlayers()
+    .thenAccept(players -> {
+        players.forEach(player -> {
+            System.out.println(player.getName() + " on " +
+                player.getConnectedServerName());
         });
-    ```
+    });
+
+// Get online player count
+playerApi.getOnlinePlayerCount()
+    .thenAccept(count -> {
+        System.out.println("Online players: " + count);
+    });
+````
 
 </CodeGroup>
 
-### getOnlinePlayer
-
-Retrieves data for currently online players.
+### Player Actions
 
 <CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val player = playerApi.getOnlinePlayer(name)
-    println("Player ${player.getName()} is on server ${player.getConnectedServerName()}")
-    ```
-
-    ```java {{ title: 'Java' }}
-    playerApi.getOnlinePlayer("Steve")
-        .thenAccept(player -> {
-            System.out.println("Player " + player.getName() +
-                " is on server " + player.getConnectedServerName());
-        });
-    ```
-
-</CodeGroup>
-
-### getOnlinePlayers
-
-Retrieves a list of all currently online players.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val players = playerApi.getOnlinePlayers()
-    players.forEach { player ->
-        println("${player.getName()} on ${player.getConnectedServerName()}")
-    }
-    ```
-
-    ```java {{ title: 'Java' }}
-    playerApi.getOnlinePlayers()
-        .thenAccept(players -> {
-            players.forEach(player -> {
-                System.out.println(player.getName() + " on " + player.getConnectedServerName());
-            });
-        });
-    ```
-
-</CodeGroup>
-
-### getOnlinePlayerCount
-
-Returns the total number of online players.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val count = playerApi.getOnlinePlayerCount()
-    println("Online players: $count")
-    ```
-
-    ```java {{ title: 'Java' }}
-    playerApi.getOnlinePlayerCount()
-        .thenAccept(count -> {
-            System.out.println("Online players: " + count);
-        });
-    ```
-
-</CodeGroup>
-
-### connectPlayer
-
-Connects a player to a specific server.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val result = playerApi.connectPlayer(uniqueId, serverName)
-    println("Connection result: $result")
-    ```
-
-    ```java {{ title: 'Java' }}
-    playerApi.connectPlayer(uniqueId, "lobby-1")
-        .thenAccept(result -> {
-            System.out.println("Connection result: " + result);
-        });
-    ```
-
-</CodeGroup>
-
-### isOnline
-
-Checks if a player is currently online.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val isOnline = playerApi.isOnline(uniqueId)
-    println("Player online: $isOnline")
-    ```
-
-    ```java {{ title: 'Java' }}
-    playerApi.isOnline(uniqueId)
-        .thenAccept(isOnline -> {
-            System.out.println("Player online: " + isOnline);
-        });
-    ```
-
-</CodeGroup>
-
-### updateServer
-
-Updates a player's current server information.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val success = playerApi.updateServer(uniqueId, serverName)
-    println("Server update success: $success")
-    ```
-
-    ```java {{ title: 'Java' }}
-    playerApi.updateServer(uniqueId, "lobby-1")
-        .thenAccept(success -> {
-            System.out.println("Server update success: " + success);
-        });
-    ```
-
-</CodeGroup>
-
-## Player Properties
-
-### getUniqueId
-
-Returns the player's unique identifier.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val uuid = player.getUniqueId()
-    println("Player UUID: $uuid")
-    ```
-
-    ```java {{ title: 'Java' }}
-    UUID uuid = player.getUniqueId();
-    System.out.println("Player UUID: " + uuid);
-    ```
-
-</CodeGroup>
-
-### getName
-
-Returns the player's username.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val name = player.getName()
-    println("Player name: $name")
-    ```
-
-    ```java {{ title: 'Java' }}
-    String name = player.getName();
-    System.out.println("Player name: " + name);
-    ```
-
-</CodeGroup>
-
-### getDisplayName
-
-Returns the player's custom display name, if set.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val displayName = player.getDisplayName()
-    println("Display name: $displayName")
-    ```
-
-    ```java {{ title: 'Java' }}
-    String displayName = player.getDisplayName();
-    System.out.println("Display name: " + displayName);
-    ```
-
-</CodeGroup>
-
-### getFirstLogin
-
-Returns the timestamp of the player's first login.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val firstLogin = player.getFirstLogin()
-    println("First joined: ${Date(firstLogin)}")
-    ```
-
-    ```java {{ title: 'Java' }}
-    long firstLogin = player.getFirstLogin();
-    System.out.println("First joined: " + new Date(firstLogin));
-    ```
-
-</CodeGroup>
-
-### getLastLogin
-
-Returns the timestamp of the player's most recent login.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val lastLogin = player.getLastLogin()
-    println("Last login: ${Date(lastLogin)}")
-    ```
-
-    ```java {{ title: 'Java' }}
-    long lastLogin = player.getLastLogin();
-    System.out.println("Last login: " + new Date(lastLogin));
-    ```
-
-</CodeGroup>
-
-### getOnlineTime
-
-Returns the player's total time spent on the network.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val onlineTime = player.getOnlineTime()
-    println("Total online time: ${TimeUnit.MILLISECONDS.toHours(onlineTime)} hours")
-    ```
-
-    ```java {{ title: 'Java' }}
-    long onlineTime = player.getOnlineTime();
-    System.out.println("Total online time: " +
-    TimeUnit.MILLISECONDS.toHours(onlineTime) + " hours");
-    ```
-
-</CodeGroup>
-
-### getSessionTime
-
-Returns the duration of the player's current session.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val sessionTime = player.getSessionTime()
-    println("Current session: ${TimeUnit.MILLISECONDS.toMinutes(sessionTime)} minutes")
-    ```
-
-    ```java {{ title: 'Java' }}
-    long sessionTime = player.getSessionTime();
-    System.out.println("Current session: " +
-    TimeUnit.MILLISECONDS.toMinutes(sessionTime) + " minutes");
-    ```
-
-</CodeGroup>
-
-### getConnectedServerName
-
-Returns the name of the server the player is currently connected to.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val serverName = player.getConnectedServerName()
-    println("Connected to server: ${serverName ?: "None"}")
-    ```
-
-    ```java {{ title: 'Java' }}
-    String serverName = player.getConnectedServerName();
-    System.out.println("Connected to server: " +
-    (serverName != null ? serverName : "None"));
-    ```
-
-</CodeGroup>
-
-### getConnectedProxyName
-
-Returns the name of the proxy server the player is connected through.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val proxyName = player.getConnectedProxyName()
-    println("Connected via proxy: $proxyName")
-    ```
-
-    ```java {{ title: 'Java' }}
-    String proxyName = player.getConnectedProxyName();
-    System.out.println("Connected via proxy: " + proxyName);
-    ```
-
-</CodeGroup>
-
-### isOnline
-
-Returns whether the player is currently online.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    val online = player.isOnline()
-    println("Player online: $online")
-    ```
-
-    ```java {{ title: 'Java' }}
-    boolean online = player.isOnline();
-    System.out.println("Player online: " + online);
-    ```
-
-</CodeGroup>
-
-### kick
-
-Kicks the player from the network with a specified reason.
-
-<CodeGroup>
-    ```kotlin {{ title: 'Kotlin' }}
-    player.kick(Component.text("Maintenance mode activated")
-        .color(NamedTextColor.RED))
-    ```
-
-    ```java {{ title: 'Java' }}
-    player.kick(Component.text("Maintenance mode activated")
-        .color(NamedTextColor.RED));
-    ```
+```kotlin {{ title: 'Kotlin' }}
+// Connect player to a server
+val result = playerApi.connectPlayer(uniqueId, serverName)
+println("Connection result: $result")
+
+// Check if player is online
+val isOnline = playerApi.isOnline(uniqueId)
+println("Player online: $isOnline")
+
+// Update player's server
+val success = playerApi.updateServer(uniqueId, serverName)
+println("Server update success: $success")
+
+// Kick player
+player.kick(
+    Component.text("Maintenance mode activated")
+        .color(NamedTextColor.RED)
+)
+````
+
+```java {{ title: 'Java' }}
+// Connect player to a server
+playerApi.connectPlayer(uniqueId, "lobby-1")
+    .thenAccept(result -> {
+        System.out.println("Connection result: " + result);
+    });
+
+// Check if player is online
+playerApi.isOnline(uniqueId)
+    .thenAccept(isOnline -> {
+        System.out.println("Player online: " + isOnline);
+    });
+
+// Update player's server
+playerApi.updateServer(uniqueId, "lobby-1")
+    .thenAccept(success -> {
+        System.out.println("Server update success: " + success);
+    });
+
+// Kick player
+player.kick(Component.text("Maintenance mode activated")
+    .color(NamedTextColor.RED));
+````
 
 </CodeGroup>
 
 ## Adventure Integration
 
-### Sending Messages
+The API provides rich content delivery through Adventure API integration.
 
-Send rich text messages to players.
+### Messages and Titles
 
 <CodeGroup>
-    ```kotlin {{ title: 'Simple Message' }}
-    player.sendMessage(Component.text("Hello, world!"))
-    ```
+```kotlin {{ title: 'Messages (Kotlin)' }}
+// Send a simple message
+player.sendMessage(Component.text("Hello, world!"))
 
-    ```kotlin {{ title: 'Formatted Message' }}
-    player.sendMessage(
-        Component.text()
-            .content("Welcome to the server!")
-            .color(NamedTextColor.GOLD)
-            .decoration(TextDecoration.BOLD, true)
-            .build()
-    )
-    ```
+// Send formatted message
+player.sendMessage(
+    Component.text()
+        .content("Welcome to the server!")
+        .color(NamedTextColor.GOLD)
+        .decoration(TextDecoration.BOLD, true)
+        .build()
+)
 
-    ```kotlin {{ title: 'Click & Hover Events' }}
-    player.sendMessage(
-        Component.text()
-            .content("Click here!")
-            .color(NamedTextColor.AQUA)
-            .clickEvent(ClickEvent.openUrl("https://example.com"))
-            .hoverEvent(HoverEvent.showText(Component.text("Visit website")))
-            .build()
-    )
-    ```
+// Send interactive message
+player.sendMessage(
+    Component.text()
+        .content("Click here!")
+        .color(NamedTextColor.AQUA)
+        .clickEvent(ClickEvent.openUrl("https://example.com"))
+        .hoverEvent(HoverEvent.showText(Component.text("Visit website")))
+        .build()
+)
+````
+
+```java {{ title: 'Messages (Java)' }}
+// Send a simple message
+player.sendMessage(Component.text("Hello, world!"));
+
+// Send formatted message
+player.sendMessage(
+    Component.text()
+        .content("Welcome to the server!")
+        .color(NamedTextColor.GOLD)
+        .decoration(TextDecoration.BOLD, true)
+        .build()
+);
+
+// Send interactive message
+player.sendMessage(
+    Component.text()
+        .content("Click here!")
+        .color(NamedTextColor.AQUA)
+        .clickEvent(ClickEvent.openUrl("https://example.com"))
+        .hoverEvent(HoverEvent.showText(Component.text("Visit website")))
+        .build()
+);
+````
 
 </CodeGroup>
 
-### Titles
-
-Display titles and subtitles to players.
-
 <CodeGroup>
-    ```kotlin {{ title: 'Title with Subtitle' }}
-    player.showTitle(Title.title(
-        Component.text("Welcome!").color(NamedTextColor.GOLD),
-        Component.text("Enjoy your stay").color(NamedTextColor.YELLOW),
-        Title.Times.of(
-            Duration.ofSeconds(1),
-            Duration.ofSeconds(3),
-            Duration.ofSeconds(1)
-        )
-    ))
-    ```
-
-    ```kotlin {{ title: 'Action Bar' }}
-    player.sendActionBar(
-        Component.text()
-            .content("+100 Experience")
-            .color(NamedTextColor.GREEN)
-            .build()
+```kotlin {{ title: 'Titles & Action Bars (Kotlin)' }}
+// Show title with subtitle
+player.showTitle(Title.title(
+    Component.text("Welcome!").color(NamedTextColor.GOLD),
+    Component.text("Enjoy your stay").color(NamedTextColor.YELLOW),
+    Title.Times.of(
+        Duration.ofSeconds(1),
+        Duration.ofSeconds(3),
+        Duration.ofSeconds(1)
     )
-    ```
+))
+
+// Show action bar
+player.sendActionBar(
+    Component.text()
+        .content("+100 Experience")
+        .color(NamedTextColor.GREEN)
+        .build()
+)
+````
+
+```java {{ title: 'Titles & Action Bars (Java)' }}
+// Show title with subtitle
+player.showTitle(Title.title(
+    Component.text("Welcome!").color(NamedTextColor.GOLD),
+    Component.text("Enjoy your stay").color(NamedTextColor.YELLOW),
+    Title.Times.of(
+        Duration.ofSeconds(1),
+        Duration.ofSeconds(3),
+        Duration.ofSeconds(1)
+    )
+));
+
+// Show action bar
+player.sendActionBar(
+    Component.text()
+        .content("+100 Experience")
+        .color(NamedTextColor.GREEN)
+        .build()
+);
+````
 
 </CodeGroup>
 
 ### Sound Effects
 
-Play sounds to players.
-
 <CodeGroup>
-    ```kotlin {{ title: 'Play Sound' }}
-    player.playSound(
-        Sound.sound(
-            Key.key("entity.player.levelup"),
-            Sound.Source.MASTER,
-            1.0f,
-            1.0f
-        )
+```kotlin {{ title: 'Sound Effects (Kotlin)' }}
+// Play a sound
+player.playSound(
+    Sound.sound(
+        Key.key("entity.player.levelup"),
+        Sound.Source.MASTER,
+        1.0f,
+        1.0f
     )
-    ```
+)
 
-    ```kotlin {{ title: 'Positioned Sound' }}
-    player.playSound(
-        Sound.sound(
-            Key.key("block.note_block.pling"),
-            Sound.Source.BLOCK,
-            1.0f,
-            1.0f
-        ),
-        x = 0.0,
-        y = 64.0,
-        z = 0.0
+// Play positioned sound
+player.playSound(
+    Sound.sound(
+        Key.key("block.note_block.pling"),
+        Sound.Source.BLOCK,
+        1.0f,
+        1.0f
+    ),
+    x = 0.0,
+    y = 64.0,
+    z = 0.0
+)
+````
+
+```java {{ title: 'Sound Effects (Java)' }}
+// Play a sound
+player.playSound(
+    Sound.sound(
+        Key.key("entity.player.levelup"),
+        Sound.Source.MASTER,
+        1.0f,
+        1.0f
     )
-    ```
+);
+
+// Play positioned sound
+player.playSound(
+    Sound.sound(
+        Key.key("block.note_block.pling"),
+        Sound.Source.BLOCK,
+        1.0f,
+        1.0f
+    ),
+    0.0,
+    64.0,
+    0.0
+);
+````
 
 </CodeGroup>
+
+## Player Properties
+
+The API provides access to various player properties and statistics.
+
+### Basic Properties
+
+| Property    | Type      | Description                      |
+| ----------- | --------- | -------------------------------- |
+| uniqueId    | `UUID`    | Player's unique identifier       |
+| name        | `String`  | Player's username                |
+| displayName | `String?` | Custom display name (if set)     |
+| firstLogin  | `Long`    | Timestamp of first network join  |
+| lastLogin   | `Long`    | Timestamp of most recent join    |
+| onlineTime  | `Long`    | Total time spent on network (ms) |
+| sessionTime | `Long`    | Current session duration (ms)    |
+
+### Connection Properties
+
+| Property               | Type      | Description                       |
+| ---------------------- | --------- | --------------------------------- |
+| connectedServerName    | `String?` | Current server name               |
+| connectedProxyName     | `String?` | Current proxy name                |
+| clientLanguage         | `String`  | Player's client language setting  |
+| numericalClientVersion | `Int`     | Minecraft protocol version        |
+| onlineMode             | `Boolean` | Whether authenticated with Mojang |
+| online                 | `Boolean` | Current online status             |
