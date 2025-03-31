@@ -127,8 +127,11 @@ simplecloud edit group [name] [flags]
 - `-m, --minimum-memory uint`: Minimum memory of the server
 - `-n, --minimum-online-count uint`: Minimum online count of the server
 - `-r, --properties stringToString`: Properties of the server (key=value pairs) (default [])
-- `-s, --server-url string`: Update the server url (either URL, change or update)
 - `-p, --start-port uint`: Start port of the server
+- `-s, --server-url string`: Update the server url. Can be:
+  - A direct URL to the server software
+  - `change`: Change to a different version entirely (e.g., from 1.21.1 to 1.21.4)
+  - `update`: Update to the latest URL for the current version from our [manifest](https://github.com/theSimpleCloud/simplecloud-manifest) (e.g., getting the newest Paper build for 1.21.4, but will not update to 1.21.5). The [manifest](https://github.com/theSimpleCloud/simplecloud-manifest) updates all software URLs once per day.
 
 ### Edit Server
 
