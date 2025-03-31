@@ -1,32 +1,32 @@
-import {CodeGroup, Note} from "../../../components/mdx";
-import {DependencySnippet} from "../../../components/DependencySnippet";
+import { CodeGroup, Note } from '../../../components/mdx'
+import { DependencySnippet } from '../../../components/DependencySnippet'
 
 export const metadata = {
-    title: 'Controller API',
-    description:
-        'The Controller API provides access to manage server groups and individual servers in your SimpleCloud infrastructure.',
+  title: 'Controller API',
+  description:
+    'The Controller API provides access to manage server groups and individual servers in your SimpleCloud infrastructure.',
 }
 
 export const sections = [
-    { title: 'Installation', id: 'installation' },
-    { title: 'Authentication', id: 'authentication' },
-    { title: 'Other Programming Languages', id: 'other-programming-languages' },
-    { title: 'createGroup', id: 'create-group' },
-    { title: 'getGroupByName', id: 'get-group-by-name' },
-    { title: 'getAllGroups', id: 'get-all-groups' },
-    { title: 'getGroupsByType', id: 'get-groups-by-type' },
-    { title: 'updateGroup', id: 'update-group' },
-    { title: 'deleteGroup', id: 'delete-group' },
-    { title: 'startServer', id: 'start-server' },
-    { title: 'getAllServers', id: 'get-all-servers' },
-    { title: 'getServerById', id: 'get-server-by-id' },
-    { title: 'getServersByGroup', id: 'get-servers-by-group' },
-    { title: 'getServerByNumerical', id: 'get-server-by-numerical' },
-    { title: 'getServersByType', id: 'get-servers-by-type' },
-    { title: 'updateServerState', id: 'update-server-state' },
-    { title: 'updateServerProperty', id: 'update-server-property' },
-    { title: 'stopServer', id: 'stop-server' },
-    { title: 'Data Models', id: 'data-models' }
+  { title: 'Installation', id: 'installation' },
+  { title: 'Authentication', id: 'authentication' },
+  { title: 'Other Programming Languages', id: 'other-programming-languages' },
+  { title: 'createGroup', id: 'create-group' },
+  { title: 'getGroupByName', id: 'get-group-by-name' },
+  { title: 'getAllGroups', id: 'get-all-groups' },
+  { title: 'getGroupsByType', id: 'get-groups-by-type' },
+  { title: 'updateGroup', id: 'update-group' },
+  { title: 'deleteGroup', id: 'delete-group' },
+  { title: 'startServer', id: 'start-server' },
+  { title: 'getAllServers', id: 'get-all-servers' },
+  { title: 'getServerById', id: 'get-server-by-id' },
+  { title: 'getServersByGroup', id: 'get-servers-by-group' },
+  { title: 'getServerByNumerical', id: 'get-server-by-numerical' },
+  { title: 'getServersByType', id: 'get-servers-by-type' },
+  { title: 'updateServerState', id: 'update-server-state' },
+  { title: 'updateServerProperty', id: 'update-server-property' },
+  { title: 'stopServer', id: 'stop-server' },
+  { title: 'Data Models', id: 'data-models' },
 ]
 
 # Controller API
@@ -36,15 +36,16 @@ The Controller API is the central interface for managing your SimpleCloud infras
 ## Installation
 
 <DependencySnippet
-    groupId="app.simplecloud.controller"
-    artifactId="controller-api"
-    type="snapshot"
+  groupId="app.simplecloud.controller"
+  artifactId="controller-api"
+  type="snapshot"
 />
 
 <Note>
-    As soon as we release our first stable version, we'll publish the Maven package to Maven Central. Until then, you can use the snapshots repository to access the latest features.
+  As soon as we release our first stable version, we'll publish the Maven
+  package to Maven Central. Until then, you can use the snapshots repository to
+  access the latest features.
 </Note>
-
 
 ## Authentication
 
@@ -56,12 +57,12 @@ You can find the master token in `/components/.secrets/auth.secret` in your Simp
 
     ```kotlin {{ title: 'Environment Auth' }}
     // Uses CONTROLLER_SECRET from environment
-    val controllerApi = ControllercontrollerApi.createCoroutineApi()
+    val controllerApi = Controller.createCoroutineApi()
     ```
 
     ```kotlin {{ title: 'Direct Auth' }}
     // Provide token directly
-    val controllerApi = ControllercontrollerApi.createCoroutineApi("your-auth-token")
+    val controllerApi = Controller.createCoroutineApi("your-auth-token")
     ```
 
 </CodeGroup>
@@ -77,6 +78,19 @@ It provides support for all kinds of languages, including:
 - Go
 - Rust
 - Other languages supported by [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/reference/other)
+
+## API Initialization
+
+<CodeGroup>
+    ```kotlin {{ title: 'Kotlin' }}
+    val controllerApi = Controller.createCoroutineApi()
+    ```
+
+    ```java {{ title: 'Java' }}
+    Controller.Future controllerApi = Controller.createFutureApi();
+    ```
+
+</CodeGroup>
 
 ## createGroup
 
@@ -420,37 +434,37 @@ Stops a running server instance.
 
 The `Group` class represents a server group template with the following properties:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| name | `string` | Unique identifier for the group |
-| type | `enum` | Server type (UNKNOWN_SERVER, SERVER, PROXY) |
-| minMemory | `long` | Minimum RAM allocation in MB |
-| maxMemory | `long` | Maximum RAM allocation in MB |
-| startPort | `long` | Base port number for new servers |
-| minOnlineCount | `long` | Minimum number of servers to keep running |
-| maxOnlineCount | `long` | Maximum number of servers allowed |
-| maxPlayers | `long` | Maximum players per server |
-| newServerPlayerRatio | `long` | Player count threshold for starting new servers (-1 to disable) |
-| properties | `Map<String, String>` | Custom key-value properties |
+| Property             | Type                  | Description                                                     |
+| -------------------- | --------------------- | --------------------------------------------------------------- |
+| name                 | `string`              | Unique identifier for the group                                 |
+| type                 | `enum`                | Server type (UNKNOWN_SERVER, SERVER, PROXY)                     |
+| minMemory            | `long`                | Minimum RAM allocation in MB                                    |
+| maxMemory            | `long`                | Maximum RAM allocation in MB                                    |
+| startPort            | `long`                | Base port number for new servers                                |
+| minOnlineCount       | `long`                | Minimum number of servers to keep running                       |
+| maxOnlineCount       | `long`                | Maximum number of servers allowed                               |
+| maxPlayers           | `long`                | Maximum players per server                                      |
+| newServerPlayerRatio | `long`                | Player count threshold for starting new servers (-1 to disable) |
+| properties           | `Map<String, String>` | Custom key-value properties                                     |
 
 ### Server Properties
 
 The `Server` class represents a running server instance with the following properties:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| uniqueId | `string` | Unique identifier (e.g., "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8") |
-| type | `enum` | Server type (UNKNOWN_SERVER, SERVER, PROXY) |
-| group | `string` | Parent group name |
-| host | `string` | Host machine identifier |
-| numericalId | `int` | Numerical ID within group |
-| ip | `string` | Server IP address |
-| port | `long` | Server port |
-| minMemory | `long` | Minimum RAM allocation in MB |
-| maxMemory | `long` | Maximum RAM allocation in MB |
-| maxPlayers | `long` | Maximum allowed players |
-| playerCount | `long` | Current player count |
-| properties | `Map<String, String>` | Custom key-value properties |
-| state | `enum` | Server state (UNKNOWN_STATE, PREPARING, STARTING, AVAILABLE, INGAME, STOPPING) |
-| createdAt | `LocalDateTime` | Creation timestamp |
-| updatedAt | `LocalDateTime` | Last update timestamp |
+| Property    | Type                  | Description                                                                    |
+| ----------- | --------------------- | ------------------------------------------------------------------------------ |
+| uniqueId    | `string`              | Unique identifier (e.g., "0f0c2d1a-d7d5-4c7f-b7a9-c0e8e9b5a6b8")               |
+| type        | `enum`                | Server type (UNKNOWN_SERVER, SERVER, PROXY)                                    |
+| group       | `string`              | Parent group name                                                              |
+| host        | `string`              | Host machine identifier                                                        |
+| numericalId | `int`                 | Numerical ID within group                                                      |
+| ip          | `string`              | Server IP address                                                              |
+| port        | `long`                | Server port                                                                    |
+| minMemory   | `long`                | Minimum RAM allocation in MB                                                   |
+| maxMemory   | `long`                | Maximum RAM allocation in MB                                                   |
+| maxPlayers  | `long`                | Maximum allowed players                                                        |
+| playerCount | `long`                | Current player count                                                           |
+| properties  | `Map<String, String>` | Custom key-value properties                                                    |
+| state       | `enum`                | Server state (UNKNOWN_STATE, PREPARING, STARTING, AVAILABLE, INGAME, STOPPING) |
+| createdAt   | `LocalDateTime`       | Creation timestamp                                                             |
+| updatedAt   | `LocalDateTime`       | Last update timestamp                                                          |

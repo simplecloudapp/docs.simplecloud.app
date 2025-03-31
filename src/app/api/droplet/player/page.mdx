@@ -1,20 +1,20 @@
-import {CodeGroup} from "../../../../components/mdx";
-import {DependencySnippet} from "../../../../components/DependencySnippet";
+import { CodeGroup } from '../../../../components/mdx'
+import { DependencySnippet } from '../../../../components/DependencySnippet'
 
 export const metadata = {
-    title: 'Player Droplet API',
-    description:
-        'The Player Droplet API provides comprehensive player management and interaction capabilities across your SimpleCloud network.',
+  title: 'Player Droplet API',
+  description:
+    'The Player Droplet API provides comprehensive player management and interaction capabilities across your SimpleCloud network.',
 }
 
 export const sections = [
-    { title: 'Installation', id: 'installation' },
-    { title: 'Authentication', id: 'authentication' },
-    { title: 'Other Programming Languages', id: 'other-programming-languages' },
-    { title: 'API Initialization', id: 'api-initialization' },
-    { title: 'Player Management', id: 'player-management' },
-    { title: 'Player Properties', id: 'player-properties' },
-    { title: 'Adventure Integration', id: 'adventure-integration' }
+  { title: 'Installation', id: 'installation' },
+  { title: 'Authentication', id: 'authentication' },
+  { title: 'Other Programming Languages', id: 'other-programming-languages' },
+  { title: 'API Initialization', id: 'api-initialization' },
+  { title: 'Player Management', id: 'player-management' },
+  { title: 'Player Properties', id: 'player-properties' },
+  { title: 'Adventure Integration', id: 'adventure-integration' },
 ]
 
 # Player Droplet API
@@ -24,16 +24,16 @@ The Player Droplet API provides comprehensive player management and interaction 
 ## Installation
 
 <DependencySnippet
-    groupId="app.simplecloud.droplet.player"
-    artifactId="player-api"
-    type="snapshot"
+  groupId="app.simplecloud.droplet.player"
+  artifactId="player-api"
+  type="snapshot"
 />
 
 Authentication
 If you're using our Player Droplet API in a Minecraft server, the token is automatically provided via environment variables. For external applications, you'll need to use the master authentication token.
 You can find the master token in /components/.secrets/auth.secret in your SimpleCloud directory.
-<CodeGroup>
 
+<CodeGroup>
 
     ```kotlin {{ title: 'Environment Auth' }}
     // Uses CONTROLLER_SECRET from environment
@@ -44,6 +44,7 @@ You can find the master token in /components/.secrets/auth.secret in your Simple
     // Provide token directly
     val playerApi = PlayerApi.createCoroutineApi("your-auth-token")
     ```
+
 </CodeGroup>
 
 ## Other Programming Languages
@@ -66,8 +67,9 @@ It provides support for all kinds of languages, including:
     ```
 
     ```java {{ title: 'Java' }}
-    PlayerApi playerApi = PlayerApi.createFutureApi();
+    PlayerApi.Future playerApi = PlayerApi.createFutureApi();
     ```
+
 </CodeGroup>
 
 ## Player Management
@@ -89,6 +91,7 @@ Retrieves player data regardless of online status.
                 " first joined at " + player.getFirstLogin());
         });
     ```
+
 </CodeGroup>
 
 ### getOnlinePlayer
@@ -108,6 +111,7 @@ Retrieves data for currently online players.
                 " is on server " + player.getConnectedServerName());
         });
     ```
+
 </CodeGroup>
 
 ### getOnlinePlayers
@@ -130,6 +134,7 @@ Retrieves a list of all currently online players.
             });
         });
     ```
+
 </CodeGroup>
 
 ### getOnlinePlayerCount
@@ -148,6 +153,7 @@ Returns the total number of online players.
             System.out.println("Online players: " + count);
         });
     ```
+
 </CodeGroup>
 
 ### connectPlayer
@@ -166,6 +172,7 @@ Connects a player to a specific server.
             System.out.println("Connection result: " + result);
         });
     ```
+
 </CodeGroup>
 
 ### isOnline
@@ -184,6 +191,7 @@ Checks if a player is currently online.
             System.out.println("Player online: " + isOnline);
         });
     ```
+
 </CodeGroup>
 
 ### updateServer
@@ -202,6 +210,7 @@ Updates a player's current server information.
             System.out.println("Server update success: " + success);
         });
     ```
+
 </CodeGroup>
 
 ## Player Properties
@@ -220,6 +229,7 @@ Returns the player's unique identifier.
     UUID uuid = player.getUniqueId();
     System.out.println("Player UUID: " + uuid);
     ```
+
 </CodeGroup>
 
 ### getName
@@ -236,6 +246,7 @@ Returns the player's username.
     String name = player.getName();
     System.out.println("Player name: " + name);
     ```
+
 </CodeGroup>
 
 ### getDisplayName
@@ -252,6 +263,7 @@ Returns the player's custom display name, if set.
     String displayName = player.getDisplayName();
     System.out.println("Display name: " + displayName);
     ```
+
 </CodeGroup>
 
 ### getFirstLogin
@@ -268,6 +280,7 @@ Returns the timestamp of the player's first login.
     long firstLogin = player.getFirstLogin();
     System.out.println("First joined: " + new Date(firstLogin));
     ```
+
 </CodeGroup>
 
 ### getLastLogin
@@ -284,6 +297,7 @@ Returns the timestamp of the player's most recent login.
     long lastLogin = player.getLastLogin();
     System.out.println("Last login: " + new Date(lastLogin));
     ```
+
 </CodeGroup>
 
 ### getOnlineTime
@@ -301,6 +315,7 @@ Returns the player's total time spent on the network.
     System.out.println("Total online time: " +
     TimeUnit.MILLISECONDS.toHours(onlineTime) + " hours");
     ```
+
 </CodeGroup>
 
 ### getSessionTime
@@ -318,6 +333,7 @@ Returns the duration of the player's current session.
     System.out.println("Current session: " +
     TimeUnit.MILLISECONDS.toMinutes(sessionTime) + " minutes");
     ```
+
 </CodeGroup>
 
 ### getConnectedServerName
@@ -335,6 +351,7 @@ Returns the name of the server the player is currently connected to.
     System.out.println("Connected to server: " +
     (serverName != null ? serverName : "None"));
     ```
+
 </CodeGroup>
 
 ### getConnectedProxyName
@@ -351,6 +368,7 @@ Returns the name of the proxy server the player is connected through.
     String proxyName = player.getConnectedProxyName();
     System.out.println("Connected via proxy: " + proxyName);
     ```
+
 </CodeGroup>
 
 ### isOnline
@@ -367,6 +385,7 @@ Returns whether the player is currently online.
     boolean online = player.isOnline();
     System.out.println("Player online: " + online);
     ```
+
 </CodeGroup>
 
 ### kick
@@ -383,6 +402,7 @@ Kicks the player from the network with a specified reason.
     player.kick(Component.text("Maintenance mode activated")
         .color(NamedTextColor.RED));
     ```
+
 </CodeGroup>
 
 ## Adventure Integration
@@ -416,6 +436,7 @@ Send rich text messages to players.
             .build()
     )
     ```
+
 </CodeGroup>
 
 ### Titles
@@ -443,6 +464,7 @@ Display titles and subtitles to players.
             .build()
     )
     ```
+
 </CodeGroup>
 
 ### Sound Effects
@@ -474,4 +496,5 @@ Play sounds to players.
         z = 0.0
     )
     ```
+
 </CodeGroup>
