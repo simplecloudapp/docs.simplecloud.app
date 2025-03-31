@@ -14,6 +14,7 @@ The SimpleCloud CLI provides a powerful command-line interface to manage all asp
 # Download and run install.bat from:
 https://raw.githubusercontent.com/theSimpleCloud/simplecloud-manifest/HEAD/install.bat
 ```
+
 </CodeGroup>
 
 ## Why a Modern CLI?
@@ -31,7 +32,9 @@ SimpleCloud v3 marks a significant shift from the traditional Manager Console to
   - Batch operations for repetitive tasks
 
 <Note>
-    While the v2 Manager Console served its purpose well, the CLI represents a more flexible and powerful approach to cloud management that better serves modern server administration needs.
+  While the v2 Manager Console served its purpose well, the CLI represents a
+  more flexible and powerful approach to cloud management that better serves
+  modern server administration needs.
 </Note>
 
 ## Command Structure
@@ -67,6 +70,7 @@ simplecloud create group [flags]
 ```
 
 **Flags**
+
 - `--configurator string`: Server configurator
 - `--max-memory string`: Maximum memory allocation for each server
 - `--max-online string`: Maximum number of servers that can be online
@@ -99,8 +103,8 @@ simplecloud delete group [flags]
 
 **Flags**
 
--    `--confirm`: Don't ask for confirmation.
--    `-h, --help`: Help for delete.
+- `--confirm`: Don't ask for confirmation.
+- `-h, --help`: Help for delete.
 
 ## Edit Command
 
@@ -114,6 +118,18 @@ Modify an existing group's configuration.
 simplecloud edit group [name] [flags]
 ```
 
+**Flags**
+
+- `-h, --help`: Help for group
+- `-P, --max-players uint`: Maximum players of the server
+- `-M, --maximum-memory uint`: Maximum memory of the server
+- `-N, --maximum-online-count uint`: Maximum online count of the server
+- `-m, --minimum-memory uint`: Minimum memory of the server
+- `-n, --minimum-online-count uint`: Minimum online count of the server
+- `-r, --properties stringToString`: Properties of the server (key=value pairs) (default [])
+- `-s, --server-url string`: Update the server url (either URL, change or update)
+- `-p, --start-port uint`: Start port of the server
+
 ### Edit Server
 
 Modify running server configurations.
@@ -121,6 +137,12 @@ Modify running server configurations.
 ```bash
 simplecloud edit server [id] [flags]
 ```
+
+**Flags**
+
+- `-h, --help`: Help for server
+- `-P, --max-players uint`: Max players of the server
+- `-r, --properties stringToString`: Properties of the server (key=value pairs) (default [])
 
 ## Info Command
 
@@ -195,21 +217,27 @@ The `stop` command gracefully stops cloud components and servers.
 Stop every necessary component of the cloud.
 
 ```bash
-simplecloud stop cloud
+simplecloud stop cloud [flags]
 ```
+
+**Flags**
+
+- `-h, --help`: Help for cloud
+- `-s, --servers`: Stop with all servers
+- `-y, --yes`: Don't ask for confirmation
 
 ### Stop Server
 
 Stop a server of a group.
 
 ```bash
-simplecloud stop server <name>
+simplecloud stop server <name> [flags]
 ```
 
 **Flags**
 
--    `-C, --confirm`: Don't ask for confirmation.
--    `-h, --help`: Help for stop.
+- `-h, --help`: Help for stop
+- `-y, --yes`: Don't ask for confirmation
 
 ## Upgrade Command
 
@@ -235,14 +263,14 @@ simplecloud version
 
 These flags are available for all commands:
 
--    `-c, --connection string`: Specify the connection name for the current session.
--    `-h, --help`: Show help information.
+- `-c, --connection string`: Specify the connection name for the current session.
+- `-h, --help`: Show help information.
 
 ## What's next?
 
 Here are a few links that might be helpful as you continue to explore SimpleCloud:
 
--    [Learn about the structure](/structure)
--    [Learn about the Controller](/controller)
--    [Learn about the Dashboard](/dashboard)
--    [Understand the Server Host Droplet](/droplet/serverhost)
+- [Learn about the structure](/structure)
+- [Learn about the Controller](/controller)
+- [Learn about the Dashboard](/dashboard)
+- [Understand the Server Host Droplet](/droplet/serverhost)
