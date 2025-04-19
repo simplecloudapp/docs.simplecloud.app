@@ -60,19 +60,19 @@ While our API is primarily written in Kotlin, we support multiple languages thro
 <CodeGroup>
 ```kotlin {{ title: 'Kotlin' }}
 // For Minecraft servers (uses environment variables)
-val controllerApi = Controller.createCoroutineApi()
+val controllerApi = ControllerApi.createCoroutineApi()
 
 // For external applications (provide token directly)
-val controllerApi = Controller.createCoroutineApi("your-auth-token")
+val controllerApi = ControllerApi.createCoroutineApi("your-auth-token")
 
 ````
 
 ```java {{ title: 'Java' }}
 // For Minecraft servers (uses environment variables)
-Controller.Future controllerApi = Controller.createFutureApi();
+ControllerApi.Future controllerApi = ControllerApi.createFutureApi();
 
 // For external applications (provide token directly)
-Controller.Future controllerApi = Controller.createFutureApi("your-auth-token");
+ControllerApi.Future controllerApi = ControllerApi.createFutureApi("your-auth-token");
 ````
 
 </CodeGroup>
