@@ -1,0 +1,88 @@
+---
+title: Start with Other Platforms
+description: Implementing the SimpleCloud Controller API in every platform, can also be Minestom
+---
+
+The following guide will show you how to implement our API in other platforms, like Minestom or standalone.
+
+Our API includes the `ControllerApi` and the `PlayerApi` class. The `ControllerApi` is used to interact with the SimpleCloud's [groups](/docs/manual/setup/groups), [servers](/docs/manual/setup/servers), and more, while the `PlayerApi` is used to interact with [players](/docs/manual/droplets/player).
+
+## Dependencies
+
+First, we need to add the dependencies to your `build.gradle` or `pom.xml`:
+
+<DependencySnippet
+  dependencies={[
+    {
+      groupId: "org.jetbrains.kotlin",
+      artifactId: "kotlin-stdlib",
+      version: "2.1.20",
+      type: "implementation",
+      autoFetch: false,
+    },
+    {
+      groupId: "org.jetbrains.kotlin",
+      artifactId: "kotlin-reflect",
+      version: "2.1.20",
+      type: "implementation",
+      autoFetch: false,
+    },
+    {
+      groupId: "org.jetbrains.kotlinx",
+      artifactId: "kotlinx-coroutines-core",
+      version: "1.10.1",
+      type: "implementation",
+      autoFetch: false,
+    },
+    {
+      groupId: "app.simplecloud.controller",
+      artifactId: "controller-api",
+      type: "implementation",
+    },
+    {
+      groupId: "app.simplecloud.droplet.player",
+      artifactId: "player-api",
+      type: "implementation",
+    },
+
+    ]}
+    type="snapshot"
+    repositories={[
+        {
+            id: "simplecloud-snapshots",
+            url: "https://repo.simplecloud.app/snapshots",
+        },
+        {
+            id: "buf-maven",
+            url: "https://buf.build/gen/maven",
+        },
+    ]}
+
+/>
+
+## Basic Usage
+
+Now that you have the dependencies, you can use the SimpleCloud API in your project.
+
+```kotlin tab="Kotlin"
+import app.simplecloud.controller.api.ControllerApi
+
+suspend fun main() {
+    val controllerApi = ControllerApi.createCoroutineApi()
+    val groups = controllerApi.getGroups().getAllGroups()
+    println(groups)
+}
+```
+
+```java tab="Java"
+import app.simplecloud.controller.api.ControllerApi;
+
+public class Main {
+    public static void main(String[] args) {
+        ControllerApi controllerApi = ControllerApi.createFutureApi();
+        controllerApi.getGroups().getAllGroups().thenAccept(groups -> {
+            System.out.println(groups);
+        });
+    }
+}
+```

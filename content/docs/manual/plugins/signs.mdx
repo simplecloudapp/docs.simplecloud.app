@@ -1,0 +1,115 @@
+---
+title: Signs Plugin
+description: Learn about SimpleCloud's signs plugin for server navigation and status display
+badge: Server
+badgeColor: purple
+---
+
+## Overview
+
+The Signs Plugin is an intuitive tool that enhances server navigation within SimpleCloud. With this plugin, users can click on designated signs to instantly connect to different servers within your network.
+
+## Supported Software
+
+| Server Type    | Plugin Support |
+| -------------- | -------------- |
+| Paper & Forks  | ✅ Yes         |
+| Spigot & Forks | 🔄 Planned     |
+
+## Quick Setup
+
+1. Download the plugin from [GitHub](https://github.com/simplecloudapp/sign-plugin/releases)
+2. Place it in your server template's plugins folder
+
+## Configuration
+
+The Signs Plugin offers extensive configuration options for dynamic and engaging server signs. Each configuration entry defines sign behavior based on server state.
+
+Example configuration:
+
+```yaml
+name: "starting" # Unique identifier
+rule: "STARTING" # Server state this applies to
+display-name: "%group%-%numerical-id%" # Dynamic name template
+priority: 0 # Rule precedence (higher overrides lower)
+frame-update-interval: 500 # Update interval in milliseconds
+frames:
+  - lines:
+      - "starting."
+      - "<group>-<numerical-id>"
+  - lines:
+      - "starting.."
+      - "<group>-<numerical-id>"
+  - lines:
+      - "starting..."
+      - "<group>-<numerical-id>"
+```
+
+## Sign Rules
+
+| Rule          | Description      | State Condition                                        |
+| ------------- | ---------------- | ------------------------------------------------------ |
+| `STARTING`    | Starting servers | Server state is `STARTING`                             |
+| `OFFLINE`     | Inactive servers | Server is `null`                                       |
+| `MAINTENANCE` | Maintenance mode | Server is `AVAILABLE` with `maintenance=true`          |
+| `FULL`        | Maximum capacity | Server is `AVAILABLE` with `playerCount == maxPlayers` |
+| `EMPTY`       | No players       | Server is `AVAILABLE` with `playerCount == 0`          |
+| `ONLINE`      | Active servers   | Server is `AVAILABLE`                                  |
+
+## Placeholders
+
+Available placeholders for sign configuration:
+
+| Placeholder      | Description     | Default   |
+| ---------------- | --------------- | --------- |
+| `%group%`        | Server group    | "unknown" |
+| `%numerical-id%` | Server ID       | "0"       |
+| `%type%`         | Server type     | "unknown" |
+| `%host%`         | Server host     | "unknown" |
+| `%ip%`           | Server IP       | "unknown" |
+| `%port%`         | Server port     | "0"       |
+| `%min-memory%`   | Min memory      | "0"       |
+| `%max-memory%`   | Max memory      | "0"       |
+| `%max-players%`  | Max players     | "0"       |
+| `%player-count%` | Current players | "0"       |
+| `%state%`        | Server state    | "unknown" |
+
+### Example Usage
+
+```yaml
+name: "online"
+rule: "ONLINE"
+display-name: "%group%-%numerical-id%"
+priority: 50
+frame-update-interval: 500
+frames:
+  - lines:
+      - "Server: %group%"
+      - "ID: %numerical-id%"
+      - "Players: %player-count%/%max-players%"
+      - "State: %state%"
+```
+
+## Commands
+
+| Command                | Description       |
+| ---------------------- | ----------------- |
+| `/sign add <group>`    | Register new sign |
+| `/sign remove [group]` | Unregister sign   |
+
+## Permissions
+
+| Permission                   | Description          |
+| ---------------------------- | -------------------- |
+| `signs.command.*`            | All sign commands    |
+| `signs.command.add`          | Register new signs   |
+| `signs.command.remove`       | Unregister signs     |
+| `signs.command.remove.group` | Remove by group name |
+
+## What's Next?
+
+Here are some helpful resources to continue exploring SimpleCloud:
+
+- [Proxy Configuration](/docs/manual/plugin/proxy-essentials)
+- [Group Management](/docs/manual/resources/groups)
+- [Plugin Development](/docs/manual/plugin/overview)

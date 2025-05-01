@@ -1,0 +1,205 @@
+---
+title: Structure
+description: |
+  Learn how SimpleCloud is internally structured and how its components work together.
+---
+
+# Structure
+
+SimpleCloud v3 has a new and more customizable structure. We have encapsulated all the core components to make it easier to extend your setup. This means you can easily replace all our [droplets](/docs/manual/droplet) and [plugins](/docs/manual/plugin) with your own implementations.
+
+<img
+  src="https://github.com/simplecloudapp/branding/blob/main/images/structure.png?raw=true"
+  alt="SimpleCloud Structure"
+  className="w-full rounded-xl border border-zinc-800"
+/>
+
+## Key Components
+
+- **Controller**: The heart of v3, managing server groups, online servers, and communicating with Server Hosts.
+- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the [CLI](/docs/manual/cli), you can send commands to the controller or install and manage droplets.
+- **Server Host Droplet**: Handles server startup/shutdown with templates, running on Screens or Docker containers.
+- **Droplets & Plugins**:
+  - **Droplets**: Microservices for non-Minecraft tasks like player data (Player Droplet) or stats (Metrics Droplet).
+  - **Plugins**: Enhance server features with Proxy (e.g., Notify, CloudCommand) or Server Plugins (e.g., Signs, NPCs).
+
+## File Structure
+
+SimpleCloud has its core components that are needed, but they can be installed and used however you want. This means theoretically you can use any file structure you want.
+
+<Callout type="warning">
+  We **don't recommend** using a custom file structure. Use the structure below as it works best in
+  our experience and makes it easier to extend your setup with our [CLI](/docs/manual/cli).
+</Callout>
+
+<Files>
+  <Folder name="components" defaultOpen>
+    <Folder name=".secrets" />
+    <Folder name="auto-updater">
+      <File name="auto-updater.jar" />
+      <File name="application.yml" />
+      <File name="versions.yml" />
+      <File name="current_version.txt" />
+    </Folder>
+    <Folder name="controller" defaultOpen>
+      <File name="application.yml" />
+      <File name="controller.properties" />
+      <File name="controller-runtime.jar" />
+      <File name="current_version.txt" />
+      <File name="database.db" />
+    </Folder>
+    <Folder name="serverhost" defaultOpen>
+      <File name="application.yml" />
+      <File name="current_version.txt" />
+      <File name="serverhost.properties" />
+      <File name="serverhost-runtime.jar" />
+    </Folder>
+    <Folder name="libs" />
+    <Folder name="scripts">
+      <Folder name="components">
+        <File name="controller.lua" />
+        <File name="envoy.lua" />
+        <File name="serverhost.lua" />
+      </Folder>
+      <Folder name="lib">
+        <File name="component.lua" />
+        <File name="process.lua" />
+        <File name="auto_updater.lua" />
+      </Folder>
+      <File name="common.lua" />
+    </Folder>
+  </Folder>
+  <Folder name="groups" defaultOpen>
+    <File name="proxy.yml" />
+    <File name="lobby.yml" />
+  </Folder>
+  <Folder name="templates" defaultOpen>
+    <Folder name="proxy" />
+    <Folder name="lobby" />
+  </Folder>
+  <Folder name="running" defaultOpen>
+    <Folder name="proxy" defaultOpen>
+      <Folder name="proxy-1" />
+    </Folder>
+    <Folder name="lobby" defaultOpen>
+      <Folder name="lobby-1" />
+    </Folder>
+  </Folder>
+</Files>
+
+<Callout>
+  Keep in mind that if you change your file structure, there might be some things that will not work
+  with our [CLI](/docs/manual/cli).
+</Callout>
+
+## Understanding Components
+
+SimpleCloud v3 is structured into components - a broad category that includes both core system elements and [droplets](/docs/manual/droplet). These components serve as the building blocks of the system, encompassing essential elements like the [Controller](/docs/manual/controller), [Envoy](https://www.envoyproxy.io/) (necessary for the Dashboard), the Auto-updater, and the [CLI](/docs/manual/cli), alongside [droplets](/docs/manual/droplet).
+
+We chose to use the term "components" to reflect this inclusive scope. This generic terminology allows us to consistently refer to all parts of the system, whether they are core elements or [droplets](/docs/manual/droplet).
+
+## Auto-Updater
+
+The auto-updater is a crucial part of SimpleCloud, ensuring that all components stay up-to-date with the latest features and security patches. It resides in the `components/auto-updater` directory and manages version control through `versions.yml`. The auto-updater is configured through its own `application.yml` file and updates itself before updating other components.
+
+## Scripts
+
+SimpleCloud uses Lua scripts as a dynamic component management system that enables seamless integration between the [CLI](/docs/manual/cli) and various components. When you execute a [CLI](/docs/manual/cli) command, these scripts act as bridges between the components and the [CLI](/docs/manual/cli), providing standardized methods for component control.
+
+### How Scripts Work
+
+When a [CLI](/docs/manual/cli) command is executed, it runs all scripts in the `components/scripts` directory. Each script must return three essential methods that the [CLI](/docs/manual/cli) can call:
+
+- **start**: Launches the component
+- **stop**: Terminates the component
+- **status**: Checks the component's current state
+
+This design makes the [CLI](/docs/manual/cli) dynamically extendable - you can integrate any standalone program (component or [droplet](/docs/manual/droplet)) into SimpleCloud by creating a corresponding Lua script that implements these methods.
+
+### Script Structure
+
+The scripts are organized into two main directories:
+
+- **components/scripts/components/**: Contains individual component scripts
+- **components/scripts/lib/**: Contains shared libraries and utilities
+
+### Example Script
+
+Here's an example of how a component script looks using our component factory:
+
+```lua
+local component = require("component")
+
+return component.create({
+    name = "controller",
+    session = "simplecloud-controller",
+    jar = "controller-runtime.jar"
+})
+```
+
+`component.create` returns the `start`, `stop`, and `status` methods that the [CLI](/docs/manual/cli) can call to manage the component.
+
+### Creating Custom Components
+
+You can easily create new components by adding a new Lua script in the `components/scripts/components` directory:
+
+```lua
+local component = require("component")
+
+return component.create({
+    name = "custom",
+    session = "simplecloud-custom",
+    jar = "custom-runtime.jar",
+    -- Optional: Custom Java options
+    java_opts = {
+        "-Xmx1g",
+        "-Xms512m",
+        "-XX:+UseG1GC",
+        -- Add more options as needed
+    }
+})
+```
+
+### Creating Non-Java Components
+
+We also support creating components that are not based on Java:
+
+```lua
+local component = require("component")
+
+return component.create({
+    name = "envoy",
+    session = "simplecloud-envoy",
+    command = "envoy -c envoy-bootstrap.yaml"
+})
+```
+
+### Auto-Updater Configuration
+
+The auto-updater has its own configuration:
+
+```yaml
+github-repository: simplecloudapp/v3-releases
+files:
+  - release-file: controller-runtime.jar
+    output-file: ../controller/controller-runtime.jar
+  - release-file: controller-api.jar
+    output-file: ../libs/controller-api.jar
+```
+
+### Component Properties
+
+Every component is built and configured to use properties files for configuration. The properties file is located in the `components` folder and named `{component}.properties`.
+
+Here's an example of a properties file:
+
+```properties
+DATABASE_URL=jdbc:sqlite:database.db
+GROUPS_PATH=../../groups
+# GRPC Uncomment and change this if you want to change grpc defintions
+GRPC_HOST=0.0.0.0
+# GRPC_PORT=5816
+# PUBSUB Uncomment and change this if you want to run pubsub on another port
+# PUBSUB_GRPC_PORT=5817
+AUTH_SECRET_PATH=../.secrets/auth.secret
+```

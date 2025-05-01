@@ -1,0 +1,64 @@
+---
+title: Installation
+description: |
+  Get SimpleCloud up and running on your server with these installation instructions
+---
+
+## Installing SimpleCloud
+
+Installing SimpleCloud is simple with our one-line command:
+
+<Tabs items={["Unix", "Windows"]}>
+<Tab>
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/theSimpleCloud/SimpleCloud/main/install.sh)" && sc setup
+```
+
+</Tab>
+<Tab>
+  <Callout type="warn">
+    While our CLI theoretically works on Windows, we do not recommend it for
+    production use. The installation will be added when we have a better Windows
+    support.
+  </Callout>
+</Tab>
+
+</Tabs>
+
+This command installs the SimpleCloud CLI and immediately runs the setup wizard in a single step.
+
+## Starting SimpleCloud
+
+The setup wizard will automatically start SimpleCloud for you. If you need to start it manually, you can use the following command:
+
+```bash
+simplecloud start
+```
+
+This command initiates the cloud and prepares it for use.
+
+## Accessing the Dashboard
+
+SimpleCloud provides a web-based dashboard for managing your Minecraft network. To access it:
+
+```bash
+simplecloud login dashboard
+```
+
+This command will display a link to access the dashboard.
+
+<Callout type="warn">
+  This link contains authentication credentials and should NOT be shared with
+  others. Each user should generate their own login link.
+</Callout>
+
+## Verifying Installation
+
+To check that everything is running correctly:
+
+```bash
+simplecloud status
+```
+
+This command displays the status of all SimpleCloud components.

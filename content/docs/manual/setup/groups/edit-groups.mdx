@@ -1,0 +1,119 @@
+---
+title: Edit a Group
+description: |
+  Modify the settings of existing server groups in SimpleCloud.
+---
+
+## Why Edit a Group?
+
+Adjust group settings to:
+
+- Update server software (e.g., new Paper version)
+- Scale resources (memory, server counts) for player load
+- Change player limits
+- Modify behavior (e.g., change min/max online count)
+
+## How to Edit Groups
+
+### Using the CLI Command (Recommended)
+
+The easiest and safest way to modify a group is using the `edit group` command:
+
+```bash
+simplecloud edit group [name] [flags]
+```
+
+### Command Options
+
+```bash
+simplecloud edit group [name] [flags]
+```
+
+**Flags**
+
+- `-P, --max-players uint`: Maximum players per server
+- `-M, --maximum-memory uint`: Maximum memory allocation (in MB)
+- `-N, --maximum-online-count uint`: Maximum number of servers that can be online
+- `-m, --minimum-memory uint`: Minimum memory allocation (in MB)
+- `-n, --minimum-online-count uint`: Minimum number of servers that must be online
+- `-r, --properties stringToString`: Properties of the server (key=value pairs)
+- `-p, --start-port uint`: Starting port number for servers
+- `-s, --server-url string`: Server software download URL
+  - A direct URL to the server software
+  - `change`: Change to a different version entirely (e.g., from 1.21.1 to 1.21.5)
+  - `update`: Update to the latest URL for the current version from our [manifest](https://github.com/theSimpleCloud/simplecloud-manifest)
+
+## Common Examples
+
+### Change Memory Allocation
+
+```bash
+# Set survival: 2GB min, 4GB max RAM
+simplecloud edit group survival --minimum-memory 2048 --maximum-memory 4096
+```
+
+### Adjust Server Scaling
+
+```bash
+# Make bedwars scale between 2 and 10 servers
+simplecloud edit group bedwars --minimum-online-count 2 --maximum-online-count 10
+```
+
+```bash
+# Make lobby always have exactly 3 servers (fixed scale)
+simplecloud edit group lobby --minimum-online-count 3 --maximum-online-count 3
+```
+
+### Update Max Players
+
+```bash
+# Allow 75 players per lobby server
+simplecloud edit group lobby --max-players 75
+```
+
+### Update Server Software
+
+```bash
+# Point a group to a new JAR URL
+simplecloud edit group lobby --server-url "https://api.papermc.io/v2/.../paper-1.20.4-XYZ.jar"
+```
+
+<Callout>
+  You can use the special value `--server-url update` to get the latest URL for
+  the current version from our manifest.
+</Callout>
+
+### Combine Multiple Changes
+
+```bash
+simplecloud edit group survival --max-players 40 --maximum-memory 3072 --minimum-online-count 2
+```
+
+## Advanced: Manual File Editing
+
+For advanced users, you can directly edit the group's `.yml` file in the `groups/` folder:
+
+```yaml
+# groups/lobby.yml
+name: lobby
+type: SERVER
+min-memory: 1024
+max-memory: 2048 # Changed
+min-online-count: 2 # Changed
+max-online-count: 2 # Changed
+# ... other settings ...
+```
+
+<Callout type="warn">
+  Manual editing carries risks: - Typos in YAML can break the group - No input
+  validation (unlike the CLI) - Generally safer to use the CLI command
+</Callout>
+
+## When Changes Apply
+
+- **Immediately**: `min-online-count`, `max-online-count` (can trigger server starts/stops)
+- **On Next Server Restart**: `max-players`, `min-memory`, `max-memory`, `start-port`, `server-url`, template changes
+
+<Callout>
+  To force all changes on running servers, you should restart the servers.
+</Callout>

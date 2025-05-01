@@ -1,0 +1,110 @@
+---
+title: Templates
+description: Templates are used to create new servers with specific files and configurations the way you want.
+---
+
+## Overview
+
+We have two types of templates pre-configured:
+
+- `dynamic`: A dynamic template is a template that is used to create a server with a specific configuration.
+- `static`: A static template is a template that is used to create a server with a specific configuration.
+
+Templates are very simple. They are just folders called like you named your server group and located in the `templates` directory.
+
+Here is an example of how your folder structure could look like:
+
+<Files>
+  <Folder name="templates" defaultOpen>
+    <Folder name="proxy" defaultOpen>
+      <Folder name="plugins" defaultOpen>
+        <File name="..." />
+      </Folder>
+    </Folder>
+
+    <Folder name="lobby" defaultOpen>
+      <Folder name="plugins" defaultOpen>
+        <File name="lobby-plugin.jar" />
+      </Folder>
+      <File name="..." />
+      <File name="server.properties" />
+      <File name="bukkit.yml" />
+    </Folder>
+
+  </Folder>
+</Files>
+
+## Dynamic Templates
+
+Every time you start a new server, SimpleCloud will copy the files from the template folder to the new server. This means that you can change the files in the template folder and they will be applied to the new server.
+
+Here are some examples when you should use dynamic templates:
+
+- **Proxy Groups**: Every proxy server should be identical to ensure consistent behavior and easier scaling.
+- **Lobby Servers**: Similar to proxy groups, you want that your lobby servers are identical to ensure consistent behavior and easier scaling.
+- **Mini-Games**: Most mini-games don't need to store any data and can be reset every time a new game starts.
+
+## Static Templates
+
+If you configure your group to use a static template, SimpleCloud will create a folder in `running/static/` (e.g. `running/static/lobby/lobby-1`) and this folder will not be deleted when the server is stopped.
+
+Additionally, every static templates also uses the dynamic template. This means before starting the server, we copy the files from the dynamic template to the static template folder, but ONLY if the file does not exist in the static template folder.
+
+Here are some examples when you should use static templates:
+
+- **SMPs**: You want to keep the same world on all of your survival servers.
+- **CityBuild, SkyBlock, etc.**: You want to keep plots of your players.
+- **Any other server where you need to keep the data between restarts.**
+
+<Callout type="warn">
+  We do not recommend using static templates for proxies, lobbies or mini-games.
+  Our experience shows that it is better to use dynamic templates for these
+  cases.
+</Callout>
+
+## Additional Default Templates
+
+SimpleCloud automatically creates templates for each server group you configure (like "lobby", "proxy", etc.). However, there are also special template patterns that can be used across multiple server groups. These special templates are not created by default to avoid unnecessary clutter in your filesystem. You'll need to manually create them if you want to use these features.
+
+- **`EVERY`**: This template is used for every server. You can put files in there that you want to be available for every server.
+- **`EVERY_<SOFTWARE>`**: This template is used for every server that is running on a specific software.
+
+  Whenever you start a new server with a specific software, SimpleCloud will copy the files from the `EVERY_<SOFTWARE>` template to the new server.
+
+  For example: `EVERY_VELOCITY`, `EVERY_BUNGEECORD`, `EVERY_PAPER`, `EVERY_SPIGOT`, etc. This also works for custom softwares.
+
+### Structure and Plugin Placement
+
+Group-specific templates (like "lobby") are created automatically when you create a server group. The special EVERY templates need to be manually created in the `templates` directory as needed. Here's an example structure:
+
+<Files>
+  <Folder name="templates" defaultOpen>
+    <Folder name="EVERY" defaultOpen>
+      <Folder name="plugins" defaultOpen>
+        <File name="global-plugin.jar" />
+      </Folder>
+      <File name="global-config.yml" />
+    </Folder>
+
+    <Folder name="EVERY_PAPER" defaultOpen>
+      <Folder name="plugins" defaultOpen>
+        <File name="paper-specific-plugin.jar" />
+      </Folder>
+      <File name="server.properties" />
+    </Folder>
+
+    <Folder name="lobby" defaultOpen>
+      <Folder name="plugins" defaultOpen>
+        <File name="lobby-plugin.jar" />
+      </Folder>
+      <File name="server.properties" />
+    </Folder>
+
+  </Folder>
+</Files>
+
+To add plugins to your servers:
+
+- For all servers: Place them in `templates/EVERY/plugins/`
+- For specific software: Place them in `templates/EVERY_<SOFTWARE>/plugins/`
+- For specific server groups: Place them in `templates/<GROUP_NAME>/plugins/`

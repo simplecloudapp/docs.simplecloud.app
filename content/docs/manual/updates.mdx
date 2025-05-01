@@ -1,0 +1,61 @@
+---
+title: Updates
+description: |
+  Keep your SimpleCloud installation up to date with our built-in update mechanisms
+---
+
+## Automatic Updates
+
+SimpleCloud automatically checks for updates when you start the cloud. This means:
+
+- When you start SimpleCloud, it checks for newer versions
+- If updates are available, they're downloaded and applied automatically
+- Your configuration files are preserved during updates
+- The cloud restarts with the new version where necessary
+
+This hands-off approach ensures you're always running the latest version without manual intervention.
+
+## Updating the CLI
+
+The CLI is your primary interface with SimpleCloud and can be updated using:
+
+```bash
+simplecloud upgrade cli
+```
+
+This command checks for a newer version of the CLI, downloads it, and replaces your current installation.
+
+## Handling Breaking Changes with Migrations
+
+Occasionally, SimpleCloud may introduce breaking changes that require manual migration steps. For these cases, we provide the `migrate` command:
+
+```bash
+simplecloud migrate [version]
+```
+
+This command guides you through any necessary migration steps for moving between major versions or handling significant changes that can't be applied automatically.
+
+For example, migrating to version 3.2:
+
+```bash
+simplecloud migrate 3.0.0-beta.1
+```
+
+<Callout>
+  The migrate command is only needed in specific cases where breaking changes
+  are introduced. For regular updates, the automatic update system handles
+  everything for you.
+</Callout>
+
+## Best Practices
+
+- **Stay Updated**: Since updates happen automatically, it's best to restart the cloud periodically to ensure you have the latest version
+- **Backup First**: Before a major version migration, always create a backup of your configuration files
+- **Check Changelog**: Review the changelog for major versions to understand what has changed before migrating
+- **Test Migrations**: For production environments, test migrations on a staging system first
+
+<Callout type="warn">
+  If you're running a custom or modified version of SimpleCloud, automatic
+  updates might overwrite your changes. Consider creating a backup before
+  restarting the cloud.
+</Callout>

@@ -1,0 +1,61 @@
+---
+title: Permissions
+description: Learn about permission management in SimpleCloud v3
+---
+
+# Permissions
+
+SimpleCloud v3 does not include a built-in permission system. Instead, we recommend using [LuckPerms](https://luckperms.net/download), the industry standard for Minecraft permission management.
+
+## Migration from v2
+
+If you're upgrading from SimpleCloud v2, we provide a migration tool to convert your existing permissions to LuckPerms:
+
+<Steps>
+  1. Enable maintenance mode or whitelist on all servers to prevent players to
+  join during the migration 2.
+  [Download](https://github.com/theSimpleCloud?q=&type=all&language=&sort=) and
+  install the permission migration on a sub-server e.g. on a lobby instance. Do
+  not perform the migration on the Proxy server! 3. Install and configure
+  [LuckPerms](https://luckperms.net/download) on the selected sub-server and set
+  it up correctly 4. Restart the server after installing LuckPerms to apply the
+  changes 5. Run `/migrate` command in the console 6. Complete the data
+  migration. All permission data will be migrated. Verify successful permission
+  migration
+</Steps>
+
+<Callout>
+  The migration tool automatically handles the conversion of all permissions,
+  groups, and user data from your v2 installation.
+</Callout>
+
+## Why LuckPerms?
+
+Luckperms is a powerful and user-friendly permissions plugin for Minecraft servers, offering many great features such as support for various server platforms and databases, real-time syncing across all servers, backup and restore functionality, and an intuitive dashboard.
+Instead of "reinventing the wheel" by creating our own permission system, we highly recommend using or switching to Luckperms. (We are not partnered with Luckperms or affiliated with them in any way.)
+
+## Best Practices
+
+1. **Network Setup**
+
+   - Use a central database for multi-server setups
+   - Keep plugin versions consistent across servers
+   - Regular permission data backups
+
+2. **Permission Management**
+   - Use the web editor for complex changes
+   - Implement clear group hierarchies
+   - Document permission assignments
+
+## Helpful Links
+
+- [Migration tool to Luckperms](https://github.com/theSimpleCloud?q=&type=all&language=&sort=)
+- [Official Luckperms Download Page](https://luckperms.net/download)
+- [Official Luckperms Documentation](https://luckperms.net/wiki/Home)
+
+## What's Next?
+
+- [LuckPerms Documentation](https://luckperms.net/wiki)
+- [Server Templates](/docs/manual/resources/template)
+- [Plugin Configuration](/docs/manual/plugin)
+- [Advanced Server Management](/docs/manual/resources/server)

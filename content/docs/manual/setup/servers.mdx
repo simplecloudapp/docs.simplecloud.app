@@ -1,0 +1,137 @@
+---
+title: Servers
+description: Learn how to manage individual server instances in SimpleCloud
+---
+
+## What are Servers?
+
+Servers are individual Minecraft instances that SimpleCloud creates and manages based on your group configurations. Each server:
+
+- Inherits its base configuration from its parent group
+- Has a unique identifier (e.g., `lobby-1`, `survival-3`)
+- Can be individually managed and configured
+- Automatically scales based on player demand
+
+## Server Lifecycle
+
+### Creation and Startup
+
+Servers are automatically created when:
+
+- The configured minimum online count hasn't been reached
+- You manually start a server
+- Player count requires more capacity based on your scaling settings
+
+### Runtime Operation
+
+During operation, servers:
+
+- Report their status to the SimpleCloud controller
+- Handle player connections
+- Can be modified with certain settings without requiring restarts
+
+### Shutdown
+
+Servers are gracefully stopped when:
+
+- You manually stop them
+- They're no longer needed (player count decreases)
+- The cloud system shuts down
+
+## Managing Servers
+
+### Starting a Server
+
+```bash
+simplecloud start server <server-id>
+```
+
+Example:
+
+```bash
+simplecloud start server lobby-1
+```
+
+### Stopping a Server
+
+```bash
+simplecloud stop server <server-id>
+```
+
+Example:
+
+```bash
+simplecloud stop server survival-2
+```
+
+### Editing a Running Server
+
+Some properties can be changed while a server is running:
+
+```bash
+simplecloud edit server <server-id> [flags]
+```
+
+**Available Flags:**
+
+- `-P, --max-players uint`: Change the maximum player limit
+- `-r, --properties stringToString`: Modify custom properties (key=value pairs)
+
+Example:
+
+```bash
+# Change max players on a specific server
+simplecloud edit server lobby-1 --max-players 100
+```
+
+You can define custom properties for your servers:
+
+```bash
+simplecloud edit server lobby-1 --properties "custom-property=value"
+```
+
+These properties can be accessed by plugins through the SimpleCloud API to enable custom behaviors and configurations.
+
+## Server States
+
+Servers transition through different states during their lifecycle:
+
+- **PREPARING**: Server files are being prepared
+- **STARTING**: Server is starting up but not ready yet
+- **RUNNING**: Server is operational and can accept players
+- **STOPPING**: Server is in the process of shutting down
+- **STOPPED**: Server has been fully stopped
+
+<Callout type="info">
+  You can view the current state of all servers using the `simplecloud info
+  servers` command.
+</Callout>
+
+## Server File Structure
+
+Here is an example of the file structure for a server:
+
+<Files>
+  <Folder name="running" defaultOpen>
+    <Folder name="dynamic" defaultOpen>
+      <Folder name="lobby" defaultOpen>
+        <Folder name="lobby-1" defaultOpen>
+          <Folder name="logs" />
+          <Folder name="plugins" />
+          <Folder name="worlds" />
+          <File name="server.properties" />
+        </Folder>
+      </Folder>
+    </Folder>
+    <Folder name="static" defaultOpen>
+      <Folder name="survival" defaultOpen>
+        <Folder name="survival-1" defaultOpen>
+          <Folder name="logs" />
+          <Folder name="plugins" />
+          <Folder name="worlds" />
+          <File name="server.properties" />
+        </Folder>
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>

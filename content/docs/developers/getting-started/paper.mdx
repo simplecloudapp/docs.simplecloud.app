@@ -1,0 +1,106 @@
+---
+title: Start with Paper
+description: Implementing the SimpleCloud Controller API in Paper
+---
+
+The following guide will show you how to implement our API in your Paper plugin.
+
+Our API includes the `ControllerApi` and the `PlayerApi` class. The `ControllerApi` is used to interact with the SimpleCloud's [groups](/docs/manual/setup/groups), [servers](/docs/manual/setup/servers), and more, while the `PlayerApi` is used to interact with [players](/docs/manual/droplets/player).
+
+## Dependencies
+
+While we are working on a native Paper implementation, you can use our Spigot API for now.
+
+First, we need to add the dependencies to your `build.gradle` or `pom.xml`:
+
+<DependencySnippet
+  dependencies={[
+    {
+      groupId: "app.simplecloud.api.platform",
+      artifactId: "spigot",
+    },
+    {
+      groupId: "io.papermc.paper",
+      artifactId: "paper-api",
+      version: "1.21.5-R0.1-SNAPSHOT",
+      autoFetch: false,
+    },
+  ]}
+  type="snapshot"
+  repositories={[
+    {
+      id: "simplecloud-snapshots",
+      url: "https://repo.simplecloud.app/snapshots",
+    },
+    {
+      id: "buf-maven",
+      url: "https://buf.build/gen/maven",
+    },
+    {
+      id: "papermc",
+      url: "https://repo.papermc.io/repository/maven-public/",
+    },
+  ]}
+/>
+
+<Callout type="warn">
+  Please don't compile our API into your plugin, just follow the next step, and
+  depend on the API.
+</Callout>
+
+## Depend on the API
+
+Paper plugins can inherit from the SimpleCloud Cloud API plugin. This is useful if you want to use the SimpleCloud API in your plugin.
+
+For this, you need to add a `depend` configuration to your `plugin.yml` file. Here is an example:
+
+```yaml
+name: simplecloud-example-paper
+version: 1.0.0
+main: app.simplecloud.examples.plugin.paper.PaperExamplePlugin
+depend: [simplecloud-api]
+```
+
+After that, you can use the SimpleCloud API in your plugin:
+
+```kotlin tab="Kotlin"
+import app.simplecloud.controller.api.ControllerApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.bukkit.plugin.java.JavaPlugin
+
+class BungeeCordExamplePlugin : JavaPlugin() {
+
+    private val controllerApi = ControllerApi.createCoroutineApi()
+
+    override fun onEnable() {
+        logger.info("Hello from Paper!")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val groups = controllerApi.getGroups().getAllGroups()
+            logger.info("Groups: $groups")
+        }
+    }
+
+}
+```
+
+```java tab="Java"
+import app.simplecloud.controller.api.ControllerApi;
+import net.md_5.bungee.api.plugin.Plugin;
+
+public class BungeeCordExamplePlugin extends Plugin {
+
+    private final ControllerApi controllerApi = ControllerApi.createFutureApi();
+
+    @Override
+    public void onEnable() {
+        getLogger().info("Hello from Paper!");
+        controllerApi.getGroups().getAllGroups().thenAccept(groups -> {
+            getLogger().info("Groups: " + groups);
+        });
+    }
+
+}
+```

@@ -1,0 +1,133 @@
+---
+title: Notify Plugin
+description: Learn about SimpleCloud's notify plugin for real-time server state notifications
+badge: Proxy
+badgeColor: sky
+---
+
+## Overview
+
+Keep your staff informed about server state changes with real-time notifications using MiniMessage formatting.
+
+<Callout>
+  This plugin uses MiniMessage for text formatting. Check out the [MiniMessage
+  Documentation](https://docs.advntr.dev/minimessage/index.html) for message
+  customization.
+</Callout>
+
+## Supported Software
+
+| Software   | Plugin Support | Dependencies |
+| ---------- | -------------- | ------------ |
+| Velocity   | ✅ Yes         | ✅ Yes       |
+| Bungeecord | ✅ Yes         | ✅ Yes       |
+
+<Callout>
+  Want to add support for another server software? Submit a pull request on
+  [GitHub](https://github.com/simplecloudapp/notify-plugin)!
+</Callout>
+
+## Quick Setup
+
+1. Download the plugin from [GitHub](https://github.com/simplecloudapp/notify-plugin/releases)
+2. Place it in your proxy template's plugins folder
+3. Start your server once to generate the configuration
+4. Configure using `plugins/notify-[velocity/bungeecord]/config.yml`
+
+## Server State Management
+
+Monitor and notify about server state changes with customizable notifications:
+
+```yaml
+server-state-filter:
+  - server-state: STARTING
+    permission: "notify.receive.state-changed.starting"
+    message: |-
+      <color:#38bdf8><bold>⚡</bold></color> <hover:show_text:'Server Information:
+         Group: <server_group>
+         State: <server_state>
+         Players: <online_players>/<max_players>'>Server <server_group> <server_id></hover> is starting up.
+
+  - server-state: AVAILABLE
+    permission: "notify.receive.state-changed.available"
+    message: |-
+      <color:#38bdf8><bold>⚡</bold></color> Server <server_group> <server_id> is now available.
+
+  - server-state: STOPPING
+    permission: "" # Empty for no permission requirement
+    message: |-
+      <color:#38bdf8><bold>⚡</bold></color> Server <server_group> <server_id> is shutting down.
+```
+
+## Notification Customization
+
+### Time Format
+
+Customize timestamp displays using [SimpleDateFormat](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/SimpleDateFormat.html) patterns:
+
+```yaml
+date-format: dd.MM.yyyy HH:mm:ss
+```
+
+### Interactive Messages
+
+Create engaging notifications with MiniMessage features:
+
+- Hover tooltips with server details
+- Click-to-connect actions
+- Custom color gradients
+- Dynamic server information
+
+## Configuration Examples
+
+### Basic Network Setup
+
+```yaml
+date-format: dd.MM.yyyy HH:mm:ss
+
+server-state-filter:
+  - server-state: STARTING
+    permission: "staff.server-state.starting"
+    message: "<color:#38bdf8>Server <server_group> <server_id> is starting up."
+
+  - server-state: STOPPING
+    permission: "staff.server-state.stopping"
+    message: "<color:#38bdf8>Server <server_group> <server_id> is shutting down."
+```
+
+## Placeholders
+
+| Placeholder            | Description          |
+| ---------------------- | -------------------- |
+| `<server_group>`       | Group name           |
+| `<server_id>`          | Server numerical ID  |
+| `<server_uuid>`        | Server UUID          |
+| `<server_state>`       | Current server state |
+| `<server_ip>`          | Server IP address    |
+| `<server_port>`        | Server port          |
+| `<online_players>`     | Current player count |
+| `<max_players>`        | Maximum players      |
+| `<server_update_date>` | Last update date     |
+| `<server_create_date>` | Creation date        |
+
+## Permissions
+
+| Permission                               | Description             |
+| ---------------------------------------- | ----------------------- |
+| `notify.receive.state-changed.starting`  | Starting notifications  |
+| `notify.receive.state-changed.available` | Available notifications |
+| `notify.receive.state-changed.stopping`  | Stopping notifications  |
+
+<Callout>
+  These permissions are examples. You can customize them in your configuration.
+  Leave the permission field empty to allow all players to receive specific
+  notifications.
+</Callout>
+
+## What's Next?
+
+Here are some helpful resources to continue exploring SimpleCloud:
+
+- [Proxy Configuration](/docs/manual/plugin/proxy-essentials)
+- [Group Management](/docs/manual/resources/groups)
+- [Plugin Development](/docs/manual/plugin/overview)

@@ -1,0 +1,208 @@
+---
+title: Server Connection Plugin
+description: Learn about SimpleCloud's server connection plugin for managing player connections and server navigation
+badge: Proxy
+badgeColor: sky
+---
+
+## Overview
+
+The Server Connection Plugin provides comprehensive player connection management for your network, including network join handling, fallback servers, and navigation commands.
+
+## Supported Software
+
+| Software   | Plugin Support | Server API Support |
+| ---------- | -------------- | ------------------ |
+| Velocity   | ✅ Full        | ✅ Yes             |
+| Bungeecord | ✅ Full        | ✅ Yes             |
+| Gate       | 🔄 Planned     | ✅ Yes             |
+| Other\*    | Varies         | No                 |
+
+<Callout>
+  *Support for other proxies is possible through custom implementation if the
+  [server API](/docs/manual/api#server) is available in your preferred
+  [programming language](/docs/manual/api).
+</Callout>
+
+## Quick Setup
+
+1. Download the plugin from [GitHub](https://github.com/simplecloudapp/server-connection-plugin/releases)
+2. Place it in your proxy template's plugins folder
+3. Configure using `config.yml`
+
+## Connection Targets
+
+Connection targets define how servers in your network are matched and accessed. Each target can have specific rules for server name matching and player access.
+
+Example configuration:
+
+```yaml
+connections:
+  # Match servers starting with "lobby"
+  - name: "lobby"
+    server-name-matcher:
+      operation: "STARTS_WITH"
+      value: "lobby"
+
+  # Match specific server with access rules
+  - name: "skyblock-spawn"
+    server-name-matcher:
+      operation: "EQUALS"
+      value: "sb-spawn"
+    rules:
+      # Permission rule
+      - type: "PERMISSION"
+        name: "network.join.skyblock"
+        value: "true"
+
+      # Environment variable rule
+      - type: "ENV"
+        name: "SKYBLOCK_JOIN_STATE"
+        value: "maintenance"
+        operation: "EQUALS"
+        negate: true
+        bypassPermission: "rank.admin"
+```
+
+### Server Name Matchers
+
+Available matching operations:
+
+| Operation     | Description         |
+| ------------- | ------------------- |
+| `EQUALS`      | Exact match         |
+| `STARTS_WITH` | Prefix match        |
+| `ENDS_WITH`   | Suffix match        |
+| `CONTAINS`    | Substring match     |
+| `REGEX`       | RegEx pattern match |
+
+### Access Rules
+
+Two types of rules are available:
+
+1. **Permission Rules**:
+
+```yaml
+- type: "PERMISSION"
+  name: "network.join.skyblock"
+  value: "true"
+  bypassPermission: "rank.admin" # Optional
+```
+
+2. **Environment Variable Rules**:
+
+```yaml
+- type: "ENV"
+  name: "SKYBLOCK_JOIN_STATE"
+  value: "maintenance"
+  operation: "EQUALS"
+  negate: true
+  bypassPermission: "rank.admin" # Optional
+```
+
+## Features
+
+<Callout>
+  All message variables support [MiniMessage
+  format](https://docs.advntr.dev/minimessage/format#standard-tags) for styling.
+</Callout>
+
+### Network Join Targets
+
+Manages initial server connections:
+
+```yaml
+network-join-targets:
+  enabled: true
+  no-target-connections-found-message: "<color:red>No target servers available."
+  target-connections:
+    - name: "lobby"
+      priority: 0
+```
+
+### Fallback Connections
+
+Handles player redirection on kicks or shutdowns:
+
+```yaml
+fallback-connections:
+  enabled: true
+  no-target-connections-found-message: "No fallback servers available."
+  target-connections:
+    - name: "lobby"
+      priority: 0
+```
+
+### Navigation Commands
+
+Create server navigation commands:
+
+```yaml
+commands:
+  - name: "lobby"
+    aliases: ["hub"]
+    target-connections:
+      - name: "lobby"
+        priority: 0
+    already-connected-message: "<red>Already in lobby!"
+    no-target-connections-found-message: "No lobby servers available."
+    permission: "command.lobby" # Optional
+```
+
+## Example Configurations
+
+### Game Server Setup
+
+```yaml
+connections:
+  - name: "lobby"
+    server-name-matcher:
+      operation: "STARTS_WITH"
+      value: "lobby"
+  - name: "bedwars"
+    server-name-matcher:
+      operation: "STARTS_WITH"
+      value: "bw"
+    rules:
+      - type: "PERMISSION"
+        name: "minigame.bedwars"
+        value: "true"
+
+network-join-target:
+  enabled: true
+  target-connections:
+    - name: "lobby"
+      priority: 0
+
+fallback-connections:
+  enabled: true
+  target-connections:
+    - name: "lobby"
+      priority: 0
+    - name: "bedwars"
+      priority: 1
+      from:
+        - operation: "STARTS_WITH"
+          value: "bw"
+
+commands:
+  - name: "lobby"
+    aliases: ["hub", "l"]
+    target-connections:
+      - name: "lobby"
+        priority: 0
+  - name: "bedwars"
+    aliases: ["bw"]
+    permission: "minigame.bedwars"
+    target-connections:
+      - name: "bedwars"
+        priority: 0
+```
+
+## What's Next?
+
+Here are some helpful resources to continue exploring SimpleCloud:
+
+- [Server API Documentation](/docs/manual/api#server)
+- [Proxy Configuration](/docs/manual/plugin/proxy-essentials)
+- [Plugin Development](/docs/manual/plugin/overview)

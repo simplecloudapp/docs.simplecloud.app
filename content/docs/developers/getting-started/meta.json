@@ -1,0 +1,6 @@
+{
+  "title": "Getting Started",
+  "description": "Getting started with the SimpleCloud Controller API",
+  "pages": ["velocity", "bungeecord", "paper", "other"],
+  "defaultOpen": true
+}

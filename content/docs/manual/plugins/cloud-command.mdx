@@ -1,0 +1,59 @@
+---
+title: Cloud Command Plugin
+description: Learn about SimpleCloud's in-game command plugin for managing your server network
+badge: Proxy
+badgeColor: sky
+---
+
+## Overview
+
+The Cloud Command Plugin empowers your network with in-game proxy commands, enabling efficient cloud management directly from within the game. Easily start, stop, and manage servers using commands.
+
+## Supported Software
+
+| Software   | Plugin Support |
+| ---------- | -------------- |
+| Velocity   | ✅ Yes         |
+| Bungeecord | ✅ Yes         |
+
+<Callout>
+  Want to add support for another server software? Submit a pull request on
+  [GitHub](https://github.com/simplecloudapp/command-plugin)!
+</Callout>
+
+## Quick Setup
+
+1. Download the plugin from [GitHub](https://github.com/simplecloudapp/command-plugin/releases)
+2. Place it in your proxy template's plugin folder
+3. Start your proxy server
+
+## Commands
+
+| Command                            | Description                                              |
+| ---------------------------------- | -------------------------------------------------------- |
+| `/cloud start <group>`             | Starts a server from a specified group                   |
+| `/cloud stop <group> <id>`         | Stops a specific server from a specified group           |
+| `/cloud info servers [group] [id]` | Retrieves one or multiple servers from a specified group |
+| `/cloud info groups [group]`       | Retrieves one or all groups                              |
+
+<Callout>
+  Use `<>` for required arguments and `[]` for optional arguments.
+</Callout>
+
+<img
+  src="https://github.com/simplecloudapp/branding/blob/main/media/plugin/cloud-command/help.png?raw=true"
+  alt="Cloud Command Help Menu"
+  style={{
+    width: "100%",
+    borderRadius: "1rem",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+  }}
+/>
+
+## What's Next?
+
+Here are some helpful resources to continue exploring SimpleCloud:
+
+- [Server API Documentation](/docs/manual/api#server)
+- [Proxy Configuration](/docs/manual/plugin/proxy-essentials)
+- [Plugin Development](/docs/manual/plugin/overview)

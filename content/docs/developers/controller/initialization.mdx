@@ -1,0 +1,52 @@
+---
+title: Initialization
+description: Initializing the SimpleCloud Controller API
+---
+
+## Dependencies
+
+Before you can use the Controller API, you need to add our dependencies to your project.
+
+Please refer to following guides, depending on your platform:
+
+- [Velocity](/docs/developers/getting-started/velocity)
+- [BungeeCord](/docs/developers/getting-started/bungeecord)
+- [Paper](/docs/developers/getting-started/paper)
+- [Standalone](/docs/developers/getting-started/standalone)
+- [Other](/docs/developers/getting-started/other)
+
+## Initialization
+
+After adding the dependencies, you can initialize the Controller API.
+
+### Initialize with Default Configuration
+
+If you are using the Controller API in any platform, we automatically set the secret token with `CONTROLLER_SECRET` environment variable.
+
+```kotlin tab="Kotlin"
+val controllerApi = ControllerApi.createCoroutineApi()
+```
+
+```java tab="Java"
+ControllerApi.Future controllerApi = ControllerApi.createFutureApi();
+```
+
+### Connect with Secret Token
+
+```kotlin tab="Kotlin"
+val controllerApi = ControllerApi.createCoroutineApi("your-secret-key")
+```
+
+```java tab="Java"
+ControllerApi.Future controllerApi = ControllerApi.createFutureApi("your-secret-key");
+```
+
+<Callout>
+    You can find your secret in `<installation-dir>/components/.secrets/auth.secret`
+</Callout>
+
+## Best Practices
+
+- **Multiple Instances**: Don't create multiple instances of the Controller API. While it's possible to create multiple instances, we don't recommend it. Just create a single instance and use it everywhere (preferd with dependency injection).
+- **Asynchronous Operations**: Use `Coroutines` for asynchronous operations in Kotlin, or `CompletableFuture` for Java. We don't recommend using our API in sync operations.
+- **Error Handling**: We don't throw any exceptions, we return `null` or `Future` objects. You should handle errors by yourself.

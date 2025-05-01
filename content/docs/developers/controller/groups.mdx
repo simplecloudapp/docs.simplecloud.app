@@ -1,0 +1,120 @@
+---
+title: Groups API
+description: Managing groups with the SimpleCloud Controller API
+---
+
+## Initialization
+
+Before you can use the Groups API, you need to initialize the Controller API. Please refer to the [Initialization](/docs/developers/getting-started/initialization) guide for more information.
+
+After initializing the Controller API, you can use `controllerApi.getGroups()` to access the Groups API.
+
+## Create Group
+
+Creating groups is very simple. You can create a group with the `createGroup` method.
+
+```kotlin tab="Kotlin"
+val group = Group(
+    name = "lobby",
+    type = ServerType.SERVER,
+    minMemory = 512,
+    maxMemory = 1024,
+    startPort = 25565,
+    minOnlineCount = 1,
+    maxOnlineCount = 5,
+    maxPlayers = 100,
+    newServerPlayerRatio = 50,
+    properties = mapOf("gamemode" to "LOBBY")
+)
+
+val createdGroup = controllerApi.getGroups().createGroup(group)
+```
+
+```java tab="Java"
+Group group = new Group(
+    "lobby",
+    ServerType.SERVER,
+    512L,
+    1024L,
+    25565L,
+    1L,
+    5L,
+    100L,
+    50L,
+    Map.of("gamemode", "LOBBY")
+);
+
+controllerApi.getGroups().createGroup(group).thenAccept(createdGroup -> {
+    // Group created successfully
+});
+```
+
+## Get Groups
+
+We provide multiple ways to get groups. You can get a specific group by name, all groups, or groups by type.
+
+```kotlin tab="Kotlin"
+// Get a specific group
+val lobbyGroup = controllerApi.getGroups().getGroupByName("lobby")
+
+// Get all groups
+val allGroups = controllerApi.getGroups().getAllGroups()
+
+// Get groups by type
+val serverGroups = controllerApi.getGroups().getGroupsByType(ServerType.SERVER)
+```
+
+```java tab="Java"
+// Get a specific group
+controllerApi.getGroups().getGroupByName("lobby")
+    .thenAccept(group -> {
+        // Handle group
+    });
+
+// Get all groups
+controllerApi.getGroups().getAllGroups()
+    .thenAccept(groups -> {
+        // Handle groups
+    });
+
+// Get groups by type
+controllerApi.getGroups().getGroupsByType(ServerType.SERVER)
+    .thenAccept(groups -> {
+        // Handle server groups
+    });
+```
+
+## Update & Delete Groups
+
+Updating and deleting groups is also very simple. You can update a group with the `updateGroup` method and delete a group with the `deleteGroup` method.
+
+```kotlin tab="Kotlin"
+// Update a group
+val updatedGroup = existingGroup.copy(
+    maxPlayers = 200,
+    maxMemory = 2048
+)
+controllerApi.getGroups().updateGroup(updatedGroup)
+
+// Delete a group
+controllerApi.getGroups().deleteGroup("lobby")
+```
+
+```java tab="Java"
+// Update a group
+Group updatedGroup = existingGroup.toBuilder()
+    .setMaxPlayers(200)
+    .setMaxMemory(2048)
+    .build();
+
+controllerApi.getGroups().updateGroup(updatedGroup)
+    .thenAccept(group -> {
+        // Group updated
+    });
+
+// Delete a group
+controllerApi.getGroups().deleteGroup("lobby")
+    .thenAccept(success -> {
+        // Group deleted
+    });
+```

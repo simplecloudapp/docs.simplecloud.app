@@ -1,0 +1,83 @@
+---
+title: SimpleCloud Droplets
+description: Learn about SimpleCloud's microservice-based droplet system for extending functionality
+---
+
+# SimpleCloud Droplets
+
+A droplet is SimpleCloud's interpretation of a microservice that extends the functionality of your SimpleCloud setup. Droplets can run custom code, interact with external services, or create custom APIs.
+
+## Understanding Droplets
+
+Droplets are a powerful way to extend SimpleCloud's functionality without writing a full application. Each droplet (microservice) focuses on doing one thing well, making it easy to maintain and scale.
+
+Key benefits of the droplet system:
+
+- Decoupled architecture allowing selective use of components
+- Easy installation and management
+- Focused functionality for better maintenance
+- Scalable design for growing deployments
+
+## Installing a Droplet
+
+Using the SimpleCloud CLI, you can easily manage droplets:
+
+```bash
+# Install a droplet
+sc install <droplet-name>
+
+# List all available droplets
+sc info droplets
+```
+
+## Droplets vs v2 Modules
+
+Droplets are not direct replacements for v2 modules. While some droplets may share similarities with existing v2 modules, our focus has shifted:
+
+- Most old module functionality is now available as plugins for Velocity, BungeeCord, or Spigot
+- V2 modules are being converted into simplified [plugins](/docs/manual/plugin/overview)
+- Droplets focus on infrastructure and service-level functionality
+
+<Callout>
+  Have ideas for new droplets or plugins? Join our
+  [Discord](https://discord.simplecloud.app) to share your thoughts with the
+  community!
+</Callout>
+
+## Creating Droplets
+
+A droplet is essentially a microservice that you can create using any technology stack. However, our official droplets typically use the following technologies:
+
+| Technology        | Purpose                      |
+| ----------------- | ---------------------------- |
+| Kotlin            | Primary programming language |
+| ProtoBuf          | Data serialization           |
+| gRPC              | Service communication        |
+| SQLite/PostgreSQL | Data storage                 |
+| JOOQ              | Database access              |
+| Docker            | Containerization             |
+
+<Callout>
+  This is our preferred tech stack, but you can use any technology to create
+  your own droplets. Need help? Join our
+  [Discord](https://discord.simplecloud.app) community!
+</Callout>
+
+## Official Droplets
+
+SimpleCloud provides several official droplets to extend your setup:
+
+| Droplet                                                      | Description                        |
+| ------------------------------------------------------------ | ---------------------------------- |
+| [Server Host](/docs/manual/droplet/serverhost)               | Manages Minecraft server instances |
+| [Server Host Docker](/docs/manual/droplet/serverhost-docker) | Docker-based server management     |
+| [Player](/docs/manual/droplet/player)                        | Player data and management         |
+| [Resource Pack](/docs/manual/droplet/resourcepack)           | Resource pack distribution         |
+
+## What's Next?
+
+Here are some helpful resources to continue exploring SimpleCloud:
+
+- [Learn about Plugins](/docs/manual/plugin/overview)
+- [Explore the API](/docs/manual/api)
+- [View Server Management](/docs/manual/resources/servers)

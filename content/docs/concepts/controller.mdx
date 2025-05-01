@@ -1,0 +1,59 @@
+---
+title: Controller
+description: |
+  The SimpleCloud Controller is the central component of the SimpleCloud server.
+---
+
+## Understanding the Controller
+
+The structure of the controller is very simple. It checks every few seconds if there are any updates on servers or server groups. If so, it will try to talk to a [serverhost](/docs/manual/concepts/serverhost) and apply those changes. For example, if additional servers are needed or group configurations change, this is forwarded to the right server host. The contacted [serverhost](/docs/manual/concepts/serverhost) will do the rest of the work, like starting, stopping, or updating a server.
+
+For example, if you want to start a server, the controller will send a message to a [serverhost](/docs/manual/concepts/serverhost) and tell it to start a server. The [serverhost](/docs/manual/concepts/serverhost) will then start the server and tell the controller that the server is now running. At last, the controller updates the status of the server in the database.
+
+<Callout>
+  The controller is a very important part of SimpleCloud, but there can be only
+  one controller running at a time. If you have multiple controllers running at
+  the same time, you will run into problems. Support for multiple running
+  controllers may be added soon.
+</Callout>
+
+## Installation
+
+When you install SimpleCloud, the controller is automatically installed. If you want, you can install the controller manually by running the [CLI](/docs/concepts/cli) command below, but it's not recommended. Let SimpleCloud handle the installation of the controller.
+
+```bash
+# Install the controller
+simplecloud install controller
+```
+
+## Using Docker
+
+<Callout>This is still work in progress.</Callout>
+
+You can run the controller in Docker. We provide a Docker image for the controller that you can use. We will also add a way that starts Minecraft servers in Docker containers in the future.
+
+## Crash Handling
+
+The controller is only responsible for managing the servers. Unlike in v2, it does not include an environment for running the servers. This means that the entire cloud ecosystem operates independently in the background, outside the Minecraft network. The advantage is that if the cloud crashes, all servers continue to run in its screens or Docker containers. The only thing that will be affected is the management of the servers. You won't be able to start, stop, or update a server until the controller is up and running again.
+
+This also means, you can restart the controller at any time. The controller will automatically detect all running servers and server groups and update the database accordingly.
+
+<Callout>
+  Please make sure to check the logs of the controller when it crashes. The logs
+  will tell you why the controller crashed and how to fix it. If you can't fix
+  the problem, please join our [Discord](https://discord.simplecloud.app) and
+  report it there.
+</Callout>
+
+## Controller vs v2 Manager
+
+The controller focuses on fewer tasks than the old v2 manager. It's a small program running in the background, responsible only for managing servers and server groups. It acts as the task manager, assigning tasks to the server hosts. All other tasks, such as managing droplets (as in v2 modules), creating and deleting servers, and handling the user interface, are managed by other components of the cloud.
+
+In contrast, the v2 manager was a large program that handled most of the core tasks in a single application: managing servers, server groups, templates, modules, and more.
+
+But like the old v2 Manager, the controller is the heart of SimpleCloud. Without the controller, SimpleCloud would not work and at the moment there is no way to run multiple controllers at the same time.
+
+<Callout type="error">
+  The controller does not start droplets. This is the job of the
+  [CLI](/docs/concepts/cli)
+</Callout>

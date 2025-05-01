@@ -1,0 +1,85 @@
+---
+title: Getting Started
+description: Discover SimpleCloud's powerful API ecosystem supporting multiple languages through gRPC and Protocol Buffers.
+---
+
+# Getting Started with SimpleCloud API
+
+Welcome to SimpleCloud's API documentation. Our API ecosystem provides a powerful, flexible foundation for building and integrating cloud services, extending far beyond traditional Minecraft server management.
+
+## Introduction
+
+SimpleCloud's API represents a major leap forward in cloud service management. At its core, it provides a component-based architecture enabling modular development across your infrastructure. Through our implementation of [gRPC](https://grpc.io/), we deliver cross-platform compatibility that breaks free from traditional constraints. The API is completely language-agnostic, allowing integrations in virtually any programming environment.
+
+## Architecture
+
+### Component-Based Design
+
+SimpleCloud's ecosystem is structured into distinct components that work together seamlessly while maintaining independence:
+
+- **Controllers**: Central management units handling service orchestration and resource allocation
+- **Droplets**: Independent service units providing scalable components and specialized functionality
+- **Plugin System**: Extends the platform's capabilities through modular additions
+
+This component-based approach allows developers to import only the dependencies they need, maintaining clean architecture and optimizing resource usage.
+
+### Protocol Buffers & gRPC
+
+The foundation of our API rests on two powerful technologies:
+
+- **[Protocol Buffers](https://protobuf.dev/)**: Efficient binary serialization with strong typing
+- **[gRPC](https://grpc.io/)**: High-performance remote procedure calls with bi-directional streaming
+
+You can find our complete Protocol Buffer specifications at [buf.build/simplecloud/proto-specs](https://buf.build/simplecloud/proto-specs/).
+
+## Authentication
+
+<Tabs items={["Minecraft Server", "External Application"]}>
+<Tab value="Minecraft Server">
+Every Minecraft server automatically receives an API key through environment variables:
+
+```bash
+# Automatically set in Minecraft server environment
+CONTROLLER_SECRET=sk_....
+```
+
+Our official APIs automatically detect and use these credentials.
+
+</Tab>
+
+<Tab value="External Application">
+For applications outside the Minecraft server environment, use the master authentication secret located at:
+
+```bash
+/components/.secrets/auth.secret
+```
+
+<Callout type="warning">
+  This master secret provides full API access. Never commit it to version control,
+  store it securely in production environments, and implement regular secret rotation.
+</Callout>
+</Tab>
+</Tabs>
+
+### Access Control System
+
+SimpleCloud implements a comprehensive access control system with:
+
+- Fine-grained permission management
+- Token-based authentication
+- Role-based access control
+- Usage monitoring
+- Audit logging capabilities
+
+<Callout>
+  The access control system is fully implemented. We're currently integrating it with the
+  [CLI](/docs/manual/cli) and [Dashboard](/docs/manual/dashboard) for easier key management.
+</Callout>
+
+## Next Steps
+
+To start building with SimpleCloud:
+
+1. [Controller API](/docs/manual/api/controller)
+2. [Server Host Droplet API](/docs/manual/api/droplet/serverhost)
+3. [Player Droplet API](/docs/manual/api/droplet/player)

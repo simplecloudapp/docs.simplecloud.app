@@ -1,0 +1,119 @@
+---
+title: Player Management
+description: Managing players with the SimpleCloud Player API
+---
+
+## Initialization
+
+Before you can use the Player API, you need to initialize the Player API. Please refer to the [Initialization](/docs/developers/getting-started/initialization) guide for more information.
+
+After initializing the Player API, you can use all methods provided by the API.
+
+## Query Players
+
+You can query players in different ways:
+
+```kotlin tab="Kotlin"
+// Get an offline player
+val player = playerApi.getOfflinePlayer("Steve")
+println("Player ${player.name} first joined at ${player.firstLogin}")
+
+// Get an online player
+val onlinePlayer = playerApi.getOnlinePlayer("Steve")
+println("Player ${onlinePlayer.name} is on server ${onlinePlayer.connectedServerName}")
+
+// Get all online players
+val players = playerApi.getOnlinePlayers()
+players.forEach { player ->
+    println("${player.name} on ${player.connectedServerName}")
+}
+
+// Get online player count
+val count = playerApi.getOnlinePlayerCount()
+println("Online players: $count")
+
+// Check if player is online
+val isOnline = playerApi.isOnline(uniqueId)
+println("Player online: $isOnline")
+```
+
+```java tab="Java"
+// Get an offline player
+playerApi.getOfflinePlayer("Steve")
+    .thenAccept(player -> {
+        System.out.println("Player " + player.getName() +
+            " first joined at " + player.getFirstLogin());
+    });
+
+// Get an online player
+playerApi.getOnlinePlayer("Steve")
+    .thenAccept(player -> {
+        System.out.println("Player " + player.getName() +
+            " is on server " + player.getConnectedServerName());
+    });
+
+// Get all online players
+playerApi.getOnlinePlayers()
+    .thenAccept(players -> {
+        players.forEach(player -> {
+            System.out.println(player.getName() + " on " +
+                player.getConnectedServerName());
+        });
+    });
+
+// Get online player count
+playerApi.getOnlinePlayerCount()
+    .thenAccept(count -> {
+        System.out.println("Online players: " + count);
+    });
+
+// Check if player is online
+playerApi.isOnline(uniqueId)
+    .thenAccept(isOnline -> {
+        System.out.println("Player online: " + isOnline);
+    });
+```
+
+## Player Actions
+
+You can perform various actions on players:
+
+```kotlin tab="Kotlin"
+// Connect player to a server
+playerApi.connectPlayer(uniqueId, "lobby-1")
+    .thenAccept { result ->
+        println("Connection result: $result")
+    }
+
+// Update player's server
+playerApi.updateServer(uniqueId, "lobby-1")
+    .thenAccept { success ->
+        println("Server update success: $success")
+    }
+
+// Kick player with a formatted message
+player.kick(
+    Component.text("Maintenance mode activated")
+        .color(NamedTextColor.RED)
+)
+```
+
+```java tab="Java"
+// Connect player to a server
+playerApi.connectPlayer(uniqueId, "lobby-1")
+    .thenAccept(result -> {
+        System.out.println("Connection result: " + result);
+    });
+
+// Update player's server
+playerApi.updateServer(uniqueId, "lobby-1")
+    .thenAccept(success -> {
+        System.out.println("Server update success: " + success);
+    });
+
+// Kick player with a formatted message
+player.kick(
+    Component.text("Maintenance mode activated")
+        .color(NamedTextColor.RED)
+);
+```

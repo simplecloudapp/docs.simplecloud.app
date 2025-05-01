@@ -1,0 +1,92 @@
+---
+title: Placeholders Plugin
+description: Use Controller API parameters for servers and groups as placeholders in your server
+badge: Server
+badgeColor: purple
+---
+
+## Overview
+
+The placeholders plugin integrates with [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) to expose all important parameters from the [Controller API](/docs/api/controller) as placeholders. This allows you to access server and group information dynamically in your server configurations.
+
+## Supported Software
+
+| Server Type    | PlaceholderAPI | This Plugin |
+| -------------- | -------------- | ----------- |
+| Paper & Forks  | ✅ Yes         | ✅ Yes      |
+| Spigot & Forks | ✅ Yes         | ✅ Yes      |
+| Other          | ❌ No          | ❌ No       |
+
+## Quick Setup
+
+1. Download the plugin from [GitHub](https://github.com/simplecloudapp/placeholder-plugin/releases)
+2. Download [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
+3. Place both plugins in your server's plugins folder
+4. Start your server
+
+## Available Placeholders
+
+You can use parameters from both the current server and its associated group as placeholders.
+
+### Server Placeholders
+
+| Placeholder                         | Description                                                                    |
+| ----------------------------------- | ------------------------------------------------------------------------------ |
+| `%simplecloud_server_id%`           | Unique identifier (UUID)                                                       |
+| `%simplecloud_server_type%`         | Server type (UNKNOWN_SERVER, SERVER, PROXY)                                    |
+| `%simplecloud_server_state%`        | Server state (UNKNOWN_STATE, PREPARING, STARTING, AVAILABLE, INGAME, STOPPING) |
+| `%simplecloud_server_host%`         | Host machine identifier                                                        |
+| `%simplecloud_server_numerical_id%` | Numerical ID within group                                                      |
+| `%simplecloud_server_ip%`           | Server IP address                                                              |
+| `%simplecloud_server_port%`         | Server port                                                                    |
+| `%simplecloud_server_max_players%`  | Maximum allowed players                                                        |
+| `%simplecloud_server_min_memory%`   | Minimum RAM allocation in MB                                                   |
+| `%simplecloud_server_max_memory%`   | Maximum RAM allocation in MB                                                   |
+| `%simplecloud_server_player_count%` | Current player count                                                           |
+
+### Group Placeholders
+
+| Placeholder                        | Description                                 |
+| ---------------------------------- | ------------------------------------------- |
+| `%simplecloud_group_name%`         | Unique identifier for the group             |
+| `%simplecloud_group_type%`         | Server type (UNKNOWN_SERVER, SERVER, PROXY) |
+| `%simplecloud_group_min_memory%`   | Minimum RAM allocation in MB                |
+| `%simplecloud_group_max_memory%`   | Maximum RAM allocation in MB                |
+| `%simplecloud_group_max_players%`  | Maximum players per server                  |
+| `%simplecloud_group_player_count%` | Current players count                       |
+
+<Callout>
+  These placeholders can be used in any plugin or configuration that supports
+  PlaceholderAPI. For example, you can use them in chat formats, scoreboards, or
+  hologram plugins.
+</Callout>
+
+## Example Usage
+
+Here's an example using placeholders in a chat format plugin:
+
+```yaml
+chat-format: "&8[&b%simplecloud_server_id%&8] &7%player_name%: &f%message%"
+```
+
+Or in a scoreboard configuration:
+
+```yaml
+scoreboard:
+  title: "&bServer Status"
+  lines:
+    - "&7Server: &f%simplecloud_server_id%"
+    - "&7Players: &f%simplecloud_server_player_count%/%simplecloud_server_max_players%"
+    - "&7State: &f%simplecloud_server_state%"
+    - ""
+    - "&7Group: &f%simplecloud_group_name%"
+    - "&7Total Players: &f%simplecloud_group_player_count%"
+```
+
+## What's Next?
+
+Here are some helpful resources to continue exploring SimpleCloud:
+
+- [Server Management](/docs/manual/resources/servers)
+- [Group Configuration](/docs/manual/resources/groups)
+- [API Documentation](/docs/api/controller)

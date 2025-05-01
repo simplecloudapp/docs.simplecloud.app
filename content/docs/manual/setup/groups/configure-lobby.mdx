@@ -1,0 +1,67 @@
+---
+title: Configure a Lobby
+description: Configure your lobby group to make the proxy redirect players to the correct server.
+---
+
+## Overview
+
+In order to make the proxy redirect players to the correct server, you need to configure our [Proxy Connection Plugin](/manual/plugins/proxy-connection). This plugin is included by default with SimpleCloud.
+
+## Configure Server Connection
+
+Configure the server connection by creating a file called `config.yml` in the `plugins/ServerConnection` directory of your proxy server with the following content:
+
+```yaml
+connections:
+  - name: "lobby" # Name of this connection target
+    permission: "" # No permission required
+    server-name-matcher:
+      operation: "STARTS_WITH"
+      value: "lobby" # The name of your server group
+```
+
+## Configure Join Connections
+
+Configure the join connections by adding the following to your `config.yml`:
+
+```yaml
+join-connections:
+  enabled: true
+  no-target-connections-found-message: "Couldn't connect you to the network because no target servers are available."
+  target-connections:
+    - name: "lobby" # The name of the connection target you configured above
+      priority: 0
+```
+
+## Configure Fallback Connections
+
+Configure the fallback connections by adding the following to your `config.yml`:
+
+```yaml
+fallback-connections:
+  enabled: true
+  no-target-connections-found-message: "You have been disconnected from the network since you have been kicked and no fallback server are available."
+  target-connections:
+    - name: "lobby" # The name of the connection target you configured above
+      priority: 0
+```
+
+## Configure Commands
+
+Configure the commands by adding the following to your `config.yml`:
+
+```yaml
+commands:
+  - name: "lobby" # The name of the command
+    aliases:
+      - "l"
+      - "hub"
+      - "quit"
+      - "leave"
+    target-connections:
+      - name: "lobby" # The name of the above configured connection target
+        priority: 0
+    already-connected-message: "§cYou are already connected to the lobby!"
+    no-target-connections-found-message: "There are no lobby servers available at the moment."
+    permission: "" # No permission required
+```

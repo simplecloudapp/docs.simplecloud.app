@@ -1,0 +1,256 @@
+---
+title: Player Droplet API
+description: The Player Droplet API provides comprehensive player management and interaction capabilities across your SimpleCloud network.
+---
+
+# Player Droplet API
+
+The Player Droplet API provides comprehensive player management and interaction capabilities across your SimpleCloud network, featuring both Future and Coroutine-based implementations.
+
+## Overview
+
+The Player Droplet API allows you to:
+
+- Manage players across your entire network
+- Track player states and properties
+- Send rich text messages and effects
+- Handle player connections and transfers
+- Integrate with Adventure API for rich content
+
+## Getting Started
+
+### 1. Add the Dependency
+
+<Tabs items={["Maven", "Gradle"]}>
+  <Tab value="Maven">
+    ```xml
+    <dependency>
+      <groupId>app.simplecloud.droplet.player</groupId>
+      <artifactId>player-api</artifactId>
+      <version>3.0.0-SNAPSHOT</version>
+    </dependency>
+    ```
+  </Tab>
+  <Tab value="Gradle">
+    ```kotlin dependencies{" "}
+    {implementation("app.simplecloud.droplet.player:player-api:3.0.0-SNAPSHOT")}
+    ```
+  </Tab>
+</Tabs>
+
+### 2. Choose Your Language
+
+While our API is primarily written in Kotlin, we support multiple languages through our [Protocol Buffer specifications](https://buf.build/simplecloud/proto-specs):
+
+- Java (Native support)
+- Kotlin (Native support)
+- TypeScript
+- Go
+- Rust
+- Other languages supported by Protocol Buffers
+
+### 3. Initialize the API
+
+<Tabs items={["Kotlin", "Java"]}>
+<Tab value="Kotlin">
+```kotlin
+// For Minecraft servers (uses environment variables)
+val playerApi = PlayerApi.createCoroutineApi()
+
+// For external applications (provide token directly)
+val playerApi = PlayerApi.createCoroutineApi("your-auth-token")
+
+````
+</Tab>
+<Tab value="Java">
+```java
+// For Minecraft servers (uses environment variables)
+PlayerApi.Future playerApi = PlayerApi.createFutureApi();
+
+// For external applications (provide token directly)
+PlayerApi.Future playerApi = PlayerApi.createFutureApi("your-auth-token");
+````
+
+</Tab>
+</Tabs>
+
+## Player Management
+
+The API provides comprehensive methods to manage players across your network.
+
+### Query Players
+
+<Tabs items={["Kotlin", "Java"]}>
+<Tab value="Kotlin">
+```kotlin
+// Get an offline player
+val player = playerApi.getOfflinePlayer(name)
+println("Player ${player.getName()} first joined at ${player.getFirstLogin()}")
+
+// Get an online player
+val onlinePlayer = playerApi.getOnlinePlayer(name)
+println("Player ${onlinePlayer.getName()} is on server ${onlinePlayer.getConnectedServerName()}")
+
+// Get all online players
+val players = playerApi.getOnlinePlayers()
+players.forEach { player ->
+println("${player.getName()} on ${player.getConnectedServerName()}")
+}
+
+// Get online player count
+val count = playerApi.getOnlinePlayerCount()
+println("Online players: $count")
+
+````
+</Tab>
+<Tab value="Java">
+```java
+// Get an offline player
+playerApi.getOfflinePlayer("Steve")
+    .thenAccept(player -> {
+        System.out.println("Player " + player.getName() +
+            " first joined at " + player.getFirstLogin());
+    });
+
+// Get an online player
+playerApi.getOnlinePlayer("Steve")
+    .thenAccept(player -> {
+        System.out.println("Player " + player.getName() +
+            " is on server " + player.getConnectedServerName());
+    });
+
+// Get all online players
+playerApi.getOnlinePlayers()
+    .thenAccept(players -> {
+        players.forEach(player -> {
+            System.out.println(player.getName() + " on " +
+                player.getConnectedServerName());
+        });
+    });
+
+// Get online player count
+playerApi.getOnlinePlayerCount()
+    .thenAccept(count -> {
+        System.out.println("Online players: " + count);
+    });
+````
+
+</Tab>
+</Tabs>
+
+### Player Actions
+
+<Tabs items={["Kotlin", "Java"]}>
+<Tab value="Kotlin">
+```kotlin
+// Connect player to a server
+val result = playerApi.connectPlayer(uniqueId, serverName)
+println("Connection result: $result")
+
+// Check if player is online
+val isOnline = playerApi.isOnline(uniqueId)
+println("Player online: $isOnline")
+
+// Update player's server
+val success = playerApi.updateServer(uniqueId, serverName)
+println("Server update success: $success")
+
+// Kick player
+player.kick(
+Component.text("Maintenance mode activated")
+.color(NamedTextColor.RED)
+)
+
+````
+</Tab>
+<Tab value="Java">
+```java
+// Connect player to a server
+playerApi.connectPlayer(uniqueId, "lobby-1")
+    .thenAccept(result -> {
+        System.out.println("Connection result: " + result);
+    });
+
+// Check if player is online
+playerApi.isOnline(uniqueId)
+    .thenAccept(isOnline -> {
+        System.out.println("Player online: " + isOnline);
+    });
+
+// Update player's server
+playerApi.updateServer(uniqueId, "lobby-1")
+    .thenAccept(success -> {
+        System.out.println("Server update success: " + success);
+    });
+
+// Kick player
+player.kick(Component.text("Maintenance mode activated")
+    .color(NamedTextColor.RED));
+````
+
+</Tab>
+</Tabs>
+
+## Adventure Integration
+
+The API provides rich content delivery through Adventure API integration.
+
+### Messages and Titles
+
+<Tabs items={["Messages", "Titles & Action Bars"]}>
+<Tab value="Messages">
+```kotlin
+// Send a simple message
+player.sendMessage(Component.text("Hello, world!"))
+
+// Send formatted message
+player.sendMessage(
+Component.text()
+.content("Welcome to the server!")
+.color(NamedTextColor.GOLD)
+.decoration(TextDecoration.BOLD, true)
+.build()
+)
+
+// Send interactive message
+player.sendMessage(
+Component.text()
+.content("Click here!")
+.color(NamedTextColor.AQUA)
+.clickEvent(ClickEvent.openUrl("https://example.com"))
+.hoverEvent(HoverEvent.showText(Component.text("Visit website")))
+.build()
+)
+
+````
+</Tab>
+<Tab value="Titles & Action Bars">
+```kotlin
+// Show title with subtitle
+player.showTitle(Title.title(
+    Component.text("Welcome!")
+        .color(NamedTextColor.GOLD),
+    Component.text("Enjoy your stay")
+        .color(NamedTextColor.YELLOW),
+    Title.Times.of(
+        Duration.ofSeconds(1),
+        Duration.ofSeconds(3),
+        Duration.ofSeconds(1)
+    )
+))
+
+// Show action bar
+player.sendActionBar(
+    Component.text("20 coins earned!")
+        .color(NamedTextColor.GREEN)
+)
+````
+
+</Tab>
+</Tabs>
+
+## Next Steps
+
+- [Server Host Droplet API](/docs/manual/api/droplet/serverhost)
+- [Metrics Droplet API](/docs/manual/api/droplet/metrics)
+- [Controller API](/docs/manual/api/controller)

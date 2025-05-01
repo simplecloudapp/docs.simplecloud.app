@@ -1,0 +1,234 @@
+---
+title: Server Host Droplet
+description: |
+  Learn about the Server Host droplet - responsible for configuring and managing Minecraft servers.
+---
+
+# Server Host Droplet
+
+The server host droplet is one of our first and most important droplets. It is responsible for configuring and managing minecraft servers.
+
+## Understanding the Server Host Droplet
+
+It's not that hard to understand the server host droplet. It is a simple droplet that is responsible for starting and managing minecraft servers.
+The nice thing about it is that it is very flexible and can be configured to work with any kind of server. It is also very easy to scale and can be installed on multiple machines.
+
+This droplet is an implementation of our server host api. You don't have to use this droplet to start and manage servers, but you have to use some kind of implementation of the server host api.
+
+## Multi-Root Installation
+
+The server host droplet is designed to be installed on multiple machines. This is called a multi-root installation.
+This means that you can have multiple server host droplets running on different machines, all connected to our [controller](/docs/manual/controller).
+
+To set up a multi-root installation you need to install our [CLI](/docs/manual/cli#installation) on the machine you want to install the server host droplet on.
+
+After you have installed the cli, you can run the following command to install the server host droplet:
+
+```bash
+# Install the server host droplet
+simplecloud install serverhost
+```
+
+<Callout>
+  Make sure to set content of the `secrets/auth.secret` file to the same value
+  as the `auth.secret` in the controller, otherwise the server host droplet
+  won't be able to connect to the
+  [controller](/docs/manual/controller#authentication).
+</Callout>
+
+## Docker Support
+
+We are currently working on dockerizing Minecraft servers with the server host droplet. This will be possible through [actions](/docs/manual/template#actions).
+
+## Online Server Check
+
+The online server checker is a new concept where we check if a server is online or not. This is done by sending a ping request to the Minecraft server and checking if it responds.
+It's very useful because this makes it possible for the droplet to know if a server is online and should be registered, or if it is offline and should be removed.
+
+Additionally, the online server checker ensures that we don't need a plugin running on the Minecraft server, so you can basically use any kind of server; it just needs to respond to the ping request.
+
+<Callout>
+  You have to make sure that the proxies send the correct player count, if
+  you're not using our [Proxy Essentials plugin](/docs/manual/plugin/proxy),
+  otherwise the player count will be wrong.
+</Callout>
+
+## Needed Group Properties
+
+The server host droplet needs some [dynamic properties](/docs/manual/resources/server-group#dynamic-properties) to work. For a group to start,
+the user has to provide every property that do not have a default value.
+
+| ID                    | Description                                           | User provided | Default value                                                  |
+| --------------------- | ----------------------------------------------------- | ------------- | -------------------------------------------------------------- |
+| `server-url`          | sets the [server URL](#server-versions)               | Yes           | `N/A`                                                          |
+| `configurator`        | sets the [configurator](#server-versions)             | Yes           | `N/A`                                                          |
+| `forwarding-secret`   | used in the velocity [configurator](#server-versions) | No            | secure secret set by the [controller](/docs/manual/controller) |
+| `max-startup-seconds` | sets the maximum time a server can take to start up   | Yes           | `120`                                                          |
+| `template-id`         | the template used by the server                       | Yes           | the groups name (generated if not present)                     |
+
+## Server Versions
+
+Server versions in the classic v2 sense don't exist anymore.
+Servers are now just started using the server URL and a server configurator. Both server URL and server configurator are required,
+if the needed [dynamic group properties](/docs/manual/resources/server-group#dynamic-properties) are not set in the group configuration, a server of this
+group will not start.
+
+### Server URL
+
+The server URL is nothing more than a simple download link to the wanted minecraft server jar.
+In fact, it can be any link you want. The server host droplet will try to download and execute it using
+user specified [options](#server-options). You can set the server URL through the `server-url` [dynamic group property](/docs/manual/resources/server-group#dynamic-properties).
+
+### Configurator
+
+A server Configurator is a YML-file that provides information needed for a minecraft server to work with the cloud.
+In most cases, it is responsible for setting the maximum players, port, online and forwarding mode of the server.
+It is executed after the server template was copied to a new server. After it finishes executing, the server is started.
+When defining a Configurator, you can use placeholders for any [controller](/docs/manual/resources/server-group#controller-properties) or [dynamic](/docs/manual/resources/server-group#dynamic-properties) property using this syntax: `%property-name%`.
+Configurators are located in the `options/configurators` directory. If you want, you can create your own or modify existing ones.
+To assign a configurator to a server, you need to set the [dynamic group property](/docs/manual/resources/server-group#dynamic-properties) `configurator` to the configurator id.
+The configurator id is equivalent to the configurator file name without the file extension (e.g. `velocity.yml` -> `velocity`)
+
+### Configurator Examples
+
+<Tabs items={['velocity.yml', 'spigot_standalone.yml', 'paper_velocity.yml']}>
+<Tab value="velocity.yml">
+
+```yml
+# A list of all configuration files
+paths:
+  # The path to the configuration file
+  - path: "velocity.toml"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "TOML"
+    # The data object
+    data:
+      bind: "%ip%:%port%"
+      show-max-players: %max-players%
+      forwarding-secret-file: "forwarding.secret"
+      player-info-forwarding-mode: "MODERN"
+  # The path to the configuration file
+  - path: "forwarding.secret"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "TXT"
+    # The data object
+    data: "%forwarding-secret%"
+```
+
+</Tab>
+<Tab value="spigot_standalone.yml">
+
+```yml
+# A list of all configuration files
+paths:
+  # The path to the configuration file
+  - path: "server.properties"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "PROPERTIES"
+    # The data object
+    data:
+      server-ip: "%ip%"
+      server-port: %port%
+      max-players: %max-players%
+      online-mode: true
+```
+
+</Tab>
+<Tab value="paper_velocity.yml">
+
+```yml
+# A list of all configuration files
+paths:
+  # The path to the configuration file
+  - path: "server.properties"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "PROPERTIES"
+    # The data object
+    data:
+      server-ip: "%ip%"
+      server-port: %port%
+      max-players: %max-players%
+      online-mode: false
+  # The path to the configuration file
+  - path: "config/paper-global.yml"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "YML"
+    # The data object
+    data:
+      proxies:
+        velocity:
+          enabled: "true"
+          online-mode: "true"
+          secret: "%forwarding-secret%"
+```
+
+</Tab>
+</Tabs>
+
+## Server Options
+
+For each server group, a YML-file is created in the `options` directory.
+This file provides configuration for the java start command of this group. There are also options to change the directory where
+started servers are stored in, and you can make the droplet instance ignore the server group.
+
+```yml
+# start arguments
+jvm:
+  executable: C:\Program Files\Java\jdk-17.0.5\bin\java
+  options:
+    [-Xms%MIN_MEMORY%M, -Xmx%MAX_MEMORY%M, -Dcom.mojang.eula.agree=true, -jar]
+  arguments: [nogui]
+# whether the group is ignored by the server host droplet
+ignore: false
+# path to a custom running/temp directory for this group
+parentDir: null
+```
+
+You can configure this file freely. The `jvm` configuration section is then parsed to a shell command and executed.
+
+<Tabs items={['Shell command syntax', 'default.yml shell command']}>
+<Tab value="Shell command syntax">
+
+```bash
+[executable] [options] [server runtime file] [arguments]
+```
+
+</Tab>
+<Tab value="default.yml shell command">
+
+```bash
+C:\Program Files\Java\jdk-17.0.5\bin\java -Xms1024M -Xmx1024M -Dcom.mojang.eula.agree=true -jar server.jar nogui
+```
+
+</Tab>
+</Tabs>
+
+This also means that you can change the executable, arguments and options freely for each server group.
+You can also use any [group property](/docs/manual/resources/server-group#controller-properties). Property placeholders follow this syntax:
+`%PROPERTY_NAME%`
+
+## Crash Handling
+
+There are two types of crashes that can happen:
+
+1. The server host droplet crashes
+2. A minecraft server crashes
+
+### Server Host Droplet Crash
+
+If the server host droplet crashes, you have to restart it manually. What's really cool is that the managed Minecraft servers will continue to run, even if the server host droplet is not running.
+After a restart, this droplet will automatically detect all running servers and reattach to them.
+
+This also means that you can restart the server host droplet without any downtime for the managed Minecraft servers, so you can update the droplet without any problems.
+
+### Minecraft Server Crash
+
+If a minecraft server crashes, the server host droplet will automatically inform the controller about the crash and the controller will start a new server, if needed.
+
+## Tech-Stack
+
+These are the technologies used by the Serverhost droplet:
+
+- [Kotlin](https://kotlinlang.org/)
+- [ProtoBuf](https://developers.google.com/protocol-buffers)
+- [gRPC](https://grpc.io/)

@@ -1,0 +1,12 @@
+{
+  "title": "Concepts",
+  "description": "Concepts for SimpleCloud",
+  "root": true,
+  "pages": [
+    "---Core Concepts---",
+    "overview",
+    "controller",
+    "serverhost",
+    "cli"
+  ]
+}

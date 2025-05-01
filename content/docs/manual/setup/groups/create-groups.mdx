@@ -1,0 +1,60 @@
+---
+title: Create Groups
+description: |
+  Learn the methods for creating new groups in SimpleCloud.
+---
+
+## Create a Proxy Group
+
+Every Minecraft network needs a proxy group. This is used to manage your proxy servers like Velocity or BungeeCord.
+
+To create a proxy group, you can use the following command:
+
+```bash
+simplecloud create group
+```
+
+<Image
+  src="https://github.com/simplecloudapp/branding/blob/main/media/cli/create-group-proxy.gif?raw=true"
+  alt="Create Proxy Group"
+/>
+
+## Create a Server Group
+
+Next to the proxy group, you need a server group. This is used to manage your Minecraft servers that run a specific software like Paper, Spigot, or any other.
+
+To create a server group, you can use same command as for the proxy group:
+
+```bash
+simplecloud create group
+```
+
+<Image
+  src="https://github.com/simplecloudapp/branding/blob/main/media/cli/create-group-lobby.gif?raw=true"
+  alt="Create Server Group"
+/>
+
+## Command Options
+
+Our CLI has a lot of options to create a group. By applying the following flags, you can create a group with the exact configuration you want without the interactive wizard.
+
+```bash
+simplecloud create group [flags]
+```
+
+**Flags**
+
+- `--configurator string`: Server configurator
+- `--max-memory string`: Maximum memory allocation for each server
+- `--max-online string`: Maximum number of servers that can be online
+- `--max-players string`: Maximum players per server
+- `--min-memory string`: Minimum memory allocation for each server
+- `--min-online string`: Minimum number of servers that must be online
+- `--name string`: Group name
+- `--port string`: Starting port number for servers
+- `--server-url string`: Server software download URL (optional)
+- `--software string`: Server software type
+- `--template string`: Template type (`dynamic` or `static`)
+- `--type string`: Server type (`PROXY` or `SERVER`)
+- `--minecraft-version string`: Minecraft version
+- `--software-version string`: Server Software version

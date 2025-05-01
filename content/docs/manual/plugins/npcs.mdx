@@ -1,0 +1,172 @@
+---
+title: NPCs Plugin
+description: Learn about SimpleCloud's NPCs plugin for interactive server navigation and management
+badge: Server
+badgeColor: purple
+---
+
+## Overview
+
+Create interactive NPCs on your server that allow players to access other subservers and perform various actions. The plugin supports multiple NPC systems and offers extensive customization options.
+
+## Supported Software
+
+| Server Type    | Plugin Support |
+| -------------- | -------------- |
+| Paper & Forks  | ✅ Yes         |
+| Spigot & Forks | ✅ Yes         |
+| Other          | ❌ No          |
+
+## Quick Setup
+
+1. Download the plugin from [GitHub](https://github.com/simplecloudapp/npc-plugin/releases)
+2. Optional: Download a supported NPC software
+3. Place it in your server's plugins folder
+4. Start your server
+
+## Compatible NPC Plugins
+
+| Plugin                                                                                                      | Supported Versions | Status |
+| ----------------------------------------------------------------------------------------------------------- | ------------------ | ------ |
+| [FancyNpcs](https://fancyplugins.de/FancyNpcs)                                                              | 1.19.4+            | ✅ Yes |
+| [Citizens](https://citizensnpcs.co)                                                                         | 1.19+              | ✅ Yes |
+| [MythicMobs](https://www.spigotmc.org/resources/⚔-mythicmobs-free-version-►the-1-custom-mob-creator◄.5702/) | 1.19+              | ✅ Yes |
+| [PlayerNPC](https://www.spigotmc.org/resources/✅-api-player-npc-✅-1-17-1-20-1.93625/)                     | 1.17.1 - 1.20.1    | ✅ Yes |
+
+<Callout>
+  Want to add support for another NPC plugin? Submit an issue on
+  [GitHub](https://github.com/simplecloudapp/npc-plugin/pulls)!
+</Callout>
+
+## Actions
+
+Available NPC actions and their options:
+
+| Action                | Option                                                                    | Description                     |
+| --------------------- | ------------------------------------------------------------------------- | ------------------------------- |
+| `open_inventory`      | inventory.name                                                            | Open server selection inventory |
+| `run_command`         | command.name                                                              | Execute player command          |
+| `run_console_command` | command.name                                                              | Execute console command         |
+| `connect_to_server`   | server.name                                                               | Send player to server           |
+| `transfer_to_server`  | server.ip, server.port                                                    | Send to external server         |
+| `quick_join`          | group.name, server.name.pattern, filter.player.count, filter.server.state | Random server join              |
+
+## NPC Configuration
+
+Example configuration:
+
+```yaml
+version: "1.0"
+id: bedwars
+holograms:
+  - start-height: 2.073
+    lores:
+      - text: <group_name> - <property:server-software>
+        billboard: CENTER
+        alignment: CENTER
+      - text: waiting for <player_count:available> players
+        billboard: CENTER
+        alignment: CENTER
+      - text: "<server_count:ingame> Servers ingame"
+actions:
+  - player-interaction: LEFT_CLICK
+    action: OPEN_INVENTORY
+    options:
+      inventory.name: bedwars
+      play.sound: block.chest.open
+      sound.pitch: 3
+      sound.volume: 2
+  - player-interaction: RIGHT_CLICK
+    action: TRANSFER_TO_SERVER
+    options:
+      server.ip: demo-server.com
+      server.port: 25565
+options:
+  hologram.placeholder.group: lobby
+  send.message: <rainbow>Some cool text here
+  send.title: title
+  send.subtitle: some cool subtitle
+```
+
+### Feedback Options
+
+| Option           | Description        |
+| ---------------- | ------------------ |
+| `send.message`   | Chat message       |
+| `send.actionbar` | Action bar message |
+| `send.title`     | Title message      |
+| `send.subtitle`  | Subtitle message   |
+| `play.sound`     | Sound effect       |
+
+<img
+  src="https://github.com/simplecloudapp/branding/blob/main/media/plugin/npcs/npc.png?raw=true"
+  alt="NPC Example"
+  style={{
+    width: "100%",
+    borderRadius: "1rem",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+  }}
+/>
+
+## Inventory Configuration
+
+Example inventory for server selection:
+
+```yaml
+version: "1.0"
+id: quickjoin.bedwars
+title: <#ffffff>Bedwars
+rows: 6
+pagination:
+  listed-group-name: bedwars
+  server-name-pattern: <group_name>-<numerical_id>
+  state-items:
+    PREPARING: starting_pagination_item
+    STARTING: starting_pagination_item
+    AVAILABLE: available_pagination_item
+    INGAME: ingame_pagination_item
+items:
+  - id: available_pagination_item
+    material: LIME_BANNER
+    display-name: <group_name> <numerical_id>
+    lores:
+      - "<gray>Players: <#38bdf8><online_players><dark_gray>/<#38bdf8><max_players>"
+      - ""
+      - "<gray>Version: <#a3a3a3><property:server-software> <property:minecraft-version>"
+      - "<gray>Template: <#a3a3a3><property:template-id>"
+```
+
+<img
+  src="https://github.com/simplecloudapp/branding/blob/main/media/plugin/npcs/inventory.png?raw=true"
+  alt="Inventory Example"
+  style={{
+    width: "100%",
+    borderRadius: "1rem",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+  }}
+/>
+
+## Commands
+
+| Command                                               | Description               |
+| ----------------------------------------------------- | ------------------------- |
+| `/scnpc apply <n>`                                    | Add SimpleCloud functions |
+| `/scnpc <id> interact <type> setAction <action>`      | Set click actions         |
+| `/scnpc <id> interact <type> setOption <key> <value>` | Set click options         |
+| `/scnpc <id> setOption <key> <value>`                 | Set global options        |
+| `/scnpc <id> setHologramGroup <groupName>`            | Set hologram group        |
+| `/scnpc createInventory <n> <groupName>`              | Create inventory config   |
+
+## Permissions
+
+| Permission                | Description        |
+| ------------------------- | ------------------ |
+| `simplecloud.command.npc` | Access to `/scnpc` |
+
+## What's Next?
+
+Here are some helpful resources to continue exploring SimpleCloud:
+
+- [Server Management](/docs/manual/resources/servers)
+- [Group Configuration](/docs/manual/resources/groups)
+- [Plugin Development](/docs/manual/plugin/overview)

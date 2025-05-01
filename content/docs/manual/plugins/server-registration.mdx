@@ -1,0 +1,100 @@
+---
+title: Server Registration Plugin
+description: Learn about SimpleCloud's server registration plugin for proxy server management
+badge: Proxy
+badgeColor: sky
+---
+
+## Overview
+
+The server registration plugin keeps your proxy's registered child servers in sync with SimpleCloud's server registry. This plugin is essential for proxy server setups, ensuring proper server communication and player routing.
+
+## Overview
+
+The plugin:
+
+- Updates proxy server registrations automatically
+- Uses the SimpleCloud [server API](/docs/manual/api#server) for server tracking
+- Supports multiple proxy platforms
+- Provides extensible interfaces for custom implementations
+
+<Callout>
+  This plugin internally uses the server API to track online cloud servers and
+  provides interfaces for custom proxy software implementations.
+</Callout>
+
+## Supported Software
+
+| Software   | Plugin Support | Server API Support |
+| ---------- | -------------- | ------------------ |
+| Velocity   | ✅ Full        | ✅ Yes             |
+| Bungeecord | ✅ Full        | ✅ Yes             |
+| Gate       | 🔄 Planned     | ✅ Yes             |
+| Other\*    | Varies         | No                 |
+
+<Callout>
+  *Support for other proxies is possible through custom implementation if the
+  [server API](/docs/manual/api#server) is available in your preferred
+  [programming language](/docs/manual/api).
+</Callout>
+
+## Quick Setup
+
+1. Download the plugin from [GitHub](https://github.com/simplecloudapp/server-registration-plugin/releases)
+2. Place it in your proxy template's plugins folder
+3. Start your proxy server
+4. Configure using `config.yml`
+
+## Configuration
+
+The plugin's configuration file (`config.yml`) supports the following options:
+
+```yaml
+# Server naming pattern
+server-name-pattern: "%GROUP%-%NUMERICAL_ID%"
+# Available placeholders:
+#   %GROUP% - Group name
+#   %ID% - Unique server ID
+#   %NUMERICAL_ID% - Numerical server ID
+
+# Ignored server groups
+ignore-server-groups:
+  - "bedwars"
+  - "skywars"
+
+# Additional non-cloud servers
+additional-servers:
+  - name: "build"
+    address: "127.0.0.1"
+    port: 25565
+```
+
+## Custom Implementation
+
+For custom proxy software support, implement the `ServerRegisterer` interface:
+
+```kotlin
+interface ServerRegisterer {
+    // Get all registered servers
+    fun getRegistered(): List<Server>
+
+    // Register new or reattached server
+    fun register(server: Server)
+
+    // Unregister unmounted server
+    fun unregister(server: Server)
+}
+```
+
+<Callout type="error">
+  For a complete implementation example, check our [Velocity
+  implementation](https://github.com/simplecloudapp/server-registration-plugin/tree/main/registration-velocity/src/main/kotlin/app/simplecloud/plugin/registration/velocity).
+</Callout>
+
+## What's Next?
+
+Here are some helpful resources to continue exploring SimpleCloud:
+
+- [Server API Documentation](/docs/manual/api#server)
+- [Proxy Configuration](/docs/manual/plugin/proxy-essentials)
+- [Plugin Development](/docs/manual/plugin/overview)

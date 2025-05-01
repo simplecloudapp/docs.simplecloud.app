@@ -1,0 +1,225 @@
+---
+title: Template Actions
+description: |
+  Template actions are a way to customize the server startup process.
+---
+
+## Understanding Templates
+
+Templates consist of actions that are executed on certain triggers. Each action stands for a sorted list of references to other [actions](#actions) and [standard behaviours](#action-types), which are configurable with settings.
+
+## Template Triggers
+
+Actions can be specified under each template trigger. These will then be executed in order.
+
+| ID      | Context                                       |
+| ------- | --------------------------------------------- |
+| `start` | Will be executed when a new server is created |
+| `stop`  | Will be executed when a server is stopped     |
+
+## Template Structure
+
+Templates are defined in YAML files located in `/droplets/serverhost-droplet/templates/definitions` or its subdirectories. The template id of a YAML file is the name of the file (without extension). Each template defines which actions should be executed on what trigger:
+
+```yaml
+when:
+  start:
+    - default/setup # references the default/setup action
+    - ...
+  stop:
+    - default/delete # references the default/delete action
+    - ...
+```
+
+## Context
+
+Each template trigger will create its own context and run in it. This means that actions can also influence each other.
+
+---
+
+# Actions
+
+Actions are reusable components for doing something (e.g. copy files from template folder to server).
+You can reference actions in other actions and in templates. This allows for creating a reusable toolchain, keeping config files minimal and extension of existing configs easy.
+All actions are located in `/droplets/serverhost-droplet/templates/actions` or its subdirectories. All actions support placeholder matching like `%my-placeholder%`.
+
+## Action Referencing
+
+Actions can be referenced in other actions or in templates. An actions ref name consists of the YAML file name it is located in and the name of the action. For example, an action in `utils.yml` called `init-placeholders` will have the ref `utils/init-placeholders`.
+
+## Config Structure
+
+An action in config files contains of a sorted list of action objects and references.
+
+### Action Objects
+
+Action objects consist of the `type` field, which will set the action type executed, and [data](#action-data) that action requires.
+
+```yaml
+cache-pull-libs:
+  - from: "%libs-dir%"
+    to: "%server-dir%/libraries"
+    type: "copy"
+```
+
+### References
+
+A reference to another action can be made by setting ref to a action reference.
+
+```yaml
+my-action:
+  - ref: other/my-other-action
+```
+
+### Mixed Example
+
+<Tabs items={["actions/utils.yml", "actions/default.yml"]}>
+<Tab value="actions/utils.yml">
+```yaml
+cache-pull:
+  - from: "%templates%/cache/%group%"
+    to: "%server-dir%"
+    type: "copy"
+  - ref: cache-pull-libs
+
+cache-pull-libs:
+
+- from: "%libs-dir%"
+  to: "%server-dir%/libraries"
+  type: "copy"
+
+cache-push:
+
+- ref: cache-push-paper
+- ref: cache-push-spigot
+
+cache-push-paper:
+
+- from: "%server-dir%/plugins/.paper-remapped/"
+  to: "%templates%/cache/%group%/plugins/.paper-remapped"
+  type: "copy"
+
+cache-push-spigot:
+
+- from: "%server-dir%/libraries"
+  to: "%templates%/cache/%group%/libraries"
+  type: "copy"
+- from: "%server-dir%/versions"
+  to: "%templates%/cache/%group%/versions"
+  type: "copy"
+
+````
+</Tab>
+<Tab value="actions/default.yml">
+```yaml
+static-setup:
+  - ref: util/init-placeholders
+  - ref: util/static-dir
+  - ref: default/setup
+
+setup:
+  - ref: util/init-placeholders
+  - ref: cache/cache-pull
+  - ref: util/every-with-software
+  - ref: util/copy
+  - ref: util/configurate
+
+delete:
+  - ref: util/init-placeholders
+  - ref: cache/cache-push
+  - path: "%server-dir%"
+    type: "delete"
+````
+
+</Tab>
+</Tabs>
+
+<Callout>
+  An actions ref name consists of the YAML file name it is located in and the
+  name of the action. For example, an action in `utils.yml` called
+  `init-placeholders` will have the ref `utils/init-placeholders`.
+</Callout>
+
+## Placeholders
+
+Actions support dynamic placeholders, these can also be altered by the `placeholder` action:
+
+| Variable              | Description                                                        |
+| --------------------- | ------------------------------------------------------------------ |
+| `%server-dir%`        | Directory the server will run in                                   |
+| `%libs-dir%`          | Directory the (cloud) libraries are located in                     |
+| `%templates%`         | Directory the actual templates folders (like in v2) are located in |
+| `%forwarding-secret%` | The velocity forwarding secret                                     |
+| `%running%`           | Directory running servers are located in                           |
+
+## Action Data
+
+This is a list of all action data forms corresponding to the action type.
+
+### `copy`
+
+This will copy files from a to b
+
+| Field                 | Type                        | Description                                            |
+| --------------------- | --------------------------- | ------------------------------------------------------ |
+| `from`                | `path`                      | File or directory used as the source                   |
+| `to`                  | `path`                      | File or directory used as the destination              |
+| `replace`             | `boolean` (default `true`)  | Whether to replace files on copy or not                |
+| `init-dir-if-missing` | `boolean` (default `false`) | Initializes non existing from paths when set to `true` |
+
+### `configurate`
+
+This will configure servers using configurators
+
+| Field          | Type                       | Description                          |
+| -------------- | -------------------------- | ------------------------------------ |
+| `configurator` | `string` (configurator id) | Configurator to use                  |
+| `dir`          | `path`                     | Directory to use the configurator on |
+
+### `delete`
+
+This delete a file or folder on the specified path
+
+| Field   | Type                       | Description                      |
+| ------- | -------------------------- | -------------------------------- |
+| `path`  | `path`                     | Directory or file to delete      |
+| `force` | `boolean` (default `true`) | Whether to force deletion or not |
+
+### `infer`
+
+This infers data from the current server into placeholders
+
+| Field       | Type                        | Description                                                                                                                           |
+| ----------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `field`     | `string` (configurator id)  | Field of server object to infer the value from (if starts with `$.` the servers properties are targeted instead of the server itself) |
+| `key`       | `string`                    | Placeholder key to override                                                                                                           |
+| `lowercase` | `boolean` (default `false`) | Whether to lowercase the value or not                                                                                                 |
+
+### `placeholder`
+
+This changes placeholders
+
+| Field   | Type     | Description                 |
+| ------- | -------- | --------------------------- |
+| `key`   | `string` | Placeholder key to override |
+| `value` | `string` | New value of said key       |
+
+### `modrinth_download`
+
+| Field                 | Type                       | Description                                                |
+| --------------------- | -------------------------- | ---------------------------------------------------------- |
+| `mod-id`              | `string`                   | Modrinth resource ID                                       |
+| `game-version`        | `string`                   | The minecraft version                                      |
+| `loader`              | `string`                   | The server software this resource is for                   |
+| `path`                | `path`                     | The path to put the download in (either file or directory) |
+| `replace`             | `boolean` (default `true`) | Whether to override files or not                           |
+| `init-dir-if-missing` | `boolean` (default `true`) | Whether to init the target paths dir or not                |
+
+### `download`
+
+| Field                 | Type                       | Description                                                |
+| --------------------- | -------------------------- | ---------------------------------------------------------- |
+| `url`                 | `url`                      | URL to download from                                       |
+| `path`                | `path`                     | The path to put the download in (either file or directory) |
+| `replace`             | `boolean` (default `true`) | Whether to override files or not                           |
+| `init-dir-if-missing` | `boolean` (default `true`) | Whether to init the target paths dir or not                |

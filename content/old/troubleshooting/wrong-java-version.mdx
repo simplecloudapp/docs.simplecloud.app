@@ -1,0 +1,72 @@
+---
+title: Wrong Java Version for Minecraft Server
+description: Learn how to fix Java version issues with your Minecraft server
+---
+
+# Wrong Java Version for Minecraft Server
+
+In this troubleshooting guide, you'll learn why your Minecraft server might not be starting with the correct Java version and how to fix this issue.
+
+## Symptoms
+
+- Windspigot throws this error: https://pastes.dev/tJtcMoN73Y
+
+```bash
+java.lang.NoSuchMethodError: 'com.google.common.collect.MapMaker com.google.common.collect.MapMaker.softValues()'
+	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.<init>(CraftServer.java:190) ~[WINDSPIGOT-1.8.8.jar:]
+	at net.minecraft.server.v1_8_R3.PlayerList.<init>(PlayerList.java:177) ~[WINDSPIGOT-1.8.8.jar:]
+	at net.minecraft.server.v1_8_R3.DedicatedPlayerList.<init>(SourceFile:14) ~[WINDSPIGOT-1.8.8.jar:]
+	at net.minecraft.server.v1_8_R3.DedicatedServer.init(DedicatedServer.java:196) ~[WINDSPIGOT-1.8.8.jar:]
+	at net.minecraft.server.v1_8_R3.MinecraftServer.run(MinecraftServer.java:620) ~[WINDSPIGOT-1.8.8.jar:]
+	at java.lang.Thread.run(Thread.java:1583) ~[?:?]
+```
+
+- 1.8 Server won't start
+
+## Possible Causes
+
+- You have an outdated Java version
+- An incorrect Java version was configured in environments/screen.yml
+
+## Resolution
+
+<Steps>
+1. Navigate to `/components/serverhost/environments/`
+2. Copy the `screen.yml` file and rename it to `java-version-screen.yml`
+3. Open the `java-version-screen.yml` file
+4. Change the configuration to:
+```yaml
+enabled: true
+is-screen: true
+use-screen-stop: true
+is-docker: false
+name: java-version-screen # Rename this to match your file name
+start:
+    command:
+    - screen
+    - -L
+    - -Logfile
+    - '%LOG_FILE%'
+    - -dmS
+    - '%SCREEN_NAME%'
+    - /opt/jdk-21.0.4+7/bin/java # Specify the correct Java installation path
+    - -Xms%MIN_MEMORY%M
+    - -Xmx%MAX_MEMORY%M
+    - -Dcom.mojang.eula.agree=true
+    - -cp
+    - /home/simplecloud/components/serverhost/../libs/*:%SERVER_FILE% # Specify your cloud path
+    - '%MAIN_CLASS%'
+    - nogui
+version: '1'
+```
+5. Go to `/components/serverhost/options/runtime/<serverGroup>.yml` and open the group file where you want to change the Java version
+6. Change the `environment` to `java-version-screen.yml`
+</Steps>
+
+<Callout>
+  If this guide doesn't help, feel free to create an issue on
+  [GitHub](https://github.com/thesimplecloud) or post in our [Community
+  Discord](https://discord.simplecloud.app).
+</Callout>
+
+Last Updated: 02.01.2025

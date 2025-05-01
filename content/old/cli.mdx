@@ -1,0 +1,216 @@
+---
+title: CLI
+description: |
+  Learn how to use the powerful command-line interface to manage all aspects of your SimpleCloud system.
+---
+
+# SimpleCloud CLI
+
+The SimpleCloud CLI provides a powerful command-line interface to manage all aspects of your cloud system. From creating groups to managing servers, the CLI offers comprehensive control over your SimpleCloud installation.
+
+## Quick Setup
+
+<Tabs items={["Unix", "Windows"]}>
+<Tab value="Unix">
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/theSimpleCloud/simplecloud-manifest/HEAD/install.sh)" && sc setup
+```
+
+</Tab>
+<Tab value="Windows">
+
+```batch
+# Download and run install.bat from:
+https://raw.githubusercontent.com/theSimpleCloud/simplecloud-manifest/HEAD/install.bat
+```
+
+</Tab>
+</Tabs>
+
+## Why a Modern CLI?
+
+SimpleCloud v3 marks a significant shift from the traditional Manager Console to a modern CLI approach. This change brings several key advantages:
+
+- **Remote Management**: The CLI can be installed and run from anywhere, allowing you to manage your cloud system from your local machine while the cloud runs on remote servers.
+- **Interactive Experience**: The CLI provides an interactive experience that guides you through complex operations:
+  - Step-by-step group creation wizards
+  - Smart autocompletion for commands and parameters
+  - Real-time validation of inputs
+- **Automation Capabilities**: Command line interfaces excel at automation:
+  - Easy integration with scripts and tools
+  - Support for continuous integration workflows
+  - Batch operations for repetitive tasks
+
+<Callout>
+  While the v2 Manager Console served its purpose well, the CLI represents a
+  more flexible and powerful approach to cloud management that better serves
+  modern server administration needs.
+</Callout>
+
+## Connect Command
+
+The `connect` command connects to the controller via a specified connection or creates a new one.
+
+```bash
+simplecloud connect [flags]
+```
+
+## Connection Command
+
+The `connection` command shows the current connection.
+
+```bash
+simplecloud connection
+```
+
+## Create Command
+
+The `create` command is used to create new resources in your cloud system.
+
+### Create Group
+
+Create a new server group with specified configuration.
+
+```bash
+simplecloud create group [flags]
+```
+
+**Flags**
+
+- `--configurator string`: Server configurator
+- `--max-memory string`: Maximum memory allocation for each server
+- `--max-online string`: Maximum number of servers that can be online
+- `--max-players string`: Maximum players per server
+- `--min-memory string`: Minimum memory allocation for each server
+- `--min-online string`: Minimum number of servers that must be online
+- `--name string`: Group name
+- `--port string`: Starting port number for servers
+- `--server-url string`: Server software download URL (optional)
+- `--software string`: Server software type
+- `--template string`: Template type (`dynamic` or `static`)
+- `--type string`: Server type (`PROXY` or `SERVER`)
+- `--minecraft-version string`: Minecraft version
+- `--software-version string`: Server Software version
+
+<Callout>
+  When all flags are set (except `--server-url`), the interactive setup wizard
+  will be skipped. This is particularly useful for automated group creation or
+  when you want to bypass the step-by-step configuration process. The server url
+  will be automatically set to the default url for the selected software and
+  software version.
+</Callout>
+
+## Delete Command
+
+The `delete` command is used to remove existing resources from your cloud system.
+
+### Delete Group
+
+Delete a group.
+
+```bash
+simplecloud delete group [flags]
+```
+
+**Flags**
+
+- `--confirm`: Don't ask for confirmation.
+- `-h, --help`: Help for delete.
+
+## Edit Command
+
+The `edit` command modifies existing resources in your cloud system.
+
+### Edit Group
+
+Modify an existing group's configuration.
+
+```bash
+simplecloud edit group [name] [flags]
+```
+
+**Flags**
+
+- `-h, --help`: Help for group
+- `-P, --max-players uint`: Maximum players of the server
+- `-M, --maximum-memory uint`: Maximum memory of the server
+- `-N, --maximum-online-count uint`: Maximum online count of the server
+- `-m, --minimum-memory uint`: Minimum memory of the server
+- `-n, --minimum-online-count uint`: Minimum online count of the server
+- `-r, --properties stringToString`: Properties of the server (key=value pairs) (default [])
+- `-p, --start-port uint`: Start port of the server
+- `-s, --server-url string`: Update the server url. Can be:
+  - A direct URL to the server software
+  - `change`: Change to a different version entirely (e.g., from 1.21.1 to 1.21.4)
+  - `update`: Update to the latest URL for the current version from our [manifest](https://github.com/theSimpleCloud/simplecloud-manifest)
+
+### Edit Server
+
+Modify running server configurations.
+
+```bash
+simplecloud edit server [id] [flags]
+```
+
+**Flags**
+
+- `-h, --help`: Help for server
+- `-P, --max-players uint`: Max players of the server
+- `-r, --properties stringToString`: Properties of the server (key=value pairs) (default [])
+
+## Info Command
+
+The `info` command retrieves specific information about groups, servers, or connections.
+
+### Info Connections
+
+List all configured cloud connections.
+
+```bash
+simplecloud info connections
+```
+
+### Info Groups
+
+Display all configured server groups and their basic information.
+
+```bash
+simplecloud info groups
+```
+
+### Info Servers
+
+Show all running and stopped servers in the cloud system.
+
+```bash
+simplecloud info servers
+```
+
+## Setup Command
+
+The `setup` command runs the setup wizard and installs a fresh cloud bundle.
+
+```bash
+simplecloud setup
+```
+
+## Start Command
+
+The `start` command initiates cloud components and servers.
+
+### Start Cloud
+
+Start all cloud components.
+
+```bash
+simplecloud start cloud
+```
+
+### Start Server
+
+Start a specific server instance.
+
+```bash
+simplecloud start server [id]
+```

@@ -1,0 +1,106 @@
+---
+title: Start with BungeeCord
+description: Implementing the SimpleCloud Controller API in BungeeCord
+---
+
+## Getting Started
+
+The following guide will show you how to implement our API in your BungeeCord plugin.
+
+Our API includes the `ControllerApi` and the `PlayerApi` class. The `ControllerApi` is used to interact with the SimpleCloud's [groups](/docs/manual/setup/groups), [servers](/docs/manual/setup/servers), and more, while the `PlayerApi` is used to interact with [players](/docs/manual/droplets/player).
+
+## Dependencies
+
+First, we need to add the dependencies to your `build.gradle` or `pom.xml`:
+
+<DependencySnippet
+  dependencies={[
+    {
+      groupId: "app.simplecloud.api.platform",
+      artifactId: "bungeecord",
+    },
+    {
+      groupId: "net.md-5",
+      artifactId: "bungeecord-api",
+      version: "1.20-R0.1-SNAPSHOT",
+      autoFetch: false,
+    },
+  ]}
+  type="snapshot"
+  repositories={[
+    {
+      id: "simplecloud-snapshots",
+      url: "https://repo.simplecloud.app/snapshots",
+    },
+    {
+      id: "buf-maven",
+      url: "https://buf.build/gen/maven",
+    },
+    {
+      id: "sonatype",
+      url: "https://oss.sonatype.org/content/repositories/snapshots/",
+    },
+  ]}
+/>
+
+<Callout type="warn">
+  Please don't compile our API into your plugin, just follow the next step, and
+  depend on the API.
+</Callout>
+
+## Depend on the API
+
+BungeeCord plugins can inherit from the SimpleCloud Cloud API plugin. This is useful if you want to use the SimpleCloud API in your plugin.
+
+For this, you need to add a `depend` configuration to your `plugin.yml` file. Here is an example:
+
+```yaml
+name: simplecloud-example-bungeecord
+version: 1.0.0
+main: app.simplecloud.examples.plugin.bungeecord.BungeeCordExamplePlugin
+depend: [simplecloud-api]
+```
+
+After that, you can use the SimpleCloud API in your plugin:
+
+```kotlin tab="Kotlin"
+import app.simplecloud.controller.api.ControllerApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import net.md_5.bungee.api.plugin.Plugin
+
+class BungeeCordExamplePlugin : Plugin() {
+
+    private val controllerApi = ControllerApi.createCoroutineApi()
+
+    override fun onEnable() {
+        logger.info("Hello from BungeeCord!")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val groups = controllerApi.getGroups().getAllGroups()
+            logger.info("Groups: $groups")
+        }
+    }
+
+}
+```
+
+```java tab="Java"
+import app.simplecloud.controller.api.ControllerApi;
+import net.md_5.bungee.api.plugin.Plugin;
+
+public class BungeeCordExamplePlugin extends Plugin {
+
+    private final ControllerApi controllerApi = ControllerApi.createFutureApi();
+
+    @Override
+    public void onEnable() {
+        getLogger().info("Hello from BungeeCord!");
+        controllerApi.getGroups().getAllGroups().thenAccept(groups -> {
+            getLogger().info("Groups: " + groups);
+        });
+    }
+
+}
+```

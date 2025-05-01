@@ -1,0 +1,129 @@
+---
+title: Start with Velocity
+description: Implementing the SimpleCloud Controller API in Velocity
+---
+
+The following guide will show you how to implement our API in your Velocity plugin.
+
+Our API includes the `ControllerApi` and the `PlayerApi` class. The `ControllerApi` is used to interact with the SimpleCloud's [groups](/docs/manual/setup/groups), [servers](/docs/manual/setup/servers), and more, while the `PlayerApi` is used to interact with [players](/docs/manual/droplets/player).
+
+## Dependencies
+
+First, we need to add the dependencies to your `build.gradle` or `pom.xml`:
+
+<DependencySnippet
+  dependencies={[
+    {
+      groupId: "app.simplecloud.api.platform",
+      artifactId: "velocity",
+    },
+    {
+      groupId: "com.velocitypowered",
+      artifactId: "velocity-api",
+      version: "3.4.0-SNAPSHOT",
+      autoFetch: false,
+    },
+    {
+      groupId: "com.velocitypowered",
+      artifactId: "velocity-api",
+      version: "3.4.0-SNAPSHOT",
+      autoFetch: false,
+      type: "annotationProcessor",
+    },
+  ]}
+  type="snapshot"
+  repositories={[
+    {
+      id: "simplecloud-snapshots",
+      url: "https://repo.simplecloud.app/snapshots",
+    },
+    {
+      id: "buf-maven",
+      url: "https://buf.build/gen/maven",
+    },
+    {
+      id: "papermc",
+      url: "https://repo.papermc.io/repository/maven-public/",
+    },
+  ]}
+/>
+
+<Callout type="warn">
+  Please don't compile our API into your plugin, just follow the next step, and
+  depend on the API.
+</Callout>
+
+## Depend on the API
+
+Velocity plugins can inherit from the SimpleCloud Cloud API plugin. This is useful if you want to use the SimpleCloud API in your plugin.
+
+```kotlin tab="Kotlin"
+import app.simplecloud.controller.api.ControllerApi
+import com.velocitypowered.api.event.Subscribe
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
+import com.velocitypowered.api.plugin.Dependency
+import com.velocitypowered.api.plugin.Plugin
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+@Plugin(
+    id = "simplecloud-example-velocity",
+    name = "SimpleCloud Example Velocity Plugin",
+    authors = ["Fllip"],
+    dependencies = [
+        // This is very important, otherwise the API be loaded after your plugin
+        Dependency(id = "simplecloud-api")
+    ]
+)
+class VelocityExamplePlugin {
+
+    private val logger = org.slf4j.LoggerFactory.getLogger(VelocityExamplePlugin::class.java)
+    private val controllerApi = ControllerApi.createCoroutineApi()
+
+    @Subscribe
+    fun onProxyInitialize(event: ProxyInitializeEvent) {
+        logger.info("Hello from Velocity!")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val groups = controllerApi.getGroups().getAllGroups()
+            logger.info("Groups: $groups")
+        }
+    }
+
+}
+```
+
+```java tab="Java"
+import app.simplecloud.controller.api.ControllerApi;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.plugin.Dependency;
+import com.velocitypowered.api.plugin.Plugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Plugin(
+    id = "simplecloud-example-velocity",
+    name = "SimpleCloud Example Velocity Plugin",
+    authors = {"Fllip"},
+    dependencies = {
+        // This is very important, otherwise the API be loaded after your plugin
+        @Dependency(id = "simplecloud-api")
+    }
+)
+public class VelocityExamplePlugin {
+
+    private final Logger logger = LoggerFactory.getLogger(VelocityExamplePlugin.class);
+    private final ControllerApi controllerApi = ControllerApi.createFutureApi();
+
+    @Subscribe
+    public void onProxyInitialize(ProxyInitializeEvent event) {
+        logger.info("Hello from Velocity!");
+        controllerApi.getGroups().getAllGroups().thenAccept(groups -> {
+            logger.info("Groups: " + groups);
+        });
+    }
+
+}
+```

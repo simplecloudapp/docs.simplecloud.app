@@ -1,0 +1,154 @@
+---
+title: Quickstart
+description: |
+  Get started with SimpleCloud by setting up a basic installation with a proxy and lobby server.
+---
+
+## System Requirements
+
+Before installing SimpleCloud, ensure that the following programs are installed on your system:
+
+- **Java 21**: Required to run Minecraft servers and other Java-based components.
+- **Screen**: Allows you to run processes in the background on Linux.
+- **lsof**: Used for checking open files and network connections (Already installed on most Linux distributions).
+
+## Installation
+
+### Install the CLI
+
+SimpleCloud now offers an extensive [CLI](/docs/manual/cli) that covers everything you need to manage SimpleCloud. It's a small application that serves as an interface for sending commands to your SimpleCloud instance and is the easiest way to get started with SimpleCloud.
+
+<Tabs items={['Unix', 'Windows']}>
+  <Tab>
+
+    ```bash
+    /bin/bash -c "$(curl -fsSL
+    https://raw.githubusercontent.com/theSimpleCloud/SimpleCloud/main/install.sh)"
+    ```
+
+  </Tab>
+  <Tab>
+  
+    ```powershell
+    # Create a install.bat file and paste the content of the following website into it:
+    # https://raw.githubusercontent.com/theSimpleCloud/simplecloud-manifest/HEAD/install.bat
+    # Now you can run the install.bat file
+    install.bat
+    ```
+
+    <Callout type="warning">
+      This is highly experimental and not recommended.
+    </Callout>
+
+  </Tab>
+</Tabs>
+
+### Install SimpleCloud
+
+After installing the CLI, you can install SimpleCloud by running the following command:
+
+```bash
+simplecloud install
+```
+
+<Callout>
+  If you already have a running SimpleCloud instance and want to add another Root Server, consider
+  using the [Server Host Droplet](/docs/manual/droplet/serverhost).
+</Callout>
+
+### Start the Controller
+
+Start the controller by running the following command:
+
+```bash
+simplecloud start
+```
+
+<Callout>
+  You can only start the controller locally. Remote access via the CLI is only possible once the
+  controller is running.
+</Callout>
+
+### Create a Proxy Group
+
+Create a proxy group by running the following command:
+
+```bash
+simplecloud group create proxy proxy
+```
+
+### Create a Lobby Group
+
+Create a lobby group by running the following command:
+
+```bash
+simplecloud group create static lobby
+```
+
+### Configure Server Connection
+
+Configure the server connection by creating a file called `config.yml` in the `plugins/ServerConnection` directory of your proxy server with the following content:
+
+```yaml
+connections:
+  - name: 'lobby' # Name of this connection target
+    permission: '' # No permission required
+    server-name-matcher:
+      operation: 'STARTS_WITH'
+      value: 'lobby' # The name of your server group
+```
+
+### Configure Join Connections
+
+Configure the join connections by adding the following to your `config.yml`:
+
+```yaml
+join-connections:
+  enabled: true
+  no-target-connections-found-message: "Couldn't connect you to the network because no target servers are available."
+  target-connections:
+    - name: 'lobby' # The name of the connection target you configured above
+      priority: 0
+```
+
+### Configure Fallback Connections
+
+Configure the fallback connections by adding the following to your `config.yml`:
+
+```yaml
+fallback-connections:
+  enabled: true
+  no-target-connections-found-message: 'You have been disconnected from the network since you have been kicked and no fallback server are available.'
+  target-connections:
+    - name: 'lobby' # The name of the connection target you configured above
+      priority: 0
+```
+
+### Configure Commands
+
+Configure the commands by adding the following to your `config.yml`:
+
+```yaml
+commands:
+  - name: 'lobby' # The name of the command
+    aliases:
+      - 'l'
+      - 'hub'
+      - 'quit'
+      - 'leave'
+    target-connections:
+      - name: 'lobby' # The name of the above configured connection target
+        priority: 0
+    already-connected-message: '§cYou are already connected to the lobby!'
+    no-target-connections-found-message: 'There are no lobby servers available at the moment.'
+    permission: '' # No permission required
+```
+
+## Next Steps
+
+Now that you have a basic SimpleCloud installation up and running, you can:
+
+- Learn more about [Server Groups](/docs/manual/resources/groups)
+- Configure [Templates](/docs/manual/resources/templates)
+- Add [Droplets](/docs/manual/droplet/overview) to extend functionality
+- Install [Plugins](/docs/manual/plugin/overview) for additional features

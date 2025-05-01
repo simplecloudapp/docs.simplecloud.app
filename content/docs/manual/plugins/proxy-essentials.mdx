@@ -1,0 +1,172 @@
+---
+title: Proxy Essentials Plugin
+description: Learn about SimpleCloud's proxy essentials plugin for customizable MOTD, Tablist, and Joinstates
+badge: Proxy
+badgeColor: sky
+---
+
+## Overview
+
+This plugin enhances your server network with customizable MOTD (Server Info), Tablist, and Joinstates features. All settings are synchronized across all proxies, offering extensive customization through simple configuration files.
+
+## Supported Software
+
+| Software   | Plugin Support |
+| ---------- | -------------- |
+| Velocity   | ✅ Yes         |
+| Bungeecord | ✅ Yes         |
+
+<Callout>
+  Want to add support for another server software? Submit a pull request on
+  [GitHub](https://github.com/simplecloudapp/proxy-plugin)!
+</Callout>
+
+## Quick Setup
+
+1. Download the plugin from [GitHub](https://github.com/simplecloudapp/proxy-plugin/releases)
+2. Place it in your proxy template's plugins folder
+3. Start your proxy server
+4. Set a joinstate for your group (e.g., `maintenance` for your proxy group)
+
+## Features
+
+### Server Info (MOTD)
+
+Create multiple layouts in the `layout/` folder for dynamic server information display:
+
+```yaml
+first-lines:
+  - <color:#0ea5e9>A simplecloud.app network
+second-lines:
+  - " "
+player-info: []
+version-name: ""
+max-player-display-type: REAL # or DYNAMIC
+dynamic-player-range: 1 # Only enabled if max-player-display-type is DYNAMIC
+```
+
+<img
+  src="https://github.com/simplecloudapp/branding/blob/main/media/plugin/proxy-essentials/server-info.png?raw=true"
+  alt="Server Info Example"
+  style={{
+    width: "100%",
+    borderRadius: "1rem",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+  }}
+/>
+
+<Callout>
+  When running locally, actual slots are displayed due to controller health
+  checks. Players see different information based on your configuration.
+</Callout>
+
+### Tablist Header and Footer
+
+Create engaging tablist headers and footers with support for static and animated content:
+
+```yaml
+groups:
+  - group-or-service: "*"
+    tab-lists:
+      - header:
+          - ""
+          - <color:#0ea5e9>SimpleCloud v3
+          - "Frame 1"
+        footer:
+          - ""
+          - " <color:#ffffff><online_players> players <color:#cbd5e1>are playing on your network "
+          - <color:#64748b>  sɪᴍᴘʟᴇᴄʟᴏᴜᴅ.ᴀᴘᴘ
+          - ""
+      # Create another list entry for rotation
+      - header:
+          - ""
+          - <color:#0ea5e9>SimpleCloud v3
+          - "Frame 2"
+        footer:
+          - ""
+          - " <color:#ffffff><online_players> players <color:#cbd5e1>are playing on your network "
+          - <color:#64748b>  sɪᴍᴘʟᴇᴄʟᴏᴜᴅ.ᴀᴘᴘ
+          - ""
+tab-list-update-time: 1000 # Update interval in milliseconds
+```
+
+<img
+  src="https://github.com/simplecloudapp/branding/blob/main/media/plugin/proxy-essentials/tablist.png?raw=true"
+  alt="Tablist Example"
+  style={{
+    width: "100%",
+    borderRadius: "1rem",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+  }}
+/>
+
+### Joinstates
+
+Manage server access with customizable states:
+
+```yaml
+# Default state for new groups
+default-state: public
+
+join-states:
+  - name: public
+    join-permission: "" # Empty for public access
+    full-join-permission: simplecloud.join.full.public
+    motd-layout-by-proxy: public
+
+  - name: closedBeta
+    join-permission: simplecloud.join.closedbeta
+    full-join-permission: simplecloud.join.full.closedbeta
+    motd-layout-by-proxy: closed_beta
+
+  - name: maintenance
+    join-permission: simplecloud.join.maintenance
+    full-join-permission: simplecloud.join.full.maintenance
+    motd-layout-by-proxy: maintenance
+```
+
+## Commands
+
+| Command                                           | Description            |
+| ------------------------------------------------- | ---------------------- |
+| `/joinstate group <group> <state>`                | Set group joinstate    |
+| `/joinstate server <group> <numericalId> <state>` | Set server joinstate   |
+| `/joinstate help`                                 | Show command help      |
+| `/joinstate groups`                               | List groups and states |
+| `/joinstate states`                               | List all joinstates    |
+
+## Placeholders
+
+| Placeholder        | MOTD | Tablist | Description             |
+| ------------------ | ---- | ------- | ----------------------- |
+| `<online_players>` | ✅   | ✅      | Current online players  |
+| `<max_players>`    | ✅   | ✅      | Maximum network players |
+| `<date>`           | ✅   | ✅      | Current date            |
+| `<env:NAME>`       | ✅   | ✅      | Environment variable    |
+| `<server_name>`    | ❌   | ✅      | Player's current server |
+| `<ping>`           | ❌   | ✅      | Player's ping           |
+
+## Permissions
+
+| Permission                             | Description            |
+| -------------------------------------- | ---------------------- |
+| `simplecloud.command.joinstate.*`      | All joinstate commands |
+| `simplecloud.command.joinstate.help`   | View command help      |
+| `simplecloud.command.joinstate.groups` | View groups and states |
+| `simplecloud.command.joinstate.states` | View all joinstates    |
+| `simplecloud.command.joinstate.server` | Set server joinstate   |
+| `simplecloud.command.joinstate.group`  | Set group joinstate    |
+
+## API Integration
+
+<Callout type="error">
+  API documentation will be available once the API is ready and public.
+</Callout>
+
+## What's Next?
+
+Here are some helpful resources to continue exploring SimpleCloud:
+
+- [Server API Documentation](/docs/manual/api#server)
+- [Plugin Development](/docs/manual/plugin/overview)
+- [Server Management](/docs/manual/resources/servers)

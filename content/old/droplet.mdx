@@ -1,0 +1,89 @@
+---
+title: SimpleCloud Droplets
+description: |
+  Learn about droplets - our interpretation of microservices that extend SimpleCloud's functionality.
+---
+
+# SimpleCloud Droplets
+
+A droplet is our interpretation of a microservice, that can extend the functionality of your SimpleCloud setup. They can be used to run custom code, interact with external services, or even to create a custom API.
+
+import { Callout } from "fumadocs-ui/components/callout";
+import { Card, Cards } from "fumadocs-ui/components/card";
+
+## Understanding Droplets
+
+Droplets are a powerful way to extend the functionality of your SimpleCloud setup, without having to write a full-blown application. A droplet (micro-service) is focused on doing one thing, and doing it well. This makes it easy to maintain for us, and easy to scale for you.
+
+This means the important parts of SimpleCloud v3 are now decoupled and can theoretically be replaced by a custom droplet, or even not used at all.
+For example, if you don't need the [CloudPlayer](/docs/manual/droplet/player), because you have your own player or don't need a player at all, you can simply not include our [player-droplet](/docs/manual/droplet/player) and you're ready to go.
+
+## Installing a Droplet
+
+If you have our [CLI](/docs/manual/cli) installed, you can install a droplet with the following command:
+
+```bash
+# Install a droplet
+simplecloud install <droplet-name­>
+```
+
+To see a list of all available droplets, you can use the following command, or view the list of official droplets below:
+
+```bash
+# List all available droplets
+simplecloud info droplets
+```
+
+## Droplets vs v2 Modules
+
+Droplets are not intended to replace v2 modules. While some droplets may share similarities with existing v2 modules, our goal is not to replicate them.
+Instead, considering that most of the old modules can function as plugins for Velocity, BungeeCord, Spigot, etc., we have decided to periodically convert all old modules into new and simplified [plugins](/docs/manual/plugin).
+
+<Callout>
+  If you have any ideas for new droplets, or plugins, feel free to join our
+  [Discord](https://discord.simplecloud.app) and share your ideas with us.
+</Callout>
+
+## Creating Droplets
+
+A droplet is simply just a microservice, you can create your own droplets. It's completely up to you how you create your droplets, but we have a small internal Tech-Stack that we use for our droplets.
+
+Here is a list of our Tech-Stack:
+
+- [Kotlin](https://kotlinlang.org/)
+- [ProtoBuf](https://developers.google.com/protocol-buffers)
+- [gRPC](https://grpc.io/)
+- [SQLite](https://www.sqlite.org/index.html) or [PostgreSQL](https://www.postgresql.org/)
+- [JOOQ](https://www.jooq.org/)
+
+Additionally, we use [Docker](https://www.docker.com/) to containerize our droplets.
+
+We don't use all of these technologies in every droplet, but we use them in most of our droplets. You can find the exact Tech-Stack of a droplet in the documentation of the specific droplet.
+
+<Callout>
+  This is just our Tech-Stack, you can use any technology you want to create
+  your own droplets. If you have any questions about creating your own droplets,
+  feel free to join our [Discord](https://discord.simplecloud.app) and ask us.
+</Callout>
+
+## Official Droplets
+
+We have created several official droplets that can be used to extend the functionality of your SimpleCloud setup:
+
+<Cards>
+  <Card title="Server Host" href="/docs/manual/droplet/serverhost">
+    Manage server startup and shutdown
+  </Card>
+  <Card
+    title="Server Host Docker"
+    href="/docs/manual/droplet/serverhost-docker"
+  >
+    Run servers in Docker containers
+  </Card>
+  <Card title="Player" href="/docs/manual/droplet/player">
+    Handle player data and management
+  </Card>
+  <Card title="Resource Pack" href="/docs/manual/droplet/resourcepack">
+    Manage resource packs for your servers
+  </Card>
+</Cards>

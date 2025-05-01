@@ -1,0 +1,41 @@
+---
+title: Groups
+description: Learn about SimpleCloud's groups for managing your servers
+---
+
+## Overview
+
+Groups are the foundation of SimpleCloud's server management system. They define how your Minecraft servers are configured, deployed, and managed. Each server inherits properties from its group, allowing for consistent and automated server management.
+
+## Types of Groups
+
+SimpleCloud offers two types of groups, to make it easier to manage your servers:
+
+- `PROXY` groups are used to manage your proxy servers like Velocity or BungeeCord.
+- `SERVER` groups are used to manage your Minecraft servers that run a specific software like Paper, Spigot, or any other.
+
+Both types of groups function the same way. The only difference is how the group is being configured. For example, a Velocity `PROXY` group will be set up with a secret, so Paper can communicate in a more modern way.
+
+## Scaling
+
+Groups will automatically scale up and down based on the number of players in the group. This is controlled by the `min-online-count` and `max-online-count` properties.
+
+## Configuration Structure
+
+Groups are defined in the `groups` directory. Each group is defined by a `.yml` file that specifies the group's properties.
+
+```yaml
+name: lobby
+type: SERVER
+min-memory: 1024
+max-memory: 1024
+start-port: 50000
+max-players: 100
+min-online-count: 1
+max-online-count: 1
+cloud-properties:
+  configurator: "paper_velocity"
+  template-id: "lobby"
+  server-url: "https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/463/downloads/paper-1.20.4-463.jar"
+  max-startup-seconds: "120"
+```

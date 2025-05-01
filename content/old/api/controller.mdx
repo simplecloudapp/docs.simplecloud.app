@@ -1,0 +1,269 @@
+---
+title: Controller API
+description: The Controller API provides access to manage server groups and individual servers in your SimpleCloud infrastructure.
+---
+
+# Controller API
+
+The Controller API is the central interface for managing your SimpleCloud infrastructure. It provides comprehensive control over server groups, individual servers, and real-time event handling.
+
+## Overview
+
+The Controller API allows you to:
+
+- Create and manage server groups
+- Start and stop servers
+- Monitor server states
+- Configure server properties
+- Handle real-time events
+
+## Getting Started
+
+### 1. Add the Dependency
+
+<Tabs items={["Maven", "Gradle"]}>
+  <Tab value="Maven">
+    ```xml
+    <dependency>
+      <groupId>app.simplecloud.controller</groupId>
+      <artifactId>controller-api</artifactId>
+      <version>3.0.0-SNAPSHOT</version>
+    </dependency>
+    ```
+  </Tab>
+  <Tab value="Gradle">
+    ```kotlin dependencies{" "}
+    {implementation("app.simplecloud.controller:controller-api:3.0.0-SNAPSHOT")}
+    ```
+  </Tab>
+</Tabs>
+
+<Callout>
+  The API is currently available as a snapshot version. Once we release our
+  first stable version, it will be published to Maven Central.
+</Callout>
+
+### 2. Choose Your Language
+
+While our API is primarily written in Kotlin, we support multiple languages through our [Protocol Buffer specifications](https://buf.build/simplecloud/proto-specs):
+
+- Java (Native support)
+- Kotlin (Native support)
+- TypeScript
+- Go
+- Rust
+- Other languages supported by Protocol Buffers
+
+### 3. Initialize the API
+
+<Tabs items={["Kotlin", "Java"]}>
+<Tab value="Kotlin">
+```kotlin
+// For Minecraft servers (uses environment variables)
+val controllerApi = Controller.createCoroutineApi()
+
+// For external applications (provide token directly)
+val controllerApi = Controller.createCoroutineApi("your-auth-token")
+
+````
+</Tab>
+<Tab value="Java">
+```java
+// For Minecraft servers (uses environment variables)
+Controller.Future controllerApi = Controller.createFutureApi();
+
+// For external applications (provide token directly)
+Controller.Future controllerApi = Controller.createFutureApi("your-auth-token");
+````
+
+</Tab>
+</Tabs>
+
+## Group Management
+
+Groups are templates for server instances. They define the configuration that new servers will use when started.
+
+### Create a Group
+
+<Tabs items={["Kotlin", "Java"]}>
+<Tab value="Kotlin">
+```kotlin
+val group = Group(
+    name = "lobby",
+    type = ServerType.SERVER,
+    minMemory = 512,
+    maxMemory = 1024,
+    startPort = 25565,
+    minOnlineCount = 1,
+    maxOnlineCount = 5,
+    maxPlayers = 100,
+    newServerPlayerRatio = 50,
+    properties = mapOf("gamemode" to "LOBBY")
+)
+
+val createdGroup = controllerApi.getGroups().createGroup(group)
+
+````
+</Tab>
+<Tab value="Java">
+```java
+Group group = new Group(
+    "lobby",
+    ServerType.SERVER,
+    512L,
+    1024L,
+    25565L,
+    1L,
+    5L,
+    100L,
+    50L,
+    Map.of("gamemode", "LOBBY")
+);
+
+controllerApi.getGroups().createGroup(group).thenAccept(createdGroup -> {
+    // Group created successfully
+});
+````
+
+</Tab>
+</Tabs>
+
+### Get Groups
+
+<Tabs items={["Kotlin", "Java"]}>
+<Tab value="Kotlin">
+```kotlin
+// Get a specific group
+val lobbyGroup = controllerApi.getGroups().getGroupByName("lobby")
+
+// Get all groups
+val allGroups = controllerApi.getGroups().getAllGroups()
+
+// Get groups by type
+val serverGroups = controllerApi.getGroups().getGroupsByType(ServerType.SERVER)
+
+````
+</Tab>
+<Tab value="Java">
+```java
+// Get a specific group
+controllerApi.getGroups().getGroupByName("lobby")
+    .thenAccept(group -> {
+        // Handle group
+    });
+
+// Get all groups
+controllerApi.getGroups().getAllGroups()
+    .thenAccept(groups -> {
+        // Handle groups
+    });
+
+// Get groups by type
+controllerApi.getGroups().getGroupsByType(ServerType.SERVER)
+    .thenAccept(groups -> {
+        // Handle server groups
+    });
+````
+
+</Tab>
+</Tabs>
+
+### Update & Delete Groups
+
+<Tabs items={["Kotlin", "Java"]}>
+<Tab value="Kotlin">
+```kotlin
+// Update a group
+val updatedGroup = existingGroup.copy(
+    maxPlayers = 200,
+    maxMemory = 2048
+)
+controllerApi.getGroups().updateGroup(updatedGroup)
+
+// Delete a group
+controllerApi.getGroups().deleteGroup("lobby")
+
+````
+</Tab>
+<Tab value="Java">
+```java
+// Update a group
+Group updatedGroup = existingGroup.toBuilder()
+    .setMaxPlayers(200)
+    .setMaxMemory(2048)
+    .build();
+
+controllerApi.getGroups().updateGroup(updatedGroup)
+    .thenAccept(group -> {
+        // Group updated
+    });
+
+// Delete a group
+controllerApi.getGroups().deleteGroup("lobby")
+    .thenAccept(success -> {
+        // Group deleted
+    });
+````
+
+</Tab>
+</Tabs>
+
+## Server Management
+
+Servers are instances created from group templates. The API provides comprehensive control over server lifecycle and properties.
+
+### Start & Stop Servers
+
+<Tabs items={["Kotlin", "Java"]}>
+<Tab value="Kotlin">
+```kotlin
+// Start a server
+val server = controllerApi.getServers().startServer(
+    groupName = "lobby",
+    startCause = ServerStartCause.API_START
+)
+
+// Stop a server by ID
+controllerApi.getServers().stopServer(
+id = "server-uuid",
+stopCause = ServerStopCause.API_STOP
+)
+
+// Stop a server by group and numerical ID
+controllerApi.getServers().stopServer(
+groupName = "lobby",
+numericalId = 1,
+stopCause = ServerStopCause.API_STOP
+)
+
+````
+</Tab>
+<Tab value="Java">
+```java
+// Start a server
+controllerApi.getServers().startServer("lobby", ServerStartCause.API_START)
+    .thenAccept(server -> {
+        // Server started
+    });
+
+// Stop a server by ID
+controllerApi.getServers().stopServer("server-uuid", ServerStopCause.API_STOP)
+    .thenAccept(success -> {
+        // Server stopped
+    });
+
+// Stop a server by group and numerical ID
+controllerApi.getServers().stopServer("lobby", 1L, ServerStopCause.API_STOP)
+    .thenAccept(success -> {
+        // Server stopped
+    });
+````
+
+</Tab>
+</Tabs>
+
+## Next Steps
+
+- [Server Host Droplet API](/docs/manual/api/droplet/serverhost)
+- [Player Droplet API](/docs/manual/api/droplet/player)
+- [Metrics Droplet API](/docs/manual/api/droplet/metrics)

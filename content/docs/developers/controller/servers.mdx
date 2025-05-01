@@ -1,0 +1,297 @@
+---
+title: Servers API
+description: Managing servers with the SimpleCloud Controller API
+---
+
+## Initialization
+
+Before you can use the Servers API, you need to initialize the Controller API. Please refer to the [Initialization](/docs/developers/getting-started/initialization) guide for more information.
+
+After initializing the Controller API, you can use `controllerApi.getServers()` to access the Servers API.
+
+## Get Servers
+
+There are multiple ways to get servers from the API:
+
+```kotlin tab="Kotlin"
+// Get all servers
+val allServers = controllerApi.getServers().getAllServers()
+
+// Get server by ID
+val server = controllerApi.getServers().getServerById("server-uuid")
+
+// Get servers by group name
+val lobbyServers = controllerApi.getServers().getServersByGroup("lobby")
+
+// Get server by group name and numerical ID
+val specificServer = controllerApi.getServers().getServerByNumerical("lobby", 1)
+
+// Get servers by type
+val proxyServers = controllerApi.getServers().getServersByType(ServerType.PROXY)
+```
+
+```java tab="Java"
+// Get all servers
+controllerApi.getServers().getAllServers()
+    .thenAccept(servers -> {
+        // Handle all servers
+    });
+
+// Get server by ID
+controllerApi.getServers().getServerById("server-uuid")
+    .thenAccept(server -> {
+        // Handle server
+    });
+
+// Get servers by group name
+controllerApi.getServers().getServersByGroup("lobby")
+    .thenAccept(servers -> {
+        // Handle lobby servers
+    });
+
+// Get server by group name and numerical ID
+controllerApi.getServers().getServerByNumerical("lobby", 1L)
+    .thenAccept(server -> {
+        // Handle specific server
+    });
+
+// Get servers by type
+controllerApi.getServers().getServersByType(ServerType.PROXY)
+    .thenAccept(servers -> {
+        // Handle proxy servers
+    });
+```
+
+## Start Servers
+
+You can start a new server by specifying the group name and optionally a start cause:
+
+```kotlin tab="Kotlin"
+// Start a server with default cause
+val server = controllerApi.getServers().startServer("lobby")
+
+// Start a server with specific cause
+val server = controllerApi.getServers().startServer(
+    groupName = "lobby",
+    startCause = ServerStartCause.API_START
+)
+```
+
+```java tab="Java"
+// Start a server with default cause
+controllerApi.getServers().startServer("lobby")
+    .thenAccept(server -> {
+        // Server started
+    });
+
+// Start a server with specific cause
+controllerApi.getServers().startServer("lobby", ServerStartCause.API_START)
+    .thenAccept(server -> {
+        // Server started
+    });
+```
+
+## Stop Servers
+
+There are multiple ways to stop servers:
+
+```kotlin tab="Kotlin"
+// Stop a server by ID
+controllerApi.getServers().stopServer(
+    id = "server-uuid",
+    stopCause = ServerStopCause.API_STOP
+)
+
+// Stop a server by group and numerical ID
+controllerApi.getServers().stopServer(
+    groupName = "lobby",
+    numericalId = 1,
+    stopCause = ServerStopCause.API_STOP
+)
+
+// Stop all servers in a group
+controllerApi.getServers().stopServers(
+    groupName = "lobby",
+    stopCause = ServerStopCause.API_STOP
+)
+
+// Stop all servers in a group with timeout
+controllerApi.getServers().stopServers(
+    groupName = "lobby",
+    timeoutSeconds = 60,
+    stopCause = ServerStopCause.API_STOP
+)
+```
+
+```java tab="Java"
+// Stop a server by ID
+controllerApi.getServers().stopServer("server-uuid", ServerStopCause.API_STOP)
+    .thenAccept(server -> {
+        // Server stopped
+    });
+
+// Stop a server by group and numerical ID
+controllerApi.getServers().stopServer("lobby", 1L, ServerStopCause.API_STOP)
+    .thenAccept(server -> {
+        // Server stopped
+    });
+
+// Stop all servers in a group
+controllerApi.getServers().stopServers("lobby", ServerStopCause.API_STOP)
+    .thenAccept(servers -> {
+        // Servers stopped
+    });
+
+// Stop all servers in a group with timeout
+controllerApi.getServers().stopServers("lobby", 60, ServerStopCause.API_STOP)
+    .thenAccept(servers -> {
+        // Servers stopped
+    });
+```
+
+## Update Servers
+
+There are several ways to update server properties:
+
+```kotlin tab="Kotlin"
+// Update entire server object
+val updatedServer = controllerApi.getServers().updateServer(server)
+
+// Update server state
+val updatedServer = controllerApi.getServers().updateServerState(
+    id = "server-uuid",
+    state = ServerState.STARTING
+)
+
+// Update a single property
+val updatedServer = controllerApi.getServers().updateServerProperty(
+    id = "server-uuid",
+    key = "maxPlayers",
+    value = 200
+)
+```
+
+```java tab="Java"
+// Update entire server object
+controllerApi.getServers().updateServer(server)
+    .thenAccept(updatedServer -> {
+        // Server updated
+    });
+
+// Update server state
+controllerApi.getServers().updateServerState("server-uuid", ServerState.STARTING)
+    .thenAccept(updatedServer -> {
+        // Server state updated
+    });
+
+// Update a single property
+controllerApi.getServers().updateServerProperty("server-uuid", "maxPlayers", 200)
+    .thenAccept(updatedServer -> {
+        // Server property updated
+    });
+```
+
+## Current Server Information
+
+There are two ways to get information about the current server your code is running on:
+
+### Using the API
+
+You can use the `getCurrentServer()` method to get information about the current server:
+
+```kotlin tab="Kotlin"
+val currentServer = serverApi.getCurrentServer()
+println("Current server group: ${currentServer.group}")
+println("Current server ID: ${currentServer.uniqueId}")
+```
+
+```java tab="Java"
+serverApi.getCurrentServer().thenAccept(currentServer -> {
+    System.out.println("Current server group: " + currentServer.getGroup());
+    System.out.println("Current server ID: " + currentServer.getUniqueId());
+});
+```
+
+### Using Environment Variables
+
+SimpleCloud automatically provides environment variables that you can access without initializing the API. These variables are available in two categories:
+
+#### Default Variables
+
+The following environment variables are always available for every server:
+
+```kotlin tab="Kotlin"
+val group = System.getenv("SIMPLECLOUD_GROUP")
+val uniqueId = System.getenv("SIMPLECLOUD_UNIQUE_ID")
+val numericalId = System.getenv("SIMPLECLOUD_NUMERICAL_ID")
+
+val host = System.getenv("SIMPLECLOUD_HOST")
+val ip = System.getenv("SIMPLECLOUD_IP")
+val port = System.getenv("SIMPLECLOUD_PORT")
+
+val type = System.getenv("SIMPLECLOUD_TYPE")
+val maxPlayers = System.getenv("SIMPLECLOUD_MAX_PLAYERS")
+val maxMemory = System.getenv("SIMPLECLOUD_MAX_MEMORY")
+val minMemory = System.getenv("SIMPLECLOUD_MIN_MEMORY")
+val createdAt = System.getenv("SIMPLECLOUD_CREATED_AT")
+```
+
+```java tab="Java"
+String group = System.getenv("SIMPLECLOUD_GROUP");
+String uniqueId = System.getenv("SIMPLECLOUD_UNIQUE_ID");
+String numericalId = System.getenv("SIMPLECLOUD_NUMERICAL_ID");
+
+String host = System.getenv("SIMPLECLOUD_HOST");
+String ip = System.getenv("SIMPLECLOUD_IP");
+String port = System.getenv("SIMPLECLOUD_PORT");
+
+String type = System.getenv("SIMPLECLOUD_TYPE");
+String maxPlayers = System.getenv("SIMPLECLOUD_MAX_PLAYERS");
+String maxMemory = System.getenv("SIMPLECLOUD_MAX_MEMORY");
+String minMemory = System.getenv("SIMPLECLOUD_MIN_MEMORY");
+String createdAt = System.getenv("SIMPLECLOUD_CREATED_AT");
+```
+
+#### Custom Properties
+
+Any custom properties defined in your group configuration are automatically available as environment variables. The property names are:
+
+1. Prefixed with `SIMPLECLOUD_`
+2. Converted to uppercase
+3. Have dashes (`-`) replaced with underscores (`_`)
+
+For example:
+
+```kotlin tab="Kotlin"
+// In your group configuration
+val group = Group(
+    name = "lobby",
+    properties = mapOf(
+        "game-mode" to "ADVENTURE",
+        "isLobby" to "true",
+        "max_rounds" to "5"
+    )
+)
+
+// In your server code
+val gameMode = System.getenv("SIMPLECLOUD_GAME_MODE")     // Returns "ADVENTURE"
+val isLobby = System.getenv("SIMPLECLOUD_ISLOBBY")        // Returns "true"
+val maxRounds = System.getenv("SIMPLECLOUD_MAX_ROUNDS")   // Returns "5"
+```
+
+```java tab="Java"
+// In your group configuration
+Group group = new Group(
+    "lobby",
+    Map.of(
+        "game-mode", "ADVENTURE",
+        "isLobby", "true",
+        "max_rounds", "5"
+    )
+);
+
+// In your server code
+String gameMode = System.getenv("SIMPLECLOUD_GAME_MODE");     // Returns "ADVENTURE"
+String isLobby = System.getenv("SIMPLECLOUD_ISLOBBY");        // Returns "true"
+String maxRounds = System.getenv("SIMPLECLOUD_MAX_ROUNDS");   // Returns "5"
+```

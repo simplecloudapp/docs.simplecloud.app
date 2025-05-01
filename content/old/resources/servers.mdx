@@ -1,0 +1,147 @@
+---
+title: Servers
+description: Learn about server management and configuration in SimpleCloud
+---
+
+# Servers
+
+Servers are the individual instances created from server groups. Each server inherits its configuration from its parent group while maintaining its own unique state and runtime properties.
+
+## Understanding Servers
+
+Each server in SimpleCloud represents a running Minecraft instance. Servers are automatically created and managed based on their group configuration:
+
+- Inherit properties from their parent group
+- Maintain individual state and runtime data
+- Can be individually configured and managed
+- Support hot-reload of most configuration changes
+
+## Server Management
+
+### Using the CLI
+
+```bash
+# Start a specific server
+sc start server lobby-1
+
+# Stop a server
+sc stop server lobby-1
+
+# Edit server configuration
+sc edit server lobby-1 --max-players 100
+```
+
+## Server Lifecycle
+
+### Creation
+
+Servers are automatically created by the controller when:
+
+- The minimum online count hasn't been reached
+- A manual start is requested
+- The player count requires more capacity
+
+### Runtime
+
+During operation, servers:
+
+- Report their status to the controller
+- Handle player connections
+- Maintain their own logs and data
+- Can be modified without restarts
+
+### Shutdown
+
+Servers are gracefully stopped when:
+
+- Manually requested
+- No longer needed (player count decreases)
+- Cloud system shuts down
+
+### Runtime Configuration
+
+Servers support various runtime configurations in `/components/serverhost/options/` with the following properties:
+
+```yaml
+# Server-specific properties
+max-players: 100
+state: RUNNING
+port: 25565
+host: "localhost"
+```
+
+## Server States
+
+A server can be in one of these states:
+
+| State     | Description             |
+| --------- | ----------------------- |
+| PREPARING | Server is being created |
+| STARTING  | Server is starting up   |
+| RUNNING   | Server is operational   |
+| STOPPING  | Server is shutting down |
+| STOPPED   | Server has stopped      |
+
+## Server Properties
+
+### Core Properties
+
+These properties are managed by the controller:
+
+| Property  | Description              |
+| --------- | ------------------------ |
+| uniqueId  | Unique server identifier |
+| groupName | Parent group name        |
+| port      | Server port              |
+| host      | Server host address      |
+| state     | Current server state     |
+
+### Custom Properties
+
+Servers can have additional custom properties defined:
+
+```yaml
+cloud-properties:
+  custom-setting: "value"
+  plugin-config: "enabled"
+```
+
+## Server Files
+
+Each server maintains its own directory structure when using the [Server Host Droplet](/docs/manual/droplet/serverhost):
+
+```
+running/
+└── <group>/
+    └── <server>/
+        ├── logs/
+        ├── plugins/
+        ├── worlds/
+        └── server.properties
+```
+
+## Server Templates
+
+Servers use templates from their parent group for initialization. The template system is implemented through the [Server Host Droplet](/docs/manual/droplet/serverhost), which handles file management and server preparation. Without the Server Host Droplet, you'll need to implement your own file management system. For detailed information about template configuration and usage with the Server Host Droplet, see the [Templates](/docs/manual/resources/templates) documentation.
+
+## Best Practices
+
+1. **Resource Management**
+
+- Monitor server performance
+- Configure appropriate memory limits
+- Use proper shutdown procedures
+
+2. **Configuration**
+
+- Keep server-specific changes minimal
+- Document custom configurations
+- Use group templates for shared settings
+
+## What's Next?
+
+Here are a few links that might be helpful as you continue to explore SimpleCloud:
+
+- [Configure Templates](/docs/manual/resources/templates)
+- [Learn about Server Groups](/docs/manual/resources/groups)
+- [Learn about the Server Host droplet](/docs/manual/droplet/serverhost)

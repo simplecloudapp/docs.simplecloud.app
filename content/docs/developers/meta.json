@@ -1,0 +1,19 @@
+{
+  "title": "Developers",
+  "description": "Developers Guide for SimpleCloud",
+  "root": true,
+  "pages": [
+    "---Developer Guide---",
+    "overview",
+    "getting-started",
+    "---Controller API---",
+    "controller/initialization",
+    "controller/groups",
+    "controller/servers",
+    "controller/events",
+    "---Player API---",
+    "droplets/player/initialization",
+    "droplets/player/player-management",
+    "droplets/player/adventure-integration"
+  ]
+}

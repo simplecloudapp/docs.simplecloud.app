@@ -1,0 +1,200 @@
+---
+title: Adventure Integration
+description: Using Adventure with the SimpleCloud Player API
+---
+
+## Initialization
+
+Before you can use [Adventure](https://docs.advntr.dev/), you need to initialize the Player API. Please refer to the [Initialization](/docs/developers/getting-started/initialization) guide for more information.
+
+After initializing the Player API, you can use Adventure components to send rich content to players. For more detailed information about Adventure's capabilities, check out the [official Adventure documentation](https://docs.advntr.dev/).
+
+## Sending Messages
+
+You can send various types of messages to players using [Adventure's text components](https://docs.advntr.dev/text.html):
+
+```kotlin tab="Kotlin"
+// Send a simple message
+player.sendMessage(Component.text("Hello, world!"))
+
+// Send colored message
+player.sendMessage(
+    Component.text("Welcome to the server!")
+        .color(NamedTextColor.GOLD)
+)
+
+// Send formatted message with multiple decorations
+player.sendMessage(
+    Component.text()
+        .content("Special Announcement")
+        .color(NamedTextColor.GOLD)
+        .decoration(TextDecoration.BOLD, true)
+        .append(Component.newline())
+        .append(
+            Component.text("Check out our new features!")
+                .color(NamedTextColor.YELLOW)
+        )
+        .build()
+)
+
+// Send interactive message with click and hover events
+player.sendMessage(
+    Component.text()
+        .content("Click here to visit our website!")
+        .color(NamedTextColor.AQUA)
+        .clickEvent(ClickEvent.openUrl("https://example.com"))
+        .hoverEvent(HoverEvent.showText(
+            Component.text("Click to open website")
+                .color(NamedTextColor.GRAY)
+        ))
+        .build()
+)
+```
+
+```java tab="Java"
+// Send a simple message
+player.sendMessage(Component.text("Hello, world!"));
+
+// Send colored message
+player.sendMessage(
+    Component.text("Welcome to the server!")
+        .color(NamedTextColor.GOLD)
+);
+
+// Send formatted message with multiple decorations
+player.sendMessage(
+    Component.text()
+        .content("Special Announcement")
+        .color(NamedTextColor.GOLD)
+        .decoration(TextDecoration.BOLD, true)
+        .append(Component.newline())
+        .append(
+            Component.text("Check out our new features!")
+                .color(NamedTextColor.YELLOW)
+        )
+        .build()
+);
+
+// Send interactive message with click and hover events
+player.sendMessage(
+    Component.text()
+        .content("Click here to visit our website!")
+        .color(NamedTextColor.AQUA)
+        .clickEvent(ClickEvent.openUrl("https://example.com"))
+        .hoverEvent(HoverEvent.showText(
+            Component.text("Click to open website")
+                .color(NamedTextColor.GRAY)
+        ))
+        .build()
+);
+```
+
+<Callout>
+  For more information about text components and formatting, see the [Adventure
+  Text documentation](https://docs.advntr.dev/text.html).
+</Callout>
+
+## Titles
+
+You can display titles and subtitles to players using [Adventure's title API](https://docs.advntr.dev/title.html):
+
+```kotlin tab="Kotlin"
+// Show title with subtitle and timing
+player.showTitle(
+    Title.title(
+        Component.text("Welcome!")
+            .color(NamedTextColor.GOLD),
+        Component.text("Enjoy your stay")
+            .color(NamedTextColor.YELLOW),
+        Title.Times.of(
+            Duration.ofSeconds(1),  // Fade in
+            Duration.ofSeconds(3),  // Stay
+            Duration.ofSeconds(1)   // Fade out
+        )
+    )
+)
+
+// Show only title
+player.showTitle(
+    Title.title(
+        Component.text("Level Up!")
+            .color(NamedTextColor.GREEN)
+            .decoration(TextDecoration.BOLD, true)
+    )
+)
+```
+
+```java tab="Java"
+// Show title with subtitle and timing
+player.showTitle(
+    Title.title(
+        Component.text("Welcome!")
+            .color(NamedTextColor.GOLD),
+        Component.text("Enjoy your stay")
+            .color(NamedTextColor.YELLOW),
+        Title.Times.of(
+            Duration.ofSeconds(1),  // Fade in
+            Duration.ofSeconds(3),  // Stay
+            Duration.ofSeconds(1)   // Fade out
+        )
+    )
+);
+
+// Show only title
+player.showTitle(
+    Title.title(
+        Component.text("Level Up!")
+            .color(NamedTextColor.GREEN)
+            .decoration(TextDecoration.BOLD, true)
+    )
+);
+```
+
+<Callout>
+  For more details about title customization, check out the [Adventure Title
+  documentation](https://docs.advntr.dev/title.html).
+</Callout>
+
+## Action Bars
+
+You can display action bar messages to players (the text above the hotbar). For more information about action bars, see the [Adventure documentation](https://docs.advntr.dev/text.html):
+
+```kotlin tab="Kotlin"
+// Show simple action bar
+player.sendActionBar(
+    Component.text("20 coins earned!")
+        .color(NamedTextColor.GREEN)
+)
+
+// Show formatted action bar
+player.sendActionBar(
+    Component.text()
+        .content("New Quest Available!")
+        .color(NamedTextColor.GOLD)
+        .decoration(TextDecoration.BOLD, true)
+        .build()
+)
+```
+
+```java tab="Java"
+// Show simple action bar
+player.sendActionBar(
+    Component.text("20 coins earned!")
+        .color(NamedTextColor.GREEN)
+);
+
+// Show formatted action bar
+player.sendActionBar(
+    Component.text()
+        .content("New Quest Available!")
+        .color(NamedTextColor.GOLD)
+        .decoration(TextDecoration.BOLD, true)
+        .build()
+);
+```
+
+<Callout>
+  For more advanced text formatting options, including gradients and advanced
+  formatting, check out [Adventure's MiniMessage
+  format](https://docs.advntr.dev/minimessage/index.html).
+</Callout>
