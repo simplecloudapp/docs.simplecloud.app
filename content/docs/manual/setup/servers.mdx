@@ -3,7 +3,7 @@ title: Servers
 description: Learn how to manage individual server instances in SimpleCloud
 ---
 
-## What are Servers?
+## Overview
 
 Servers are individual Minecraft instances that SimpleCloud creates and manages based on your group configurations. Each server:
 
@@ -38,60 +38,6 @@ Servers are gracefully stopped when:
 - They're no longer needed (player count decreases)
 - The cloud system shuts down
 
-## Managing Servers
-
-### Starting a Server
-
-```bash
-simplecloud start server <server-id>
-```
-
-Example:
-
-```bash
-simplecloud start server lobby-1
-```
-
-### Stopping a Server
-
-```bash
-simplecloud stop server <server-id>
-```
-
-Example:
-
-```bash
-simplecloud stop server survival-2
-```
-
-### Editing a Running Server
-
-Some properties can be changed while a server is running:
-
-```bash
-simplecloud edit server <server-id> [flags]
-```
-
-**Available Flags:**
-
-- `-P, --max-players uint`: Change the maximum player limit
-- `-r, --properties stringToString`: Modify custom properties (key=value pairs)
-
-Example:
-
-```bash
-# Change max players on a specific server
-simplecloud edit server lobby-1 --max-players 100
-```
-
-You can define custom properties for your servers:
-
-```bash
-simplecloud edit server lobby-1 --properties "custom-property=value"
-```
-
-These properties can be accessed by plugins through the SimpleCloud API to enable custom behaviors and configurations.
-
 ## Server States
 
 Servers transition through different states during their lifecycle:
@@ -107,9 +53,67 @@ Servers transition through different states during their lifecycle:
   servers` command.
 </Callout>
 
+## Managing Servers
+
+### Starting a Server
+
+To start a specific server instance:
+
+```bash
+simplecloud start server <group-name>
+```
+
+Example:
+
+```bash
+simplecloud start server lobby
+```
+
+### Stopping a Server
+
+To stop a running server:
+
+```bash
+simplecloud stop server <group-name> <server-numerical-id>
+```
+
+Example:
+
+```bash
+simplecloud stop server survival 1
+```
+
+### Editing Server Properties
+
+Some properties can be modified while a server is running:
+
+```bash
+simplecloud edit server <group-name> <server-numerical-id> [flags]
+```
+
+Available flags:
+
+- `-P, --max-players uint`: Change the maximum player limit
+- `-r, --properties stringToString`: Modify custom properties (key=value pairs)
+
+Examples:
+
+```bash
+# Change max players on a specific server
+simplecloud edit server lobby 1 --max-players 100
+
+# Set custom properties
+simplecloud edit server lobby 1 --properties "custom-property=value"
+```
+
+<Callout>
+  Custom properties can be accessed by plugins through the SimpleCloud API to
+  enable custom behaviors and configurations.
+</Callout>
+
 ## Server File Structure
 
-Here is an example of the file structure for a server:
+Here is the typical file structure for running servers:
 
 <Files>
   <Folder name="running" defaultOpen>
