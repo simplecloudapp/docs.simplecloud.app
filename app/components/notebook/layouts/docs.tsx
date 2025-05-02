@@ -184,7 +184,10 @@ export function DocsLayout({
                   <SidebarLayoutTab
                     key={tab.url}
                     item={tab}
-                    className={cn("lg:hidden", i === tabs.length - 1 && "mb-4")}
+                    className={cn(
+                      "px-4 lg:hidden",
+                      i === tabs.length - 1 && "mb-4"
+                    )}
                   />
                 ))}
               {links.map((item, i) => (
