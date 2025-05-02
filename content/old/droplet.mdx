@@ -16,11 +16,11 @@ import { Card, Cards } from "fumadocs-ui/components/card";
 Droplets are a powerful way to extend the functionality of your SimpleCloud setup, without having to write a full-blown application. A droplet (micro-service) is focused on doing one thing, and doing it well. This makes it easy to maintain for us, and easy to scale for you.
 
 This means the important parts of SimpleCloud v3 are now decoupled and can theoretically be replaced by a custom droplet, or even not used at all.
-For example, if you don't need the [CloudPlayer](/docs/manual/droplet/player), because you have your own player or don't need a player at all, you can simply not include our [player-droplet](/docs/manual/droplet/player) and you're ready to go.
+For example, if you don't need the [CloudPlayer](/manual/droplet/player), because you have your own player or don't need a player at all, you can simply not include our [player-droplet](/manual/droplet/player) and you're ready to go.
 
 ## Installing a Droplet
 
-If you have our [CLI](/docs/manual/cli) installed, you can install a droplet with the following command:
+If you have our [CLI](/manual/cli) installed, you can install a droplet with the following command:
 
 ```bash
 # Install a droplet
@@ -37,7 +37,7 @@ simplecloud info droplets
 ## Droplets vs v2 Modules
 
 Droplets are not intended to replace v2 modules. While some droplets may share similarities with existing v2 modules, our goal is not to replicate them.
-Instead, considering that most of the old modules can function as plugins for Velocity, BungeeCord, Spigot, etc., we have decided to periodically convert all old modules into new and simplified [plugins](/docs/manual/plugin).
+Instead, considering that most of the old modules can function as plugins for Velocity, BungeeCord, Spigot, etc., we have decided to periodically convert all old modules into new and simplified [plugins](/manual/plugin).
 
 <Callout>
   If you have any ideas for new droplets, or plugins, feel free to join our
@@ -71,19 +71,16 @@ We don't use all of these technologies in every droplet, but we use them in most
 We have created several official droplets that can be used to extend the functionality of your SimpleCloud setup:
 
 <Cards>
-  <Card title="Server Host" href="/docs/manual/droplet/serverhost">
+  <Card title="Server Host" href="/manual/droplet/serverhost">
     Manage server startup and shutdown
   </Card>
-  <Card
-    title="Server Host Docker"
-    href="/docs/manual/droplet/serverhost-docker"
-  >
+  <Card title="Server Host Docker" href="/manual/droplet/serverhost-docker">
     Run servers in Docker containers
   </Card>
-  <Card title="Player" href="/docs/manual/droplet/player">
+  <Card title="Player" href="/manual/droplet/player">
     Handle player data and management
   </Card>
-  <Card title="Resource Pack" href="/docs/manual/droplet/resourcepack">
+  <Card title="Resource Pack" href="/manual/droplet/resourcepack">
     Manage resource packs for your servers
   </Card>
 </Cards>

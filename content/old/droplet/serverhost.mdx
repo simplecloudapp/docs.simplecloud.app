@@ -18,9 +18,9 @@ This droplet is an implementation of our server host api. You don't have to use 
 ## Multi-Root Installation
 
 The server host droplet is designed to be installed on multiple machines. This is called a multi-root installation.
-This means that you can have multiple server host droplets running on different machines, all connected to our [controller](/docs/manual/controller).
+This means that you can have multiple server host droplets running on different machines, all connected to our [controller](/manual/controller).
 
-To set up a multi-root installation you need to install our [CLI](/docs/manual/cli#installation) on the machine you want to install the server host droplet on.
+To set up a multi-root installation you need to install our [CLI](/manual/cli#installation) on the machine you want to install the server host droplet on.
 
 After you have installed the cli, you can run the following command to install the server host droplet:
 
@@ -33,12 +33,12 @@ simplecloud install serverhost
   Make sure to set content of the `secrets/auth.secret` file to the same value
   as the `auth.secret` in the controller, otherwise the server host droplet
   won't be able to connect to the
-  [controller](/docs/manual/controller#authentication).
+  [controller](/manual/controller#authentication).
 </Callout>
 
 ## Docker Support
 
-We are currently working on dockerizing Minecraft servers with the server host droplet. This will be possible through [actions](/docs/manual/template#actions).
+We are currently working on dockerizing Minecraft servers with the server host droplet. This will be possible through [actions](/manual/template#actions).
 
 ## Online Server Check
 
@@ -49,44 +49,44 @@ Additionally, the online server checker ensures that we don't need a plugin runn
 
 <Callout>
   You have to make sure that the proxies send the correct player count, if
-  you're not using our [Proxy Essentials plugin](/docs/manual/plugin/proxy),
+  you're not using our [Proxy Essentials plugin](/manual/plugin/proxy),
   otherwise the player count will be wrong.
 </Callout>
 
 ## Needed Group Properties
 
-The server host droplet needs some [dynamic properties](/docs/manual/resources/server-group#dynamic-properties) to work. For a group to start,
+The server host droplet needs some [dynamic properties](/manual/resources/server-group#dynamic-properties) to work. For a group to start,
 the user has to provide every property that do not have a default value.
 
-| ID                    | Description                                           | User provided | Default value                                                  |
-| --------------------- | ----------------------------------------------------- | ------------- | -------------------------------------------------------------- |
-| `server-url`          | sets the [server URL](#server-versions)               | Yes           | `N/A`                                                          |
-| `configurator`        | sets the [configurator](#server-versions)             | Yes           | `N/A`                                                          |
-| `forwarding-secret`   | used in the velocity [configurator](#server-versions) | No            | secure secret set by the [controller](/docs/manual/controller) |
-| `max-startup-seconds` | sets the maximum time a server can take to start up   | Yes           | `120`                                                          |
-| `template-id`         | the template used by the server                       | Yes           | the groups name (generated if not present)                     |
+| ID                    | Description                                           | User provided | Default value                                             |
+| --------------------- | ----------------------------------------------------- | ------------- | --------------------------------------------------------- |
+| `server-url`          | sets the [server URL](#server-versions)               | Yes           | `N/A`                                                     |
+| `configurator`        | sets the [configurator](#server-versions)             | Yes           | `N/A`                                                     |
+| `forwarding-secret`   | used in the velocity [configurator](#server-versions) | No            | secure secret set by the [controller](/manual/controller) |
+| `max-startup-seconds` | sets the maximum time a server can take to start up   | Yes           | `120`                                                     |
+| `template-id`         | the template used by the server                       | Yes           | the groups name (generated if not present)                |
 
 ## Server Versions
 
 Server versions in the classic v2 sense don't exist anymore.
 Servers are now just started using the server URL and a server configurator. Both server URL and server configurator are required,
-if the needed [dynamic group properties](/docs/manual/resources/server-group#dynamic-properties) are not set in the group configuration, a server of this
+if the needed [dynamic group properties](/manual/resources/server-group#dynamic-properties) are not set in the group configuration, a server of this
 group will not start.
 
 ### Server URL
 
 The server URL is nothing more than a simple download link to the wanted minecraft server jar.
 In fact, it can be any link you want. The server host droplet will try to download and execute it using
-user specified [options](#server-options). You can set the server URL through the `server-url` [dynamic group property](/docs/manual/resources/server-group#dynamic-properties).
+user specified [options](#server-options). You can set the server URL through the `server-url` [dynamic group property](/manual/resources/server-group#dynamic-properties).
 
 ### Configurator
 
 A server Configurator is a YML-file that provides information needed for a minecraft server to work with the cloud.
 In most cases, it is responsible for setting the maximum players, port, online and forwarding mode of the server.
 It is executed after the server template was copied to a new server. After it finishes executing, the server is started.
-When defining a Configurator, you can use placeholders for any [controller](/docs/manual/resources/server-group#controller-properties) or [dynamic](/docs/manual/resources/server-group#dynamic-properties) property using this syntax: `%property-name%`.
+When defining a Configurator, you can use placeholders for any [controller](/manual/resources/server-group#controller-properties) or [dynamic](/manual/resources/server-group#dynamic-properties) property using this syntax: `%property-name%`.
 Configurators are located in the `options/configurators` directory. If you want, you can create your own or modify existing ones.
-To assign a configurator to a server, you need to set the [dynamic group property](/docs/manual/resources/server-group#dynamic-properties) `configurator` to the configurator id.
+To assign a configurator to a server, you need to set the [dynamic group property](/manual/resources/server-group#dynamic-properties) `configurator` to the configurator id.
 The configurator id is equivalent to the configurator file name without the file extension (e.g. `velocity.yml` -> `velocity`)
 
 ### Configurator Examples
@@ -204,7 +204,7 @@ C:\Program Files\Java\jdk-17.0.5\bin\java -Xms1024M -Xmx1024M -Dcom.mojang.eula.
 </Tabs>
 
 This also means that you can change the executable, arguments and options freely for each server group.
-You can also use any [group property](/docs/manual/resources/server-group#controller-properties). Property placeholders follow this syntax:
+You can also use any [group property](/manual/resources/server-group#controller-properties). Property placeholders follow this syntax:
 `%PROPERTY_NAME%`
 
 ## Crash Handling

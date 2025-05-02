@@ -6,7 +6,7 @@ description: |
 
 # Structure
 
-SimpleCloud v3 has a new and more customizable structure. We have encapsulated all the core components to make it easier to extend your setup. This means you can easily replace all our [droplets](/docs/manual/droplet) and [plugins](/docs/manual/plugin) with your own implementations.
+SimpleCloud v3 has a new and more customizable structure. We have encapsulated all the core components to make it easier to extend your setup. This means you can easily replace all our [droplets](/manual/droplet) and [plugins](/manual/plugin) with your own implementations.
 
 <img
   src="https://github.com/simplecloudapp/branding/blob/main/images/structure.png?raw=true"
@@ -17,7 +17,7 @@ SimpleCloud v3 has a new and more customizable structure. We have encapsulated a
 ## Key Components
 
 - **Controller**: The heart of v3, managing server groups, online servers, and communicating with Server Hosts.
-- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the [CLI](/docs/manual/cli), you can send commands to the controller or install and manage droplets.
+- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the [CLI](/manual/cli), you can send commands to the controller or install and manage droplets.
 - **Server Host Droplet**: Handles server startup/shutdown with templates, running on Screens or Docker containers.
 - **Droplets & Plugins**:
   - **Droplets**: Microservices for non-Minecraft tasks like player data (Player Droplet) or stats (Metrics Droplet).
@@ -28,8 +28,9 @@ SimpleCloud v3 has a new and more customizable structure. We have encapsulated a
 SimpleCloud has its core components that are needed, but they can be installed and used however you want. This means theoretically you can use any file structure you want.
 
 <Callout type="warning">
-  We **don't recommend** using a custom file structure. Use the structure below as it works best in
-  our experience and makes it easier to extend your setup with our [CLI](/docs/manual/cli).
+  We **don't recommend** using a custom file structure. Use the structure below
+  as it works best in our experience and makes it easier to extend your setup
+  with our [CLI](/manual/cli).
 </Callout>
 
 <Files>
@@ -88,15 +89,15 @@ SimpleCloud has its core components that are needed, but they can be installed a
 </Files>
 
 <Callout>
-  Keep in mind that if you change your file structure, there might be some things that will not work
-  with our [CLI](/docs/manual/cli).
+  Keep in mind that if you change your file structure, there might be some
+  things that will not work with our [CLI](/manual/cli).
 </Callout>
 
 ## Understanding Components
 
-SimpleCloud v3 is structured into components - a broad category that includes both core system elements and [droplets](/docs/manual/droplet). These components serve as the building blocks of the system, encompassing essential elements like the [Controller](/docs/manual/controller), [Envoy](https://www.envoyproxy.io/) (necessary for the Dashboard), the Auto-updater, and the [CLI](/docs/manual/cli), alongside [droplets](/docs/manual/droplet).
+SimpleCloud v3 is structured into components - a broad category that includes both core system elements and [droplets](/manual/droplet). These components serve as the building blocks of the system, encompassing essential elements like the [Controller](/manual/controller), [Envoy](https://www.envoyproxy.io/) (necessary for the Dashboard), the Auto-updater, and the [CLI](/manual/cli), alongside [droplets](/manual/droplet).
 
-We chose to use the term "components" to reflect this inclusive scope. This generic terminology allows us to consistently refer to all parts of the system, whether they are core elements or [droplets](/docs/manual/droplet).
+We chose to use the term "components" to reflect this inclusive scope. This generic terminology allows us to consistently refer to all parts of the system, whether they are core elements or [droplets](/manual/droplet).
 
 ## Auto-Updater
 
@@ -104,17 +105,17 @@ The auto-updater is a crucial part of SimpleCloud, ensuring that all components 
 
 ## Scripts
 
-SimpleCloud uses Lua scripts as a dynamic component management system that enables seamless integration between the [CLI](/docs/manual/cli) and various components. When you execute a [CLI](/docs/manual/cli) command, these scripts act as bridges between the components and the [CLI](/docs/manual/cli), providing standardized methods for component control.
+SimpleCloud uses Lua scripts as a dynamic component management system that enables seamless integration between the [CLI](/manual/cli) and various components. When you execute a [CLI](/manual/cli) command, these scripts act as bridges between the components and the [CLI](/manual/cli), providing standardized methods for component control.
 
 ### How Scripts Work
 
-When a [CLI](/docs/manual/cli) command is executed, it runs all scripts in the `components/scripts` directory. Each script must return three essential methods that the [CLI](/docs/manual/cli) can call:
+When a [CLI](/manual/cli) command is executed, it runs all scripts in the `components/scripts` directory. Each script must return three essential methods that the [CLI](/manual/cli) can call:
 
 - **start**: Launches the component
 - **stop**: Terminates the component
 - **status**: Checks the component's current state
 
-This design makes the [CLI](/docs/manual/cli) dynamically extendable - you can integrate any standalone program (component or [droplet](/docs/manual/droplet)) into SimpleCloud by creating a corresponding Lua script that implements these methods.
+This design makes the [CLI](/manual/cli) dynamically extendable - you can integrate any standalone program (component or [droplet](/manual/droplet)) into SimpleCloud by creating a corresponding Lua script that implements these methods.
 
 ### Script Structure
 
@@ -137,7 +138,7 @@ return component.create({
 })
 ```
 
-`component.create` returns the `start`, `stop`, and `status` methods that the [CLI](/docs/manual/cli) can call to manage the component.
+`component.create` returns the `start`, `stop`, and `status` methods that the [CLI](/manual/cli) can call to manage the component.
 
 ### Creating Custom Components
 

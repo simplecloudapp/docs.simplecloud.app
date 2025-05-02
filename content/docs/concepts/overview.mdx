@@ -7,7 +7,7 @@ description: |
 ## Key Components
 
 - **Controller**: The heart of v3, managing server groups, online servers, and communicating with Server Hosts.
-- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the [CLI](/docs/concepts/cli), you can send commands to the controller or install and manage droplets.
+- **CLI** (Command Line Interface): A lightweight interface to connect to the Controller and manage your Cloud components. With the [CLI](/concepts/cli), you can send commands to the controller or install and manage droplets.
 - **Server Host**: Handles server startup/shutdown with templates, running on Screens or Docker containers.
 - **Droplets & Plugins**:
   - **Droplets**: Microservices for non-Minecraft tasks, but still with Minecraft related features like player data (Player Droplet) or Resourcepacks (Resourcepack Droplet).
@@ -15,7 +15,7 @@ description: |
 
 ## Structure
 
-SimpleCloud v3 has a new and more customizable structure. We have encapsulated all the core components to make it easier to extend your setup. This means you can easily replace all our [droplets](/docs/manual/droplets) and [plugins](/docs/manual/plugin) with your own implementations.
+SimpleCloud v3 has a new and more customizable structure. We have encapsulated all the core components to make it easier to extend your setup. This means you can easily replace all our [droplets](/manual/droplets) and [plugins](/manual/plugin) with your own implementations.
 
 <Image
   src="https://github.com/simplecloudapp/branding/blob/main/images/structure.png?raw=true"
@@ -29,7 +29,7 @@ SimpleCloud has its core components that are needed, but they can be installed a
 <Callout type="warn">
   We **don't recommend** using a custom file structure. Use the structure below
   as it works best in our experience and makes it easier to extend your setup
-  with our [CLI](/docs/concepts/cli).
+  with our [CLI](/concepts/cli).
 </Callout>
 
 <Files>
@@ -78,14 +78,14 @@ SimpleCloud has its core components that are needed, but they can be installed a
 
 <Callout>
   Keep in mind that if you change your file structure, there might be some
-  things that will not work with our [CLI](/docs/concepts/cli).
+  things that will not work with our [CLI](/concepts/cli).
 </Callout>
 
 ## Understanding Components
 
-SimpleCloud v3 is structured into components - a broad category that includes both core system elements and [droplets](/docs/manual/droplets). These components serve as the building blocks of the system, encompassing essential elements like the [Controller](/docs/concepts/controller), [Envoy](https://www.envoyproxy.io/) (necessary for the Dashboard), the Auto-updater, and the [CLI](/docs/concepts/cli), alongside [droplets](/docs/manual/droplets).
+SimpleCloud v3 is structured into components - a broad category that includes both core system elements and [droplets](/manual/droplets). These components serve as the building blocks of the system, encompassing essential elements like the [Controller](/concepts/controller), [Envoy](https://www.envoyproxy.io/) (necessary for the Dashboard), the Auto-updater, and the [CLI](/concepts/cli), alongside [droplets](/manual/droplets).
 
-We chose to use the term "components" to reflect this inclusive scope. This generic terminology allows us to consistently refer to all parts of the system, whether they are core elements or [droplets](/docs/manual/droplets).
+We chose to use the term "components" to reflect this inclusive scope. This generic terminology allows us to consistently refer to all parts of the system, whether they are core elements or [droplets](/manual/droplets).
 
 ## Auto-Updater
 

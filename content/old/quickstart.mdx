@@ -16,7 +16,7 @@ Before installing SimpleCloud, ensure that the following programs are installed 
 
 ### Install the CLI
 
-SimpleCloud now offers an extensive [CLI](/docs/manual/cli) that covers everything you need to manage SimpleCloud. It's a small application that serves as an interface for sending commands to your SimpleCloud instance and is the easiest way to get started with SimpleCloud.
+SimpleCloud now offers an extensive [CLI](/manual/cli) that covers everything you need to manage SimpleCloud. It's a small application that serves as an interface for sending commands to your SimpleCloud instance and is the easiest way to get started with SimpleCloud.
 
 <Tabs items={['Unix', 'Windows']}>
   <Tab>
@@ -52,8 +52,9 @@ simplecloud install
 ```
 
 <Callout>
-  If you already have a running SimpleCloud instance and want to add another Root Server, consider
-  using the [Server Host Droplet](/docs/manual/droplet/serverhost).
+  If you already have a running SimpleCloud instance and want to add another
+  Root Server, consider using the [Server Host
+  Droplet](/manual/droplet/serverhost).
 </Callout>
 
 ### Start the Controller
@@ -65,8 +66,8 @@ simplecloud start
 ```
 
 <Callout>
-  You can only start the controller locally. Remote access via the CLI is only possible once the
-  controller is running.
+  You can only start the controller locally. Remote access via the CLI is only
+  possible once the controller is running.
 </Callout>
 
 ### Create a Proxy Group
@@ -91,11 +92,11 @@ Configure the server connection by creating a file called `config.yml` in the `p
 
 ```yaml
 connections:
-  - name: 'lobby' # Name of this connection target
-    permission: '' # No permission required
+  - name: "lobby" # Name of this connection target
+    permission: "" # No permission required
     server-name-matcher:
-      operation: 'STARTS_WITH'
-      value: 'lobby' # The name of your server group
+      operation: "STARTS_WITH"
+      value: "lobby" # The name of your server group
 ```
 
 ### Configure Join Connections
@@ -107,7 +108,7 @@ join-connections:
   enabled: true
   no-target-connections-found-message: "Couldn't connect you to the network because no target servers are available."
   target-connections:
-    - name: 'lobby' # The name of the connection target you configured above
+    - name: "lobby" # The name of the connection target you configured above
       priority: 0
 ```
 
@@ -118,9 +119,9 @@ Configure the fallback connections by adding the following to your `config.yml`:
 ```yaml
 fallback-connections:
   enabled: true
-  no-target-connections-found-message: 'You have been disconnected from the network since you have been kicked and no fallback server are available.'
+  no-target-connections-found-message: "You have been disconnected from the network since you have been kicked and no fallback server are available."
   target-connections:
-    - name: 'lobby' # The name of the connection target you configured above
+    - name: "lobby" # The name of the connection target you configured above
       priority: 0
 ```
 
@@ -130,25 +131,25 @@ Configure the commands by adding the following to your `config.yml`:
 
 ```yaml
 commands:
-  - name: 'lobby' # The name of the command
+  - name: "lobby" # The name of the command
     aliases:
-      - 'l'
-      - 'hub'
-      - 'quit'
-      - 'leave'
+      - "l"
+      - "hub"
+      - "quit"
+      - "leave"
     target-connections:
-      - name: 'lobby' # The name of the above configured connection target
+      - name: "lobby" # The name of the above configured connection target
         priority: 0
-    already-connected-message: '§cYou are already connected to the lobby!'
-    no-target-connections-found-message: 'There are no lobby servers available at the moment.'
-    permission: '' # No permission required
+    already-connected-message: "§cYou are already connected to the lobby!"
+    no-target-connections-found-message: "There are no lobby servers available at the moment."
+    permission: "" # No permission required
 ```
 
 ## Next Steps
 
 Now that you have a basic SimpleCloud installation up and running, you can:
 
-- Learn more about [Server Groups](/docs/manual/resources/groups)
-- Configure [Templates](/docs/manual/resources/templates)
-- Add [Droplets](/docs/manual/droplet/overview) to extend functionality
-- Install [Plugins](/docs/manual/plugin/overview) for additional features
+- Learn more about [Server Groups](/manual/resources/groups)
+- Configure [Templates](/manual/resources/templates)
+- Add [Droplets](/manual/droplet/overview) to extend functionality
+- Install [Plugins](/manual/plugin/overview) for additional features

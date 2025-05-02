@@ -6,9 +6,9 @@ description: |
 
 ## Understanding the Controller
 
-The structure of the controller is very simple. It checks every few seconds if there are any updates on servers or server groups. If so, it will try to talk to a [serverhost](/docs/manual/concepts/serverhost) and apply those changes. For example, if additional servers are needed or group configurations change, this is forwarded to the right server host. The contacted [serverhost](/docs/manual/concepts/serverhost) will do the rest of the work, like starting, stopping, or updating a server.
+The structure of the controller is very simple. It checks every few seconds if there are any updates on servers or server groups. If so, it will try to talk to a [serverhost](/manual/concepts/serverhost) and apply those changes. For example, if additional servers are needed or group configurations change, this is forwarded to the right server host. The contacted [serverhost](/manual/concepts/serverhost) will do the rest of the work, like starting, stopping, or updating a server.
 
-For example, if you want to start a server, the controller will send a message to a [serverhost](/docs/manual/concepts/serverhost) and tell it to start a server. The [serverhost](/docs/manual/concepts/serverhost) will then start the server and tell the controller that the server is now running. At last, the controller updates the status of the server in the database.
+For example, if you want to start a server, the controller will send a message to a [serverhost](/manual/concepts/serverhost) and tell it to start a server. The [serverhost](/manual/concepts/serverhost) will then start the server and tell the controller that the server is now running. At last, the controller updates the status of the server in the database.
 
 <Callout>
   The controller is a very important part of SimpleCloud, but there can be only
@@ -19,7 +19,7 @@ For example, if you want to start a server, the controller will send a message t
 
 ## Installation
 
-When you install SimpleCloud, the controller is automatically installed. If you want, you can install the controller manually by running the [CLI](/docs/concepts/cli) command below, but it's not recommended. Let SimpleCloud handle the installation of the controller.
+When you install SimpleCloud, the controller is automatically installed. If you want, you can install the controller manually by running the [CLI](/concepts/cli) command below, but it's not recommended. Let SimpleCloud handle the installation of the controller.
 
 ```bash
 # Install the controller
@@ -55,5 +55,5 @@ But like the old v2 Manager, the controller is the heart of SimpleCloud. Without
 
 <Callout type="error">
   The controller does not start droplets. This is the job of the
-  [CLI](/docs/concepts/cli)
+  [CLI](/concepts/cli)
 </Callout>

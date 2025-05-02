@@ -86,7 +86,7 @@ export const source = loader({
     };
     metaData: MetaData;
   }>,
-  baseUrl: "/docs",
+  baseUrl: "/",
   pageTree: {
     attachFile,
   },

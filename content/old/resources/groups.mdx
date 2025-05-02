@@ -56,7 +56,7 @@ sc create group --name survival --type SERVER --min-memory 2048 --max-memory 409
 <Callout>
   To skip the entire interactive group setup, you have to use all existing flags
   (except `--server-url`)! You can find a more detailed explanation
-  [here](/docs/manual/cli#create-group)
+  [here](/manual/cli#create-group)
 </Callout>
 
 ## Configuration Structure
@@ -86,10 +86,10 @@ There are two types of groups in SimpleCloud, PROXY and SERVER. PROXY groups are
 servers like Velocity or BungeeCord that handle player connections and server networking. SERVER
 groups are used for Minecraft game servers running software like Paper, Spigot, or Minestom.
 
-In general it's not important to the [Controller](/docs/manual/controller) to know which group type
+In general it's not important to the [Controller](/manual/controller) to know which group type
 you're using. Basically, both types are the same, the main difference is that PROXY groups and
 SERVER groups are configured differently, so that a
-[Server Host Droplet](/docs/manual/droplet/serverhost) knows how to handle them.
+[Server Host Droplet](/manual/droplet/serverhost) knows how to handle them.
 
 ## Editing a Group
 
@@ -116,10 +116,10 @@ Groups can be edited by modifying their YAML files directly. When editing group 
   cloud-properties
 - **Memory/Player Limits**: Can be changed freely, but minimum should always be lower than maximum
 - **Port Configuration**: Can be modified, if ports are already in use, the
-  [Server Host Droplet](/docs/manual/droplet/serverhost) will pick up the next available port
+  [Server Host Droplet](/manual/droplet/serverhost) will pick up the next available port
 - **Cloud Properties**: Can be customized based on your needs (see
   [Cloud Properties](#cloud-properties)), but we have some required ones, if you use our
-  [Server Host Droplet](/docs/manual/droplet/serverhost)
+  [Server Host Droplet](/manual/droplet/serverhost)
 
 <Callout>
   All changes are applied automatically without requiring restarts. Running
@@ -171,7 +171,7 @@ Every group requires these essential configuration properties:
 ## Cloud Properties
 
 The `cloud-properties` section is primarily used by the
-[Server Host Droplet](/docs/manual/droplet/serverhost) to configure and manage servers. While you
+[Server Host Droplet](/manual/droplet/serverhost) to configure and manage servers. While you
 can add any custom properties here, certain properties are required when using our Server Host
 Droplet:
 
@@ -188,8 +188,8 @@ cloud-properties:
 ```
 
 <Callout>
-  See the [Server Host Droplet documentation](/docs/manual/droplet/serverhost)
-  for a complete list of required properties and their configurations.
+  See the [Server Host Droplet documentation](/manual/droplet/serverhost) for a
+  complete list of required properties and their configurations.
 </Callout>
 
 ## Best Practices
@@ -205,17 +205,17 @@ cloud-properties:
 - Set realistic memory limits
 - Consider overhead when setting max-players
 - Configure appropriate port ranges (We do this automatically in our
-  [Server Host Droplet](/docs/manual/droplet/serverhost))
+  [Server Host Droplet](/manual/droplet/serverhost))
 
 ## API reference
 
 We have a detailed guide on how to use the API to manage groups. You can find it in the
-[API documentation](/docs/manual/api#server-group).
+[API documentation](/manual/api#server-group).
 
 ## What's Next?
 
 Here are a few links that might be helpful as you continue to explore SimpleCloud:
 
-- [Configure Templates](/docs/manual/resources/templates)
-- [Learn about Servers](/docs/manual/resources/servers)
-- [Learn about the Server Host droplet](/docs/manual/droplet/serverhost)
+- [Configure Templates](/manual/resources/templates)
+- [Learn about Servers](/manual/resources/servers)
+- [Learn about the Server Host droplet](/manual/droplet/serverhost)
