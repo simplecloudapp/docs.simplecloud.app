@@ -1,0 +1,79 @@
+---
+title: Dashboard
+description: |
+  Login to the SimpleCloud dashboard, and start managing your Minecraft network.
+---
+
+## Understanding the Dashboard
+
+The dashboard provides a powerful web-based interface for managing your Minecraft network. Like the [CLI](/concepts/cli), it allows you to manage your cloud instance, serving as an interface that sends commands to the controller or droplets and retrieves information.
+
+<Image
+  src={
+    "https://github.com/simplecloudapp/branding/blob/main/media/dashboard/overview.png?raw=true"
+  }
+  alt="SimpleCloud Dashboard Overview"
+/>
+
+## Key Features
+
+The dashboard offers several powerful features to help you manage your cloud:
+
+- **Server Insights**: Start, stop, and monitor individual sub-servers on their dedicated pages with integrated console and file browser
+- **Group Management**: Create and edit server groups with all essential information available on the group overview page
+- **File Browser**: Edit templates through our integrated file browser - upload new worlds, modify configurations, or edit files directly
+- **Custom Branding**: Customize the dashboard with your logo, project name, and custom banners for server groups
+
+Coming soon:
+
+- **Users and Permissions**: Create roles for your developers
+- **Monitoring**: View extensive statistics about your cloud instance with clear graphs (requires Metrics Droplet)
+
+## Accessing the Dashboard
+
+You can access the dashboard in two ways:
+
+### Using the CLI (Recommended)
+
+The simplest way to access the dashboard is through the CLI:
+
+```bash
+simplecloud login dashboard
+```
+
+This command will display a secure login link.
+
+<Callout type="warn">
+  The login link contains authentication credentials and should NOT be shared
+  with others. Each user should generate their own login link.
+</Callout>
+
+### Using the Hosted Dashboard
+
+For those who prefer not to use the CLI, you can access our hosted dashboard directly:
+
+<Image
+  src={
+    "https://github.com/simplecloudapp/branding/blob/main/media/dashboard/login.png?raw=true"
+  }
+  alt="SimpleCloud Dashboard Login"
+/>
+
+1. Visit [dashboard.simplecloud.app](http://dashboard.simplecloud.app)
+2. Enter your controller endpoint (Example: `187.420.69.31:1337`)
+3. Enter your controller secret (found in `/components/.secrets/auth.secret`)
+
+<Callout>
+  Note that the dashboard is just an interface - you cannot start the controller
+  directly from it. The controller must be running locally before you can
+  connect to it through the dashboard.
+</Callout>
+
+## Self-Hosting the Dashboard
+
+<Callout type="warn">
+  Self-hosting is not available during the Public Beta while we focus on
+  squashing major bugs. This ensures you won't need to deal with frequent
+  updates after launch. Stay updated through our [Community
+  Discord](https://discord.simplecloud.com).
+</Callout>

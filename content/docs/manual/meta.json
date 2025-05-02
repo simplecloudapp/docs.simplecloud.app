@@ -10,6 +10,7 @@
     "faq",
     "---Setup---",
     "setup/index",
+    "setup/dashboard",
     "setup/groups",
     "setup/servers",
     "setup/templates",
