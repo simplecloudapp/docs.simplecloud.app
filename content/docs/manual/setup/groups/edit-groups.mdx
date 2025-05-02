@@ -1,119 +1,123 @@
 ---
-title: Edit a Group
+title: Edit Groups
 description: |
-  Modify the settings of existing server groups in SimpleCloud.
+  Learn how to modify existing server groups in SimpleCloud to adjust settings like memory, player limits, and server software.
 ---
 
-## Why Edit a Group?
+## Overview
 
-Adjust group settings to:
+Server groups in SimpleCloud can be modified to adapt to changing needs. Common reasons to edit groups include:
 
-- Update server software (e.g., new Paper version)
-- Scale resources (memory, server counts) for player load
-- Change player limits
-- Modify behavior (e.g., change min/max online count)
+- Updating server software versions
+- Adjusting resource allocation
+- Modifying player limits
+- Changing server scaling behavior
 
-## How to Edit Groups
+## Using the CLI Command
 
-### Using the CLI Command (Recommended)
-
-The easiest and safest way to modify a group is using the `edit group` command:
+The primary way to edit groups is through the `edit group` command:
 
 ```bash
 simplecloud edit group [name] [flags]
 ```
 
-### Command Options
+### Available Flags
 
-```bash
-simplecloud edit group [name] [flags]
-```
+| Flag                         | Description                      | Example                      |
+| ---------------------------- | -------------------------------- | ---------------------------- |
+| `-P, --max-players`          | Maximum players per server       | `--max-players 50`           |
+| `-M, --maximum-memory`       | Maximum memory in MB             | `--maximum-memory 4096`      |
+| `-N, --maximum-online-count` | Maximum number of online servers | `--maximum-online-count 5`   |
+| `-m, --minimum-memory`       | Minimum memory in MB             | `--minimum-memory 2048`      |
+| `-n, --minimum-online-count` | Minimum number of online servers | `--minimum-online-count 2`   |
+| `-r, --properties`           | Server properties (key=value)    | `--properties mode=survival` |
+| `-p, --start-port`           | Starting port number             | `--start-port 25565`         |
+| `-s, --server-url`           | Server software download URL     | `--server-url https://...`   |
 
-**Flags**
-
-- `-P, --max-players uint`: Maximum players per server
-- `-M, --maximum-memory uint`: Maximum memory allocation (in MB)
-- `-N, --maximum-online-count uint`: Maximum number of servers that can be online
-- `-m, --minimum-memory uint`: Minimum memory allocation (in MB)
-- `-n, --minimum-online-count uint`: Minimum number of servers that must be online
-- `-r, --properties stringToString`: Properties of the server (key=value pairs)
-- `-p, --start-port uint`: Starting port number for servers
-- `-s, --server-url string`: Server software download URL
-  - A direct URL to the server software
-  - `change`: Change to a different version entirely (e.g., from 1.21.1 to 1.21.5)
-  - `update`: Update to the latest URL for the current version from our [manifest](https://github.com/theSimpleCloud/simplecloud-manifest)
+<Callout>
+  For the `--server-url` flag, you can use special values: - `update`: Get
+  latest URL for current version from our manifest - `change`: Switch to a
+  different version entirely
+</Callout>
 
 ## Common Examples
 
-### Change Memory Allocation
+### Memory Allocation
 
 ```bash
 # Set survival: 2GB min, 4GB max RAM
 simplecloud edit group survival --minimum-memory 2048 --maximum-memory 4096
 ```
 
-### Adjust Server Scaling
+### Server Scaling
 
 ```bash
 # Make bedwars scale between 2 and 10 servers
 simplecloud edit group bedwars --minimum-online-count 2 --maximum-online-count 10
-```
 
-```bash
-# Make lobby always have exactly 3 servers (fixed scale)
+# Make lobby always have exactly 3 servers
 simplecloud edit group lobby --minimum-online-count 3 --maximum-online-count 3
 ```
 
-### Update Max Players
+### Player Limits
 
 ```bash
 # Allow 75 players per lobby server
 simplecloud edit group lobby --max-players 75
 ```
 
-### Update Server Software
+### Server Software
 
 ```bash
-# Point a group to a new JAR URL
+# Update to new server JAR
 simplecloud edit group lobby --server-url "https://api.papermc.io/v2/.../paper-1.20.4-XYZ.jar"
+
+# Update to latest version from manifest
+simplecloud edit group lobby --server-url update
 ```
 
-<Callout>
-  You can use the special value `--server-url update` to get the latest URL for
-  the current version from our manifest.
-</Callout>
-
-### Combine Multiple Changes
+### Multiple Changes
 
 ```bash
-simplecloud edit group survival --max-players 40 --maximum-memory 3072 --minimum-online-count 2
+# Combine multiple settings in one command
+simplecloud edit group survival \
+  --max-players 40 \
+  --maximum-memory 3072 \
+  --minimum-online-count 2
 ```
 
-## Advanced: Manual File Editing
+## Advanced: Manual Configuration
 
-For advanced users, you can directly edit the group's `.yml` file in the `groups/` folder:
+For advanced users, groups can be edited directly in their YAML files:
 
 ```yaml
 # groups/lobby.yml
 name: lobby
 type: SERVER
 min-memory: 1024
-max-memory: 2048 # Changed
-min-online-count: 2 # Changed
-max-online-count: 2 # Changed
+max-memory: 2048
+min-online-count: 2
+max-online-count: 2
 # ... other settings ...
 ```
 
 <Callout type="warn">
-  Manual editing carries risks: - Typos in YAML can break the group - No input
-  validation (unlike the CLI) - Generally safer to use the CLI command
+  Manual editing carries risks: - YAML syntax errors can break the group - No
+  input validation (unlike the CLI) - Changes may not take effect immediately
 </Callout>
 
 ## When Changes Apply
 
-- **Immediately**: `min-online-count`, `max-online-count` (can trigger server starts/stops)
-- **On Next Server Restart**: `max-players`, `min-memory`, `max-memory`, `start-port`, `server-url`, template changes
+Changes to group settings take effect at different times:
+
+| Setting                                   | When Applied      |
+| ----------------------------------------- | ----------------- |
+| `min-online-count`, `max-online-count`    | Immediately       |
+| `max-players`, `min-memory`, `max-memory` | On server restart |
+| `start-port`, `server-url`                | On server restart |
+| Template changes                          | On server restart |
 
 <Callout>
-  To force all changes on running servers, you should restart the servers.
+  To apply all changes immediately to running servers, restart the affected
+  servers.
 </Callout>
