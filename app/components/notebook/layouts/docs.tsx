@@ -43,7 +43,7 @@ import {
 import { type Option, RootToggle } from "../layout/root-toggle";
 import Link from "fumadocs-core/link";
 import { LargeSearchToggle, SearchToggle } from "../layout/search-toggle";
-import { GithubInfo } from "fumadocs-ui/components/github-info";
+import { GithubInfo } from "@/components/github-info";
 import { ClientOnly } from "remix-utils/client-only";
 
 export interface DocsLayoutProps extends BaseLayoutProps {
@@ -309,6 +309,7 @@ function DocsNavbar({
             searchToggle,
             <SearchToggle hideIfDisabled className="md:hidden" />
           )}
+          <GithubInfo owner="simplecloudapp" repo="v3-releases" />
           <NavbarSidebarTrigger className="-me-1.5 md:hidden" />
           {links
             .filter((item) => item.type === "icon")
