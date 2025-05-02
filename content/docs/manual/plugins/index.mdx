@@ -25,6 +25,71 @@ Installing plugins is straightforward:
   documentation](/manual/structure).
 </Callout>
 
+## Managing Plugins via CLI
+
+SimpleCloud provides CLI commands to manage plugins in your local installation:
+
+```bash
+sc local plugins [command]
+```
+
+Available commands:
+
+- `list` - Shows all installed plugins and their locations
+- `add <plugin-name>` - Adds a specific plugin to your installation
+- `add --all` - Adds all available plugins
+- `remove <plugin-name>` - Removes a plugin from your installation
+- `remove --all` - Removes all installed plugins
+
+Example usage:
+
+```bash
+# List all installed plugins
+sc local plugins list
+
+# Add a specific plugin
+sc local plugins add proxy-essentials
+
+# Add all available plugins
+sc local plugins add --all
+
+# Remove a specific plugin
+sc local plugins remove proxy-essentials
+```
+
+<Callout>
+  The CLI plugin management is only available for local installations and
+  supports official SimpleCloud plugins.
+</Callout>
+
+### Available CLI Plugins
+
+The following plugins can be managed through the CLI:
+
+**Core Plugins**
+
+- `cloud-api` - SimpleCloud API plugin, all plugins depend on it
+
+**Proxy Plugins**
+
+- `proxy-essentials` - Great to have proxy features
+- `server-connection` - Server connection handling
+- `server-registration` - Server registration management
+- `cloud-command` - In-game cloud commands
+- `notify` - Server notifications
+
+**Server Plugins**
+
+- `placeholder` - Dynamic text placeholders
+- `signs` - Dynamic server status signs
+- `npcs` - Server information NPCs
+
+Example: To add the proxy essentials plugin, run:
+
+```bash
+sc local plugins add proxy-essentials
+```
+
 ## Plugins vs v2 Modules
 
 In SimpleCloud v3, we've simplified our extension system:

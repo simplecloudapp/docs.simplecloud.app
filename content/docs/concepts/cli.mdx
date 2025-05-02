@@ -210,3 +210,66 @@ Start a specific server instance.
 ```bash
 simplecloud start server [id]
 ```
+
+## Local Plugins Command
+
+The `local plugins` command manages plugins in your local SimpleCloud installation.
+
+```bash
+simplecloud local plugins [command]
+```
+
+### Available Commands
+
+- `list`: Shows all installed plugins and their locations
+- `add`: Add plugins to your installation
+- `remove`: Remove plugins from your installation
+
+### Add Plugins
+
+Add specific plugins or all available plugins to your installation.
+
+```bash
+# Add a specific plugin
+simplecloud local plugins add <plugin-name>
+
+# Add all available plugins
+simplecloud local plugins add --all
+```
+
+### Remove Plugins
+
+Remove specific plugins or all installed plugins from your installation.
+
+```bash
+# Remove a specific plugin
+simplecloud local plugins remove <plugin-name>
+
+# Remove all installed plugins
+simplecloud local plugins remove --all
+```
+
+### Available Plugins
+
+**Core Plugins**
+
+- `cloud-api` - SimpleCloud API plugin, all plugins depend on it
+
+**Proxy Plugins**
+
+- `proxy-essentials` - Great to have proxy features
+- `server-connection` - Server connection handling
+- `server-registration` - Server registration management
+- `cloud-command` - In-game cloud commands
+- `notify` - Server notifications
+
+**Server Plugins**
+
+- `placeholder` - Dynamic text placeholders
+- `signs` - Dynamic server status signs
+- `npcs` - Server information NPCs
+
+<Callout>
+  The local plugins command only works with local installations and manages
+  official SimpleCloud plugins.
+</Callout>
