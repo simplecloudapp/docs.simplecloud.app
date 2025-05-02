@@ -1,0 +1,97 @@
+---
+title: Configurators
+description: |
+  Configurators are a way to customize the server startup process.
+---
+
+## Understanding Configurators
+
+A server Configurator is a YML-file that provides information needed for a minecraft server to work with the cloud.
+In most cases, it is responsible for setting the maximum players, port, online and forwarding mode of the server.
+It is executed after the server template was copied to a new server. After it finishes executing, the server is started.
+
+## Using Placeholders
+
+When defining a Configurator, you can use placeholders for any [controller](/manual/resources/server-group#controller-properties) or [dynamic](/manual/resources/server-group#dynamic-properties) property using this syntax: `%property-name%`.
+
+## Location and Assignment
+
+Configurators are located in the `components/serverhost/options/configurators` directory. If you want, you can create your own or modify existing ones.
+To assign a configurator to a server, you need to set the [dynamic group property](/manual/resources/server-group#dynamic-properties) `configurator` to the configurator id.
+The configurator id is equivalent to the configurator file name without the file extension (e.g. `velocity.yml` -> `velocity`)
+
+## Configurator Examples
+
+<Tabs items={['velocity.yml', 'spigot_standalone.yml', 'paper_velocity.yml']}>
+<Tab value="velocity.yml">
+
+```yml
+# A list of all configuration files
+paths:
+  # The path to the configuration file
+  - path: "velocity.toml"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "TOML"
+    # The data object
+    data:
+      bind: "%ip%:%port%"
+      show-max-players: %max-players%
+      forwarding-secret-file: "forwarding.secret"
+      player-info-forwarding-mode: "MODERN"
+  # The path to the configuration file
+  - path: "forwarding.secret"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "TXT"
+    # The data object
+    data: "%forwarding-secret%"
+```
+
+</Tab>
+<Tab value="spigot_standalone.yml">
+
+```yml
+# A list of all configuration files
+paths:
+  # The path to the configuration file
+  - path: "server.properties"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "PROPERTIES"
+    # The data object
+    data:
+      server-ip: "%ip%"
+      server-port: %port%
+      max-players: %max-players%
+      online-mode: true
+```
+
+</Tab>
+<Tab value="paper_velocity.yml">
+
+```yml
+# A list of all configuration files
+paths:
+  # The path to the configuration file
+  - path: "server.properties"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "PROPERTIES"
+    # The data object
+    data:
+      server-ip: "%ip%"
+      server-port: %port%
+      max-players: %max-players%
+      online-mode: false
+  # The path to the configuration file
+  - path: "config/paper-global.yml"
+    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
+    type: "YML"
+    # The data object
+    data:
+      proxies:
+        velocity:
+          enabled: "true"
+          online-mode: "true"
+          secret: "%forwarding-secret%"
+```
+
+</Tab>
+</Tabs>

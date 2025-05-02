@@ -53,13 +53,13 @@ Additionally, the online server checker ensures that we don't need a plugin runn
 The Serverhost needs some [dynamic properties](/manual/resources/server-group#dynamic-properties) to work. For a group to start,
 the user has to provide every property that do not have a default value.
 
-| ID                    | Description                                           | User provided | Default value                                               |
-| --------------------- | ----------------------------------------------------- | ------------- | ----------------------------------------------------------- |
-| `server-url`          | sets the [server URL](#server-versions)               | Yes           | `N/A`                                                       |
-| `configurator`        | sets the [configurator](#server-versions)             | Yes           | `N/A`                                                       |
-| `forwarding-secret`   | used in the velocity [configurator](#server-versions) | No            | secure secret set by the [controller](/concepts/controller) |
-| `max-startup-seconds` | sets the maximum time a server can take to start up   | Yes           | `120`                                                       |
-| `template-id`         | the template used by the server                       | Yes           | the groups name (generated if not present)                  |
+| ID                    | Description                                                             | User provided | Default value                                               |
+| --------------------- | ----------------------------------------------------------------------- | ------------- | ----------------------------------------------------------- |
+| `server-url`          | sets the [server URL](#server-versions)                                 | Yes           | `N/A`                                                       |
+| `configurator`        | sets the [configurator](/concepts/serverhost/configurators)             | Yes           | `N/A`                                                       |
+| `forwarding-secret`   | used in the velocity [configurator](/concepts/serverhost/configurators) | No            | secure secret set by the [controller](/concepts/controller) |
+| `max-startup-seconds` | sets the maximum time a server can take to start up                     | Yes           | `120`                                                       |
+| `template-id`         | the template used by the server                                         | Yes           | the groups name (generated if not present)                  |
 
 ## Server Versions
 
@@ -73,92 +73,6 @@ group will not start.
 The server URL is nothing more than a simple download link to the wanted minecraft server jar.
 In fact, it can be any link you want. The Serverhost will try to download and execute it using
 user specified [options](#server-options). You can set the server URL through the `server-url` [dynamic group property](/manual/resources/server-group#dynamic-properties).
-
-### Configurator
-
-A server Configurator is a YML-file that provides information needed for a minecraft server to work with the cloud.
-In most cases, it is responsible for setting the maximum players, port, online and forwarding mode of the server.
-It is executed after the server template was copied to a new server. After it finishes executing, the server is started.
-When defining a Configurator, you can use placeholders for any [controller](/manual/resources/server-group#controller-properties) or [dynamic](/manual/resources/server-group#dynamic-properties) property using this syntax: `%property-name%`.
-Configurators are located in the `options/configurators` directory. If you want, you can create your own or modify existing ones.
-To assign a configurator to a server, you need to set the [dynamic group property](/manual/resources/server-group#dynamic-properties) `configurator` to the configurator id.
-The configurator id is equivalent to the configurator file name without the file extension (e.g. `velocity.yml` -> `velocity`)
-
-### Configurator Examples
-
-<Tabs items={['velocity.yml', 'spigot_standalone.yml', 'paper_velocity.yml']}>
-<Tab value="velocity.yml">
-
-```yml
-# A list of all configuration files
-paths:
-  # The path to the configuration file
-  - path: "velocity.toml"
-    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
-    type: "TOML"
-    # The data object
-    data:
-      bind: "%ip%:%port%"
-      show-max-players: %max-players%
-      forwarding-secret-file: "forwarding.secret"
-      player-info-forwarding-mode: "MODERN"
-  # The path to the configuration file
-  - path: "forwarding.secret"
-    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
-    type: "TXT"
-    # The data object
-    data: "%forwarding-secret%"
-```
-
-</Tab>
-<Tab value="spigot_standalone.yml">
-
-```yml
-# A list of all configuration files
-paths:
-  # The path to the configuration file
-  - path: "server.properties"
-    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
-    type: "PROPERTIES"
-    # The data object
-    data:
-      server-ip: "%ip%"
-      server-port: %port%
-      max-players: %max-players%
-      online-mode: true
-```
-
-</Tab>
-<Tab value="paper_velocity.yml">
-
-```yml
-# A list of all configuration files
-paths:
-  # The path to the configuration file
-  - path: "server.properties"
-    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
-    type: "PROPERTIES"
-    # The data object
-    data:
-      server-ip: "%ip%"
-      server-port: %port%
-      max-players: %max-players%
-      online-mode: false
-  # The path to the configuration file
-  - path: "config/paper-global.yml"
-    # The type of the configuration file (valid are TXT, PROPERTIES, TOML, YML, JSON)
-    type: "YML"
-    # The data object
-    data:
-      proxies:
-        velocity:
-          enabled: "true"
-          online-mode: "true"
-          secret: "%forwarding-secret%"
-```
-
-</Tab>
-</Tabs>
 
 ## Server Options
 
