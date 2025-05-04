@@ -309,7 +309,11 @@ function DocsNavbar({
             searchToggle,
             <SearchToggle hideIfDisabled className="md:hidden" />
           )}
-          <GithubInfo owner="simplecloudapp" repo="v3-releases" />
+          <GithubInfo
+            owner="simplecloudapp"
+            repo="v3-releases"
+            className="hidden md:flex"
+          />
           <NavbarSidebarTrigger className="-me-1.5 md:hidden" />
           {links
             .filter((item) => item.type === "icon")
