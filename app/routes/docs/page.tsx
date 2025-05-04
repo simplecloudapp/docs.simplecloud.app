@@ -138,7 +138,7 @@ export default function Page(props: Route.ComponentProps) {
         <div className="flex flex-col items-center gap-4 justify-center h-full min-h-screen w-full container mx-auto">
           <h1 className="text-3xl font-bold">Page is under construction</h1>
           <p className="text-sm text-muted-foreground">
-            This paeg has not been created yet. Our team is workin hard on it!
+            This page has not been created yet. Our team is workin hard on it!
           </p>
           <Button variant="outline" asChild>
             <Link to="/docs">Back to docs</Link>
