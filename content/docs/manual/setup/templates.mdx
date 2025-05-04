@@ -66,27 +66,27 @@ Here are some examples when you should use static templates:
 
 SimpleCloud automatically creates templates for each server group you configure (like "lobby", "proxy", etc.). However, there are also special template patterns that can be used across multiple server groups. These special templates are not created by default to avoid unnecessary clutter in your filesystem. You'll need to manually create them if you want to use these features.
 
-- **`EVERY`**: This template is used for every server. You can put files in there that you want to be available for every server.
-- **`EVERY_<SOFTWARE>`**: This template is used for every server that is running on a specific software.
+- **`every`**: This template is used for every server. You can put files in there that you want to be available for every server.
+- **`every_<software>`**: This template is used for every server that is running on a specific software.
 
-  Whenever you start a new server with a specific software, SimpleCloud will copy the files from the `EVERY_<SOFTWARE>` template to the new server.
+  Whenever you start a new server with a specific software, SimpleCloud will copy the files from the `every_<software>` template to the new server.
 
-  For example: `EVERY_VELOCITY`, `EVERY_BUNGEECORD`, `EVERY_PAPER`, `EVERY_SPIGOT`, etc. This also works for custom softwares.
+  For example: `every_velocity`, `every_bungeecord`, `every_paper`, `every_spigot`, etc. This also works for custom softwares.
 
 ### Structure and Plugin Placement
 
-Group-specific templates (like "lobby") are created automatically when you create a server group. The special EVERY templates need to be manually created in the `templates` directory as needed. Here's an example structure:
+Group-specific templates (like "lobby") are created automatically when you create a server group. The special every templates need to be manually created in the `templates` directory as needed. Here's an example structure:
 
 <Files>
   <Folder name="templates" defaultOpen>
-    <Folder name="EVERY" defaultOpen>
+    <Folder name="every" defaultOpen>
       <Folder name="plugins" defaultOpen>
         <File name="global-plugin.jar" />
       </Folder>
       <File name="global-config.yml" />
     </Folder>
 
-    <Folder name="EVERY_PAPER" defaultOpen>
+    <Folder name="every_paper" defaultOpen>
       <Folder name="plugins" defaultOpen>
         <File name="paper-specific-plugin.jar" />
       </Folder>
@@ -105,6 +105,6 @@ Group-specific templates (like "lobby") are created automatically when you creat
 
 To add plugins to your servers:
 
-- For all servers: Place them in `templates/EVERY/plugins/`
-- For specific software: Place them in `templates/EVERY_<SOFTWARE>/plugins/`
-- For specific server groups: Place them in `templates/<GROUP_NAME>/plugins/`
+- For all servers: Place them in `templates/every/plugins/`
+- For specific software: Place them in `templates/every_<software>/plugins/`
+- For specific server groups: Place them in `templates/<group_name>/plugins/`
