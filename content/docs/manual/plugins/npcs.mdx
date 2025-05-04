@@ -7,7 +7,13 @@ badgeColor: purple
 
 ## Overview
 
-Create interactive NPCs on your server that allow players to access other subservers and perform various actions. The plugin supports multiple NPC systems and offers extensive customization options.
+The SimpleCloud NPCs plugin allows you to create interactive NPCs on your server that enable players to access other subservers and perform various actions.
+
+<Callout type="important">
+  This plugin requires a supported third-party NPC plugin such as Citizens or
+  FancyNpcs to function. The SimpleCloud NPCs plugin adds SimpleCloud
+  functionality to NPCs created by these third-party plugins.
+</Callout>
 
 ## Supported Software
 
@@ -19,17 +25,21 @@ Create interactive NPCs on your server that allow players to access other subser
 
 ## Quick Setup
 
-1. Download the plugin from [GitHub](https://github.com/simplecloudapp/npc-plugin/releases)
-2. Optional: Download a supported NPC software
-3. Place it in your server's plugins folder
+1. Download the SimpleCloud NPCs plugin from [GitHub](https://github.com/simplecloudapp/npc-plugin/releases)
+2. Download and install one of the supported NPC plugins (e.g., Citizens)
+3. Place both plugins in your server's plugins folder
 4. Start your server
+5. Create an NPC using the third-party plugin's commands
+6. Use the SimpleCloud NPCs commands to add SimpleCloud functionality to the created NPC
 
-## Compatible NPC Plugins
+## Required NPC Plugins
+
+You must install one of the following NPC plugins for the SimpleCloud NPCs plugin to work:
 
 | Plugin                                                                                                      | Supported Versions | Status |
 | ----------------------------------------------------------------------------------------------------------- | ------------------ | ------ |
-| [FancyNpcs](https://fancyplugins.de/FancyNpcs)                                                              | 1.19.4+            | ✅ Yes |
 | [Citizens](https://citizensnpcs.co)                                                                         | 1.19+              | ✅ Yes |
+| [FancyNpcs](https://fancyplugins.de/FancyNpcs)                                                              | 1.19.4+            | ✅ Yes |
 | [MythicMobs](https://www.spigotmc.org/resources/⚔-mythicmobs-free-version-►the-1-custom-mob-creator◄.5702/) | 1.19+              | ✅ Yes |
 | [PlayerNPC](https://www.spigotmc.org/resources/✅-api-player-npc-✅-1-17-1-20-1.93625/)                     | 1.17.1 - 1.20.1    | ✅ Yes |
 
@@ -148,14 +158,14 @@ items:
 
 ## Commands
 
-| Command                                               | Description               |
-| ----------------------------------------------------- | ------------------------- |
-| `/scnpc apply <n>`                                    | Add SimpleCloud functions |
-| `/scnpc <id> interact <type> setAction <action>`      | Set click actions         |
-| `/scnpc <id> interact <type> setOption <key> <value>` | Set click options         |
-| `/scnpc <id> setOption <key> <value>`                 | Set global options        |
-| `/scnpc <id> setHologramGroup <groupName>`            | Set hologram group        |
-| `/scnpc createInventory <n> <groupName>`              | Create inventory config   |
+| Command                                               | Description                                  |
+| ----------------------------------------------------- | -------------------------------------------- |
+| `/scnpc apply <n>`                                    | Add SimpleCloud functions to an existing NPC |
+| `/scnpc <id> interact <type> setAction <action>`      | Set click actions                            |
+| `/scnpc <id> interact <type> setOption <key> <value>` | Set click options                            |
+| `/scnpc <id> setOption <key> <value>`                 | Set global options                           |
+| `/scnpc <id> setHologramGroup <groupName>`            | Set hologram group                           |
+| `/scnpc createInventory <n> <groupName>`              | Create inventory config                      |
 
 ## Permissions
 
