@@ -200,13 +200,13 @@ There are two ways to get information about the current server your code is runn
 You can use the `getCurrentServer()` method to get information about the current server:
 
 ```kotlin tab="Kotlin"
-val currentServer = serverApi.getCurrentServer()
+val currentServer = controllerApi.getServers().getCurrentServer()
 println("Current server group: ${currentServer.group}")
 println("Current server ID: ${currentServer.uniqueId}")
 ```
 
 ```java tab="Java"
-serverApi.getCurrentServer().thenAccept(currentServer -> {
+controllerApi.getServers().getCurrentServer().thenAccept(currentServer -> {
     System.out.println("Current server group: " + currentServer.getGroup());
     System.out.println("Current server ID: " + currentServer.getUniqueId());
 });
