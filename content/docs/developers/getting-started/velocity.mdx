@@ -115,7 +115,7 @@ import org.slf4j.LoggerFactory;
 public class VelocityExamplePlugin {
 
     private final Logger logger = LoggerFactory.getLogger(VelocityExamplePlugin.class);
-    private final ControllerApi controllerApi = ControllerApi.createFutureApi();
+    private final ControllerApi.Future controllerApi = ControllerApi.createFutureApi();
 
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {

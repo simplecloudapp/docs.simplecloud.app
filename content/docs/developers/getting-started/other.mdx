@@ -79,7 +79,7 @@ import app.simplecloud.controller.api.ControllerApi;
 
 public class Main {
     public static void main(String[] args) {
-        ControllerApi controllerApi = ControllerApi.createFutureApi();
+        ControllerApi.Future controllerApi = ControllerApi.createFutureApi();
         controllerApi.getGroups().getAllGroups().thenAccept(groups -> {
             System.out.println(groups);
         });
