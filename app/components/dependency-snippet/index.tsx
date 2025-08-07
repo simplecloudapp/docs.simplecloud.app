@@ -96,6 +96,7 @@ function getDependencyCode(
         <groupId>${dependency.groupId}</groupId>
         <artifactId>${dependency.artifactId}</artifactId>
         <version>${version}</version>
+        <scope>${type === "compileOnly" ? "provided" : "compile"}</scope>
     </dependency>`;
   }
 }
