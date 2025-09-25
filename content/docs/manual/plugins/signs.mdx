@@ -30,7 +30,7 @@ Example configuration:
 ```yaml
 name: "starting" # Unique identifier
 rule: "STARTING" # Server state this applies to
-display-name: "%group%-%numerical-id%" # Dynamic name template
+server-name: "%group%-%numerical-id%" # Dynamic name template
 priority: 0 # Rule precedence (higher overrides lower)
 frame-update-interval: 500 # Update interval in milliseconds
 frames:
@@ -58,36 +58,41 @@ frames:
 
 ## Placeholders
 
-Available placeholders for sign configuration:
+Available placeholders for sign configuration (all follow the MiniMessage `<placeholder>` syntax):
 
-| Placeholder      | Description     | Default   |
-| ---------------- | --------------- | --------- |
-| `%group%`        | Server group    | "unknown" |
-| `%numerical-id%` | Server ID       | "0"       |
-| `%type%`         | Server type     | "unknown" |
-| `%host%`         | Server host     | "unknown" |
-| `%ip%`           | Server IP       | "unknown" |
-| `%port%`         | Server port     | "0"       |
-| `%min-memory%`   | Min memory      | "0"       |
-| `%max-memory%`   | Max memory      | "0"       |
-| `%max-players%`  | Max players     | "0"       |
-| `%player-count%` | Current players | "0"       |
-| `%state%`        | Server state    | "unknown" |
+| Placeholder                   | Description                                   | Default   |
+| ----------------------------- | --------------------------------------------- | --------- |
+| `<group>`                     | Server group                                  | "unknown" |
+| `<numerical-id>`              | Server ID                                     | "0"       |
+| `<type>`                      | Server type                                   | "unknown" |
+| `<host>`                      | Server host                                   | "unknown" |
+| `<ip>`                        | Server IP                                     | "unknown" |
+| `<port>`                      | Server port                                   | "0"       |
+| `<min-memory>`                | Min memory                                    | "0"       |
+| `<max-memory>`                | Max memory                                    | "0"       |
+| `<max-players>`               | Max players                                   | "0"       |
+| `<player-count>`              | Current players                               | "0"       |
+| `<state>`                     | Server state                                  | "unknown" |
+| `<player_name>`               | Player name (rules run for a player only)     | n/a       |
+| `<player_sender>`             | Player's proxy/server name                    | n/a       |
+| `<property:[name]:[default]>` | Custom property lookup with optional fallback | ""        |
+
+For dynamic sign properties you can use the tag `<property:joinstate:'Maintenance'>`. The resolver looks up `joinstate` in the server's properties map and, if it isn't present, falls back to the optional `default` argument (empty string when omitted).
 
 ### Example Usage
 
 ```yaml
 name: "online"
 rule: "ONLINE"
-display-name: "%group%-%numerical-id%"
+display-name: "<group>-<numerical-id>"
 priority: 50
 frame-update-interval: 500
 frames:
   - lines:
-      - "Server: %group%"
-      - "ID: %numerical-id%"
-      - "Players: %player-count%/%max-players%"
-      - "State: %state%"
+      - "Server: <group>"
+      - "ID: <numerical-id>"
+      - "Players: <player-count>/<max-players>"
+      - "State: <state>"
 ```
 
 ## Commands
